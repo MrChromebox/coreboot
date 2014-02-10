@@ -14,7 +14,9 @@
  * GNU General Public License for more details.
  */
 
+#if CONFIG_CHROMEOS
 #define ENABLE_TPM
+#endif
 
 DefinitionBlock(
 	"dsdt.aml",
