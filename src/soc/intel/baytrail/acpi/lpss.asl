@@ -85,10 +85,10 @@ Device (I2C1)
 	Name (_DDN, "I2C Controller #1")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -144,10 +144,10 @@ Device (I2C2)
 	Name (_DDN, "I2C Controller #2")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -203,10 +203,10 @@ Device (I2C3)
 	Name (_DDN, "I2C Controller #3")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -262,10 +262,10 @@ Device (I2C4)
 	Name (_DDN, "I2C Controller #4")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -321,10 +321,10 @@ Device (I2C5)
 	Name (_DDN, "I2C Controller #5")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -380,10 +380,10 @@ Device (I2C6)
 	Name (_DDN, "I2C Controller #6")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
@@ -439,10 +439,10 @@ Device (I2C7)
 	Name (_DDN, "I2C Controller #7")
 
 	/* Standard Mode: HCNT, LCNT, SDA Hold Time */
-	Name (SSCN, Package () { 0x200, 0x200, 0x6 })
+	Name (SSCN, Package () { 0x200, 0x200, 0x1E })
 
 	/* Fast Mode: HCNT, LCNT, SDA Hold Time */
-	Name (FMCN, Package () { 0x55, 0x99, 0x6 })
+	Name (FMCN, Package () { 0x55, 0x99, 0x1E })
 
 	Name (RBUF, ResourceTemplate()
 	{
