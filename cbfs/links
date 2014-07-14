@@ -1,0 +1,12 @@
+pci8086,0402.rom pci8086,0406.rom # GT1 Desktop
+pci8086,0406.rom pci8086,0406.rom # GT1 Mobile
+pci8086,040a.rom pci8086,0406.rom # GT1 Server
+pci8086,0a06.rom pci8086,0406.rom # GT1 ULT
+pci8086,0412.rom pci8086,0406.rom # GT2 Desktop
+pci8086,0416.rom pci8086,0406.rom # GT2 Mobile
+pci8086,041a.rom pci8086,0406.rom # GT2 Server
+pci8086,0a16.rom pci8086,0406.rom # GT2 ULT
+pci8086,0422.rom pci8086,0406.rom # GT3 Desktop
+pci8086,0426.rom pci8086,0406.rom # GT3 Mobile
+pci8086,042a.rom pci8086,0406.rom # GT3 Server
+pci8086,0a26.rom pci8086,0406.rom # GT3 ULT
