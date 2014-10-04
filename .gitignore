@@ -132,3 +132,15 @@ Documentation/*.pdf
 Documentation/_build
 
 doxygen/*
+
+*.rom
+*.rom.md5
+*.elf.*
+*.old
+*.orig
+out/*
+*.img
+*.fd
+blobs/*
+*.1
+.vscode/*
