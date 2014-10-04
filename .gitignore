@@ -120,3 +120,11 @@ documentation/skconfig.tex
 documentation/socketfkconfig.tex
 
 doxygen/*
+
+*.rom
+*.rom.md5
+*.elf.*
+*.old
+*.orig
+out/*
+*.img
