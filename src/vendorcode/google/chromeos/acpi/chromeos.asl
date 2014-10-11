@@ -108,4 +108,4 @@ Device (CRHW)
 	}
 }
 
-#include "ramoops.asl"
+//#include "ramoops.asl"
