@@ -123,12 +123,12 @@ chip northbridge/intel/haswell
 						io 0x60 = 0x720
 						io 0x62 = 0x730
 					end
-					device pnp 2e.5 on
+					device pnp 2e.5 off
 						io 0x60 = 0x60
 						io 0x62 = 0x64
 						irq 0x70 = 1
 					end # Keyboard
-					device pnp 2e.6 on
+					device pnp 2e.6 off
 						irq 0x70 = 12
 					end # Mouse
 					device pnp 2e.a off end # IR
