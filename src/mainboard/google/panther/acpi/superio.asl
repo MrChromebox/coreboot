@@ -22,8 +22,8 @@
 #undef SIO_ENABLE_FDC0           // pnp 2e.0: Disable Floppy Controller
 #undef SIO_ENABLE_INFR           // pnp 2e.a: Disable Consumer IR
 
-#define SIO_ENABLE_PS2K          // pnp 2e.5: Enable PS/2 Keyboard
-#define SIO_ENABLE_PS2M          // pnp 2e.6: Enable PS/2 Mouse
+#undef SIO_ENABLE_PS2K          // pnp 2e.5: Enable PS/2 Keyboard
+#undef SIO_ENABLE_PS2M          // pnp 2e.6: Enable PS/2 Mouse
 #define SIO_ENABLE_COM1          // pnp 2e.1: Enable Serial Port 1
 #define SIO_ENABLE_ENVC          // pnp 2e.4: Enable Environmental Controller
 #define SIO_ENVC_IO0      0x700  // pnp 2e.4: io 0x60
