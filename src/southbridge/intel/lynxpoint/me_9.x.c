@@ -613,14 +613,6 @@ void intel_me_finalize_smm(void)
 	/* Try to send EOP command so ME stops accepting other commands */
 	mkhi_end_of_post();
 
-	/* Make sure IO is disabled */
-	reg32 = pci_read_config32(PCH_ME_DEV, PCI_COMMAND);
-	reg32 &= ~(PCI_COMMAND_MASTER |
-		   PCI_COMMAND_MEMORY | PCI_COMMAND_IO);
-	pci_write_config32(PCH_ME_DEV, PCI_COMMAND, reg32);
-
-	/* Hide the PCI device */
-	RCBA32_OR(FD2, PCH_DISABLE_MEI1);
 }
 
 #else /* !__SMM__ */
@@ -889,20 +881,10 @@ static struct pci_operations pci_ops = {
 	.set_subsystem = set_subsystem,
 };
 
-static void intel_me_enable(struct device *dev)
-{
-	/* Avoid talking to the device in S3 path */
-	if (acpi_is_wakeup_s3()) {
-		dev->enabled = 0;
-		pch_disable_devfn(dev);
-	}
-}
-
 static struct device_operations device_ops = {
 	.read_resources		= pci_dev_read_resources,
 	.set_resources		= pci_dev_set_resources,
 	.enable_resources	= pci_dev_enable_resources,
-	.enable			= intel_me_enable,
 	.init			= intel_me_init,
 	.ops_pci		= &pci_ops,
 };
