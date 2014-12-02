@@ -609,7 +609,7 @@ void intel_me_finalize_smm(void)
 	pci_write_config32(PCH_ME_DEV, PCI_COMMAND, reg32);
 
 	/* Hide the PCI device */
-	RCBA32_OR(FD2, PCH_DISABLE_MEI1);
+	//RCBA32_OR(FD2, PCH_DISABLE_MEI1);
 }
 
 #else /* !__SMM__ */
