@@ -543,12 +543,6 @@ void intel_me_finalize(struct device *dev)
 	/* Try to send EOP command so ME stops accepting other commands */
 	mkhi_end_of_post();
 
-	/* Make sure IO is disabled */
-	pci_and_config16(dev, PCI_COMMAND,
-			 ~(PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY | PCI_COMMAND_IO));
-
-	/* Hide the PCI device */
-	RCBA32_OR(FD2, PCH_DISABLE_MEI1);
 }
 
 static int me_icc_set_clock_enables(u32 mask)
@@ -900,20 +894,10 @@ static void intel_me_init(struct device *dev)
 	 */
 }
 
-static void intel_me_enable(struct device *dev)
-{
-	/* Avoid talking to the device in S3 path */
-	if (acpi_is_wakeup_s3()) {
-		dev->enabled = 0;
-		pch_disable_devfn(dev);
-	}
-}
-
 static struct device_operations device_ops = {
 	.read_resources		= pci_dev_read_resources,
 	.set_resources		= pci_dev_set_resources,
 	.enable_resources	= pci_dev_enable_resources,
-	.enable			= intel_me_enable,
 	.init			= intel_me_init,
 	.final			= intel_me_finalize,
 	.ops_pci		= &pci_dev_ops_pci,
