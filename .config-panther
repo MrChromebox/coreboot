@@ -308,7 +308,7 @@ CONFIG_SOUTH_BRIDGE_OPTIONS=y
 # CONFIG_SERIRQ_CONTINUOUS_MODE is not set
 # CONFIG_BUILD_WITH_FAKE_IFD is not set
 CONFIG_IFD_BIN_PATH="3rdparty/mainboard/google/panther/descriptor.bin"
-CONFIG_ME_BIN_PATH="3rdparty/mainboard/google/panther/me.bin"
+CONFIG_ME_BIN_PATH="3rdparty/mainboard/google/panther/me_9.5.14.1904.bin"
 CONFIG_SOUTHBRIDGE_INTEL_LYNXPOINT=y
 CONFIG_INTEL_LYNXPOINT_LP=y
 CONFIG_ME_MBP_CLEAR_LATE=y
