@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 filename="coreboot-haswell-chromebox-`date +"%Y%m%d"`-md.rom"
+filename2="coreboot-haswell-chromebox-headless-`date +"%Y%m%d"`-md.rom"
 rm -f ${filename}*
 rm -rf ./build
 cp .config-panther .config
@@ -14,5 +15,9 @@ cbfstool ${filename} add -f ./cbfs/boot-menu-message -n etc/boot-menu-message -t
 cbfstool ${filename} add -f ./cbfs/links -n links -t raw
 cbfstool ${filename} print
 md5sum ${filename} > ${filename}.md5
+cp ${filename} ${filename2}
+cbfstool ${filename2} remove -n pci8086,0406.rom
+cbfstool ${filename2} add -f ./3rdparty/mainboard/google/panther/vgabios_headless.bin -n pci8086,0406.rom -t optionrom
+md5sum ${filename2} > ${filename2}.md5
 fi
 
