@@ -17,7 +17,7 @@ cbfstool ${filename} print
 md5sum ${filename} > ${filename}.md5
 cp ${filename} ${filename2}
 cbfstool ${filename2} remove -n pci8086,0406.rom
-cbfstool ${filename2} add -f ./3rdparty/mainboard/google/panther/vgabios_headless.bin -n pci8086,0406.rom -t optionrom
+cbfstool ${filename2} add -f ./3rdparty/mainboard/google/panther/hsw_1035_cbox_headless.dat -n pci8086,0406.rom -t optionrom
 md5sum ${filename2} > ${filename2}.md5
 fi
 
