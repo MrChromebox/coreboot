@@ -171,3 +171,39 @@ Device (SIO) {
 	}
 #endif
 }
+
+#ifdef SIO_EC_ENABLE_PS2K
+	Device (PS2K)		// Keyboard
+		{
+			Name (_HID, EISAID("GGL0303"))
+
+			Method (_STA, 0, NotSerialized) {
+				Return (0x0F)
+			}
+
+			Name (_CRS, ResourceTemplate()
+			{
+				IO (Decode16, 0x60, 0x60, 0x01, 0x01)
+				IO (Decode16, 0x64, 0x64, 0x01, 0x01)
+	#ifdef SIO_EC_PS2K_IRQ
+				SIO_EC_PS2K_IRQ
+	#else
+				IRQ (Edge, ActiveHigh, ExclusiveAndWake) {1}
+	#endif
+			})
+
+			Name (_PRS, ResourceTemplate()
+			{
+				StartDependentFn (0, 0) {
+					IO (Decode16, 0x60, 0x60, 0x01, 0x01)
+					IO (Decode16, 0x64, 0x64, 0x01, 0x01)
+	#ifdef SIO_EC_PS2K_IRQ
+					SIO_EC_PS2K_IRQ
+	#else
+					IRQ (Edge, ActiveHigh, ExclusiveAndWake) {1}
+	#endif
+				}
+				EndDependentFn ()
+			})
+		}
+#endif
