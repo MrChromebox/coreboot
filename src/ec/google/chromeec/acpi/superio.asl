@@ -33,6 +33,7 @@
 // Scope is \_SB.PCI0.LPCB
 
 Device (SIO) {
+	Name (_HID, EisaId ("PNP0A05"))
 	Name (_UID, 0)
 	Name (_ADR, 0)
 
@@ -112,7 +113,7 @@ Device (SIO) {
 		Name (_ADR, 0)
 
 		Method (_STA, 0, NotSerialized) {
-			Return (0x0F)
+			Return (0x0B)
 		}
 
 		Name (_CRS, ResourceTemplate ()
@@ -134,12 +135,23 @@ Device (SIO) {
 }
 
 #ifdef SIO_EC_ENABLE_PS2K
-Device (PS2K)		// Keyboard
+#if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL) || IS_ENABLED(CONFIG_SOC_INTEL_BRASWELL)
+}
+
+Scope (\_SB.PCI0)
 {
-	Name (_UID, 0)
-	Name (_ADR, 0)
-	Name (_HID, "GOOG000A")
-	Name (_CID, Package() { EISAID("PNP0303"), EISAID("PNP030B") } )
+#endif
+	Device (PS2K)		// Keyboard
+	{
+#if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL)|| IS_ENABLED(CONFIG_SOC_INTEL_BRASWELL)
+		Name (_UID, 1)
+		Name (_ADR, 1)
+#else
+		Name (_UID, 0)
+		Name (_ADR, 0)
+#endif
+		Name (_HID, "GOOG000A")
+		Name (_CID, Package() { EISAID("PNP0303"), EISAID("PNP030B"), "GGL0303" } )
 
 	Method (_STA, 0, NotSerialized) {
 		Return (0x0F)
