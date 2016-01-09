@@ -69,38 +69,6 @@ Scope (\_SB.PCI0.RP01)
 
 Scope (\_SB.PCI0.I2C0)
 {
-	Device (ATPB)
-	{
-		Name (_HID, "ATML0000")
-		Name (_DDN, "Atmel Touchpad Bootloader")
-		Name (_UID, 1)
-		Name (_S0W, 4)
-		Name (ISTP, 1) /* Touchpad */
-
-		Name (_CRS, ResourceTemplate()
-		{
-			I2cSerialBus (
-				0x26,                     // SlaveAddress
-				ControllerInitiated,      // SlaveMode
-				400000,                   // ConnectionSpeed
-				AddressingMode7Bit,       // AddressingMode
-				"\\_SB.PCI0.I2C0",        // ResourceSource
-			)
-
-			// GPIO13 is PIRQL
-			Interrupt (ResourceConsumer, Edge, ActiveLow) { 27 }
-		})
-
-		Method (_STA)
-		{
-			If (LEqual (\S1EN, 1)) {
-				Return (0xF)
-			} Else {
-				Return (0x0)
-			}
-		}
-	}
-
 	Device (ATPA)
 	{
 		Name (_HID, "ATML0000")
@@ -258,38 +226,6 @@ Scope (\_SB.PCI0.I2C0)
 
 Scope (\_SB.PCI0.I2C1)
 {
-	Device (ATSB)
-	{
-		Name (_HID, "ATML0001")
-		Name (_DDN, "Atmel Touchscreen Bootloader")
-		Name (_UID, 4)
-		Name (_S0W, 4)
-		Name (ISTP, 0) /* TouchScreen */
-
-		Name (_CRS, ResourceTemplate()
-		{
-			I2cSerialBus (
-				0x27,                     // SlaveAddress
-				ControllerInitiated,      // SlaveMode
-				400000,                   // ConnectionSpeed
-				AddressingMode7Bit,       // AddressingMode
-				"\\_SB.PCI0.I2C1",        // ResourceSource
-			)
-
-			// GPIO14 is PIRQM
-			Interrupt (ResourceConsumer, Edge, ActiveLow) { 28 }
-		})
-
-		Method (_STA)
-		{
-			If (LEqual (\S2EN, 1)) {
-				Return (0xF)
-			} Else {
-				Return (0x0)
-			}
-		}
-	}
-
 	Device (ATSA)
 	{
 		Name (_HID, "ATML0001")
