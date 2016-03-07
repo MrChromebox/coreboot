@@ -68,6 +68,10 @@ config SERIAL_CPU_INIT
 	bool
 	default n
 
+config ENABLE_VMX
+	bool "Enable VMX for virtualization"
+	default n
+
 config SMM_TSEG_SIZE
 	hex
 	default 0x800000
