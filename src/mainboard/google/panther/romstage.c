@@ -27,11 +27,7 @@
 #include <superio/ite/common/ite.h>
 #include <superio/ite/it8772f/it8772f.h>
 #include "gpio.h"
-
-#define SERIAL_DEV PNP_DEV(0x2e, IT8772F_SP1)
-#define GPIO_DEV PNP_DEV(0x2e, IT8772F_GPIO)
-#define DUMMY_DEV PNP_DEV(0x2e, 0)
-
+#include "onboard.h"
 
 const struct rcba_config_instruction rcba_config[] = {
 
@@ -140,10 +136,16 @@ void mainboard_romstage_entry(unsigned long bist)
 	};
 
 	/* Early SuperIO setup */
-	ite_kill_watchdog(GPIO_DEV);
-	it8772f_ac_resume_southbridge(DUMMY_DEV);
+	ite_kill_watchdog(IT8772F_GPIO_DEV);
+	it8772f_ac_resume_southbridge(IT8772F_DUMMY_DEV);
 	pch_enable_lpc();
-	ite_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
+    ite_enable_serial(IT8772F_SERIAL_DEV, CONFIG_TTYS0_BASE);
+
+    /* Turn on Power LED GP22 for Tricky */
+	it8772f_gpio_led(IT8772F_GPIO_DEV, 2 /* set */, 0xF7 /* select */,
+		0x04 /* polarity: inverting */, 0x00 /* 0=pulldown */,
+		0x04 /* output */, 0x04 /* 1=Simple IO function */,
+		SIO_GPIO_BLINK_GPIO22, IT8772F_GPIO_BLINK_FREQUENCY_1_HZ);
 
 	/* Call into the real romstage main with this board's attributes. */
 	romstage_common(&romstage_params);

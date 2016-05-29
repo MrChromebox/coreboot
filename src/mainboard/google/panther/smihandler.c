@@ -23,6 +23,8 @@
 #include <southbridge/intel/lynxpoint/nvs.h>
 #include <southbridge/intel/lynxpoint/pch.h>
 #include <elog.h>
+#include <superio/ite/it8772f/it8772f.h>
+#include "onboard.h"
 
 /* GPIO46 controls the WLAN_DISABLE_L signal. */
 #define GPIO_WLAN_DISABLE_L 46
@@ -49,4 +51,26 @@ int mainboard_smi_apmc(u8 apmc)
 		break;
 	}
 	return 0;
+}
+
+void mainboard_smi_sleep(u8 slp_typ)
+{
+	/* Enable/Disable power LED blinking for Tricky */
+	switch (slp_typ) {
+	    case 3:
+            it8772f_gpio_led(IT8772F_GPIO_DEV, 2 /* set */, 0xF7 /* select */,
+			    0x04 /* polarity: inverting */, 0x04 /* 1=pullup */,
+			    0x04 /* output */, 0x00, /* 0=Alternate function */
+			    SIO_GPIO_BLINK_GPIO22, IT8772F_GPIO_BLINK_FREQUENCY_1_4_HZ);
+		    break;
+	    case 5:
+            it8772f_gpio_led(IT8772F_GPIO_DEV, 2 /* set */, 0xF7 /* select */,
+			    0x04 /* polarity: inverting */, 0x00 /* 0=pulldown */,
+			    0x04 /* output */, 0x04 /* 1=Simple IO function */,
+			    SIO_GPIO_BLINK_GPIO22, IT8772F_GPIO_BLINK_FREQUENCY_1_4_HZ);
+		    break;
+	    default:
+		    break;
+	}
+	return;
 }
