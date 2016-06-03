@@ -1,0 +1,2 @@
+config BOARD_GOOGLE_GLIMMER
+	bool "Glimmer"
