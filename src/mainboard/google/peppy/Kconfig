@@ -21,6 +21,13 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 	select INTEL_DDI
 	select INTEL_INT15
 
+config ELAN_TRACKPAD_ACPI
+	bool "Use Elan Trackpad"
+	default n
+	help
+		Some Acer C720's ship with an Elan trackpad instead of Cypress.
+		Enumerate this in ACPI so trackpad is functional.
+
 config CHROMEOS
 	select EC_SOFTWARE_SYNC
 	select LID_SWITCH
