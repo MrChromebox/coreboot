@@ -400,5 +400,7 @@ Device (XHCI)
 		Device (PRT4) { Name (_ADR, 4) } // USB Port 3
 		Device (PRT5) { Name (_ADR, 5) } // USB Port 4
 		Device (PRT6) { Name (_ADR, 6) } // USB Port 5
+		Device (PRT7) { Name (_ADR, 7) } // USB Port 7
+		Device (SSP1) { Name (_ADR, 10) } // USB Port 10
 	}
 }
