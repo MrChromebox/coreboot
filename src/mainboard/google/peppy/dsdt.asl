@@ -60,6 +60,9 @@ DefinitionBlock(
 	// Mainboard specific
 	#include "acpi/mainboard.asl"
 
+	// USB ports
+	#include "acpi/usb.asl"
+
 	// Thermal handler
 	#include "acpi/thermal.asl"
 
