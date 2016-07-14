@@ -127,6 +127,9 @@ Device (SDMA)
 	Name (_UID, 1)
 	Name (_ADR, 0x00150000)
 
+	Name (SSCN, Package () { 432, 507, 30 })
+	Name (FMCN, Package () { 72, 160, 30 })
+
 	// BAR0 is assigned during PCI enumeration and saved into NVS
 	Name (RBUF, ResourceTemplate ()
 	{
@@ -164,6 +167,9 @@ Device (I2C0)
 	Name (_CID, "INT33C2")
 	Name (_UID, 1)
 	Name (_ADR, 0x00150001)
+
+	Name (SSCN, Package () { 432, 507, 30 })
+	Name (FMCN, Package () { 72, 160, 30 })
 
 	// BAR0 is assigned during PCI enumeration and saved into NVS
 	Name (RBUF, ResourceTemplate ()
