@@ -593,25 +593,6 @@ static int mkhi_hmrfpo_lock_noack(void)
 	return 0;
 }
 
-static void intel_me_finalize(struct device *dev)
-{
-	u16 reg16;
-
-	/* S3 path will have hidden this device already */
-	if (!mei_base_address || mei_base_address == (u8 *) 0xfffffff0)
-		return;
-
-	/* Make sure IO is disabled */
-	reg16 = pci_read_config16(dev, PCI_COMMAND);
-	reg16 &= ~(PCI_COMMAND_MASTER |
-		   PCI_COMMAND_MEMORY | PCI_COMMAND_IO);
-	pci_write_config16(dev, PCI_COMMAND, reg16);
-
-	/* Hide the PCI device */
-	RCBA32_OR(FD2, PCH_DISABLE_MEI1);
-	RCBA32(FD2);
-}
-
 static int me_icc_set_clock_enables(u32 mask)
 {
 	struct icc_clock_enables_msg clk = {
@@ -1020,22 +1001,11 @@ static void intel_me_init(struct device *dev)
 	}
 }
 
-static void intel_me_enable(struct device *dev)
-{
-	/* Avoid talking to the device in S3 path */
-	if (acpi_is_wakeup_s3()) {
-		dev->enabled = 0;
-		pch_disable_devfn(dev);
-	}
-}
-
 static struct device_operations device_ops = {
 	.read_resources		= &pci_dev_read_resources,
 	.set_resources		= &pci_dev_set_resources,
 	.enable_resources	= &pci_dev_enable_resources,
-	.enable			= &intel_me_enable,
 	.init			= &intel_me_init,
-	.final			= &intel_me_finalize,
 	.ops_pci		= &pci_dev_ops_pci,
 };
 
