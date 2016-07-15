@@ -55,4 +55,7 @@ DefinitionBlock(
 
 	// Mainboard specific
 	#include "acpi/mainboard.asl"
+
+	//USB ports
+	#include "acpi/usb.asl"
 }
