@@ -1,0 +1,50 @@
+if BOARD_GOOGLE_CANDY
+
+config BOARD_SPECIFIC_OPTIONS
+	def_bool y
+	select SOC_INTEL_BAYTRAIL
+	select EC_GOOGLE_CHROMEEC
+	select ENABLE_BUILTIN_COM1
+	select BOARD_ROMSIZE_KB_8192
+	select HAVE_ACPI_TABLES
+	select HAVE_OPTION_TABLE
+	select HAVE_ACPI_RESUME
+	select MAINBOARD_HAS_CHROMEOS
+	select MAINBOARD_HAS_LPC_TPM
+
+config CHROMEOS
+	select EC_SOFTWARE_SYNC
+	select LID_SWITCH
+	select VBOOT_VBNV_CMOS
+	select VIRTUAL_DEV_SWITCH
+
+config MAINBOARD_DIR
+	string
+	default google/candy
+
+config MAINBOARD_PART_NUMBER
+	string
+	default "Candy"
+
+config VGA_BIOS_FILE
+	string
+	default "pci8086,0f31.rom"
+
+config HAVE_IFD_BIN
+	bool
+	default n
+
+config HAVE_ME_BIN
+	bool
+	default n
+
+config EC_GOOGLE_CHROMEEC_BOARDNAME
+	string
+	default ""
+
+config GBB_HWID
+	string
+	depends on CHROMEOS
+	default "CANDY TEST A-A 1345"
+
+endif # BOARD_GOOGLE_CANDY
