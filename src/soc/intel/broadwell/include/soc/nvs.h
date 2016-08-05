@@ -49,7 +49,15 @@ typedef struct {
 	u32	cbmc; /* 0x1c - 0x1f - Coreboot Memory Console */
 	u64	pm1i; /* 0x20 - 0x27 - PM1 wake status bit */
 	u64	gpei; /* 0x28 - 0x2f - GPE wake status bit */
-	u8	unused[208];
+
+	u16	cste; /* 0x30 - current display state */
+	u16	nste; /* 0x32 - next display state */
+	u16	sste; /* 0x34 - set display state */
+
+	u8	ndid; /* 0x35 - number of device ids */
+	u32	did[5]; /* 0x36 - 4a device id 1..5 */
+
+	u8	unused[181];
 
 	/* ChromeOS specific (0x100 - 0xfff) */
 	chromeos_acpi_t chromeos;
