@@ -50,7 +50,15 @@ typedef struct global_nvs_t {
 	u32	cbmc; /* 0x1c - 0x1f - coreboot Memory Console */
 	u64	pm1i; /* 0x20 - 0x27 - PM1 wake status bit */
 	u64	gpei; /* 0x28 - 0x2f - GPE wake status bit */
-	u8	unused1[132]; /* 0x30 - 0xb3 - unused */
+
+	/* ACPI Display Controls */
+	u16	cste; /* 0x30 - current display state */
+	u16	nste; /* 0x32 - next display state */
+	u16	sste; /* 0x34 - set display state */
+	u8	ndid; /* 0x35 - number of device ids */
+	u32	did[5]; /* 0x36 - 4a device id 1..5 */
+
+	u8	unused1[105]; /* 0x4b - 0xb3 - unused */
 
 	/* IGD OpRegion */
 	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */
