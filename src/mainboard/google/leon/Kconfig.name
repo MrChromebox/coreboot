@@ -1,0 +1,2 @@
+config BOARD_GOOGLE_LEON
+	bool "Leon"
