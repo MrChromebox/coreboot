@@ -25,6 +25,7 @@
 #include <string.h>
 #include <reg_script.h>
 #include <cbmem.h>
+#include <drivers/intel/gma/i915.h>
 #include <drivers/intel/gma/i915_reg.h>
 #include <drivers/intel/gma/opregion.h>
 #include <soc/cpu.h>
@@ -257,7 +258,7 @@ u32 map_oprom_vendev(u32 vendev)
 
 static struct resource *gtt_res = NULL;
 
-static unsigned long gtt_read(unsigned long reg)
+u32 gtt_read(u32 reg)
 {
 	u32 val;
 	val = read32(res2mmio(gtt_res, reg, 0));
@@ -265,7 +266,7 @@ static unsigned long gtt_read(unsigned long reg)
 
 }
 
-static void gtt_write(unsigned long reg, unsigned long data)
+void gtt_write(u32 reg, u32 data)
 {
 	write32(res2mmio(gtt_res, reg, 0), data);
 }
@@ -278,7 +279,7 @@ static inline void gtt_rmw(u32 reg, u32 andmask, u32 ormask)
 	gtt_write(reg, val);
 }
 
-static int gtt_poll(u32 reg, u32 mask, u32 value)
+int gtt_poll(u32 reg, u32 mask, u32 value)
 {
 	unsigned int try = GT_RETRY;
 	u32 data;
@@ -600,11 +601,35 @@ gma_write_acpi_tables(struct device *const dev, unsigned long current,
 	return current;
 }
 
+const struct i915_gpu_controller_info *
+intel_gma_get_controller_info(void)
+{
+	device_t dev = dev_find_slot(0, PCI_DEVFN(0x2,0));
+	if (!dev) {
+		return NULL;
+	}
+	struct soc_intel_broadwell_config *chip = dev->chip_info;
+	return &chip->gfx;
+}
+
+static void gma_ssdt(device_t device)
+{
+	const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
+	if (!gfx) {
+		return;
+	}
+#if IS_ENABLED(CONFIG_INTEL_GMA_ACPI)
+	drivers_intel_gma_displays_ssdt_generate(gfx);
+#endif
+
+}
+
 static struct device_operations igd_ops = {
 	.read_resources		= &pci_dev_read_resources,
 	.set_resources		= &pci_dev_set_resources,
 	.enable_resources	= &pci_dev_enable_resources,
 	.init			= &igd_init,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 	.ops_pci		= &broadwell_pci_ops,
 	.write_acpi_tables	= gma_write_acpi_tables,
 };

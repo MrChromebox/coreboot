@@ -605,7 +605,11 @@ static void southcluster_inject_dsdt(struct device *device)
 	}
 
 	if (gnvs) {
+		const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
 		acpi_create_gnvs(gnvs);
+		gnvs->ndid = gfx->ndid;
+		memcpy(gnvs->did, gfx->did, sizeof(gnvs->did));
+
 		/* And tell SMI about it */
 		smm_setup_structures(gnvs, NULL, NULL);
 
