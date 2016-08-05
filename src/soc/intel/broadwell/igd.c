@@ -592,7 +592,7 @@ static void gma_ssdt(device_t device)
 #if IS_ENABLED(CONFIG_INTEL_GMA_ACPI)
 	drivers_intel_gma_displays_ssdt_generate(gfx);
 #endif
-	
+
 }
 
 static struct device_operations igd_ops = {
