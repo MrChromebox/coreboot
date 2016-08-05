@@ -17,6 +17,7 @@
 /* Global Variables */
 
 Name (\PICM, 0)		// IOAPIC/8259
+Name (\DSEN, 1)		// Display Output Switching Enable
 
 /*
  * Global ACPI memory region. This region is used for passing information
@@ -58,6 +59,15 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	CBMC,	32,	// 0x1c - 0x1f - coreboot Memory Console
 	PM1I,	64,	// 0x20 - 0x27 - PM1 wake status bit
 	GPEI,	64,	// 0x28 - 0x2f - GPE wake status bit
+	CSTE,	16,	// 0x30 - Current display state
+	NSTE,	16,	// 0x32 - Next display state
+	SSTE,	16,	// 0x34 - Set display state
+	NDID,	 8,	// 0x35 - Number of Device IDs
+	DID1,	32,	// 0x36 - 0x39 - Device ID 1
+	DID2,	32,	// 0x3a - 0x3d - Device ID 2
+	DID3,	32,	// 0x3e - 0x41 - Device ID 3
+	DID4,	32,	// 0x42 - 0x45 - Device ID 4
+	DID5,	32,	// 0x46 - 0x49 - Device ID 5
 
 	/* IGD OpRegion */
 	Offset (0xb4),
