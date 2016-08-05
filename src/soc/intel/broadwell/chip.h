@@ -14,6 +14,8 @@
  * GNU General Public License for more details.
  */
 
+#include <drivers/intel/gma/i915.h>
+
 #ifndef _SOC_INTEL_BROADWELL_CHIP_H_
 #define _SOC_INTEL_BROADWELL_CHIP_H_
 
@@ -128,6 +130,8 @@ struct soc_intel_broadwell_config {
 	 * 3 = 675MHz
 	 */
 	int cdclk;
+
+	struct i915_gpu_controller_info gfx;
 
 	/* Enable S0iX support */
 	int s0ix_enable;
