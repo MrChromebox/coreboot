@@ -88,7 +88,7 @@ Scope (\_SB.PCI0.I2C0)
 			)
 
 			// GPIO13 is PIRQL
-			Interrupt (ResourceConsumer, Edge, ActiveLow) { 27 }
+			Interrupt (ResourceConsumer, Level, ActiveLow) { 27 }
 		})
 
 		Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 3 })
@@ -245,7 +245,7 @@ Scope (\_SB.PCI0.I2C1)
 			)
 
 			// GPIO14 is PIRQM
-			Interrupt (ResourceConsumer, Edge, ActiveLow) { 28 }
+			Interrupt (ResourceConsumer, Level, ActiveLow) { 28 }
 		})
 
 #ifdef ENABLE_TOUCH_WAKE
