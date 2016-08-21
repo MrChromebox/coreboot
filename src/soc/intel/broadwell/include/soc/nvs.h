@@ -57,7 +57,10 @@ typedef struct {
 	u8	ndid; /* 0x35 - number of device ids */
 	u32	did[5]; /* 0x36 - 4a device id 1..5 */
 
-	u8	unused[181];
+	u8	tid1; /* 0x37 - Touch Pad ID 1. 0 - all, 1,2,3... - for each */
+	u8	tid2; /* 0x38 - Touch Pad ID 2. 0 - all, 1,2,3... - for each */
+
+	u8	unused[179];
 
 	/* ChromeOS specific (0x100 - 0xfff) */
 	chromeos_acpi_t chromeos;
