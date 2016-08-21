@@ -28,4 +28,6 @@
 #define BOARD_TOUCHSCREEN_I2C_BUS	2	/* I2C1 */
 #define BOARD_TOUCHSCREEN_I2C_ADDR	0x4a
 
+#define BOARD_WLAN_WAKE_GPIO		10	/* GPIO10 */
+
 #endif

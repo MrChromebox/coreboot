@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  */
 
-#include <mainboard/google/lulu/onboard.h>
+#include "onboard.h"
 
 Scope (\_SB)
 {
@@ -204,16 +204,14 @@ Scope (\_SB.PCI0.RP01)
 	{
 		Name (_ADR, 0x00000000)
 
-		/* GPIO10 is WLAN_WAKE_L_Q */
-		Name (GPIO, 10)
-
-		Name (_PRW, Package() { GPIO, 3 })
+		Name (_PRW, Package() { BOARD_WLAN_WAKE_GPIO, 3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
+			Store (BOARD_WLAN_WAKE_GPIO, Local0)
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
-				\_SB.PCI0.LPCB.GPIO.GWAK (^GPIO)
+				\_SB.PCI0.LPCB.GPIO.GWAK (Local0)
 			}
 		}
 	}
