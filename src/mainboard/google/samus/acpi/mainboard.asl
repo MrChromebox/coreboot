@@ -15,6 +15,8 @@
 
 #undef ENABLE_TOUCH_WAKE
 
+#include "onboard.h"
+
 Scope (\_SB)
 {
 	Device (LID0)
@@ -52,16 +54,14 @@ Scope (\_SB.PCI0.RP01)
 	{
 		Name (_ADR, 0x00000000)
 
-		/* GPIO10 is PCH_WLAN_WAKE_L */
-		Name (GPIO, 10)
-
-		Name (_PRW, Package() { GPIO, 3 })
+		Name (_PRW, Package() { BOARD_WLAN_WAKE_GPIO, 3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
+			Store (BOARD_WLAN_WAKE_GPIO, Local0)
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
-				\_SB.PCI0.LPCB.GPIO.GWAK (^GPIO)
+				\_SB.PCI0.LPCB.GPIO.GWAK (Local0)
 			}
 		}
 	}
@@ -76,7 +76,6 @@ Scope (\_SB.PCI0.I2C0)
 		Name (_UID, 2)
 		Name (_S0W, 4)
 		Name (ISTP, 1) /* Touchpad */
-		Name (GPIO, 9) /* TRACKPAD_INT_L (WAKE) */
 
 		Name (_CRS, ResourceTemplate()
 		{
@@ -92,13 +91,14 @@ Scope (\_SB.PCI0.I2C0)
 			Interrupt (ResourceConsumer, Edge, ActiveLow) { 27 }
 		})
 
-		Name (_PRW, Package() { GPIO, 3 })
+		Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
+			Store (BOARD_TRACKPAD_WAKE_GPIO, Local0)
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
-				\_SB.PCI0.LPCB.GPIO.GWAK (^GPIO)
+				\_SB.PCI0.LPCB.GPIO.GWAK (Local0)
 			}
 		}
 
@@ -121,7 +121,6 @@ Scope (\_SB.PCI0.I2C0)
 		Name (_HID, "RT5677CE")
 		Name (_DDN, "RT5667 Codec")
 		Name (_UID, 1)
-		Name (WAKE, 45) /* DSP_INT (use as codec wake) */
 
 		Name (MB1, 1)   /* MICBIAS1 = 2.970V */
 		Name (DACR, 1)  /* Use codec internal 1.8V as DACREF source */
@@ -203,13 +202,14 @@ Scope (\_SB.PCI0.I2C0)
 				"\\_SB.PCI0.I2C0.CODC") { 1 }
 		})
 
-		Name (_PRW, Package() { WAKE, 3 })
+		Name (_PRW, Package() { BOARD_CODEC_WAKE_GPIO, 3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
+			Store (BOARD_CODEC_WAKE_GPIO, Local0)
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
-				\_SB.PCI0.LPCB.GPIO.GWAK (^WAKE)
+				\_SB.PCI0.LPCB.GPIO.GWAK (Local0)
 			}
 		}
 
@@ -233,7 +233,6 @@ Scope (\_SB.PCI0.I2C1)
 		Name (_UID, 5)
 		Name (_S0W, 4)
 		Name (ISTP, 0) /* TouchScreen */
-		Name (GPIO, 14) /* TOUCH_INT_L */
 
 		Name (_CRS, ResourceTemplate()
 		{
@@ -250,13 +249,14 @@ Scope (\_SB.PCI0.I2C1)
 		})
 
 #ifdef ENABLE_TOUCH_WAKE
-		Name (_PRW, Package() { GPIO, 3 })
+		Name (_PRW, Package() { BOARD_TOUCHSCREEN_WAKE_GPIO, 3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
+			Store (BOARD_CODEC_WAKE_GPIO, Local0)
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
-				\_SB.PCI0.LPCB.GPIO.GWAK (^GPIO)
+				\_SB.PCI0.LPCB.GPIO.GWAK (Local0)
 			}
 		}
 #endif
