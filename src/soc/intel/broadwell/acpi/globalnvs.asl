@@ -59,6 +59,8 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	CBMC,	32,	// 0x1c - 0x1f - Coreboot Memory Console
 	PM1I,	64,	// 0x20 - 0x27 - PM1 wake status bit
 	GPEI,	64,	// 0x28 - 0x2f - GPE wake status bit
+	TID1,	8,	// 0x26 - Touch Pad ID1(0 - All, 1,2,3... - for each)
+	TID2,	8,	// 0x27 - Touch Pad ID2(0 - All, 1,2,3... - for each)
 	CSTE,	16,	// 0x30 - Current display state
 	NSTE,	16,	// 0x32 - Next display state
 	SSTE,	16,	// 0x34 - Set display state
