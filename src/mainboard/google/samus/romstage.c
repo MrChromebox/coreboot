@@ -53,7 +53,7 @@ void mainboard_romstage_entry(struct romstage_params *rp)
 	mainboard_fill_spd_data(&pei_data);
 	rp->pei_data = &pei_data;
 
-	/* Initalize memory */
+	/* Initialize memory */
 	romstage_common(rp);
 
 	/* Bring SSD out of reset */
