@@ -83,7 +83,6 @@ void mainboard_smi_sleep(u8 slp_typ)
 		}
 
 		set_gpio(GPIO_PP3300_CODEC_EN, 0);
-		set_gpio(GPIO_WLAN_DISABLE_L, 0);
 
 		/* Enable wake events */
 		google_chromeec_set_wake_mask(MAINBOARD_EC_S3_WAKE_EVENTS);

@@ -14,7 +14,7 @@
  */
 
 /* mainboard configuration */
-#include <mainboard/google/auron/ec.h>
+#include "ec.h"
 
 #define SIO_EC_MEMMAP_ENABLE     // EC Memory Map Resources
 #define SIO_EC_HOST_ENABLE       // EC Host Interface Resources
