@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  */
 
-#include <mainboard/google/auron/onboard.h>
+#include "onboard.h"
 
 Scope (\_SB)
 {
