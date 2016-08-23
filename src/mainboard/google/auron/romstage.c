@@ -22,7 +22,7 @@
 #include <soc/pei_data.h>
 #include <soc/pei_wrapper.h>
 #include <soc/romstage.h>
-#include <mainboard/google/auron/spd/spd.h>
+#include "spd/spd.h"
 #include "gpio.h"
 
 void mainboard_romstage_entry(struct romstage_params *rp)
