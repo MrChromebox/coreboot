@@ -49,7 +49,6 @@ config HAVE_ME_BIN
 	bool
 	default n
 
-
 config MAINBOARD_FAMILY
 	string
 	depends on GENERATE_SMBIOS_TABLES

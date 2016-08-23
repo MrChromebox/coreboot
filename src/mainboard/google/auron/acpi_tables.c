@@ -29,8 +29,6 @@
 #include <soc/nvs.h>
 #include "thermal.h"
 
-extern const unsigned char AmlCode[];
-
 static void acpi_update_thermal_table(global_nvs_t *gnvs)
 {
 	gnvs->tmps = CTL_TDP_SENSOR_ID;
