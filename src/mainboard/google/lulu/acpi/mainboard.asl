@@ -72,12 +72,22 @@ Scope (\_SB.PCI0.I2C0)
 	Device (STPA)
 	{
 		Name (_HID, "SYNA0000")
-		Name (_CID, "PNP0C50")
 		Name (_DDN, "Synaptics Touchpad")
 		Name (_UID, 1)
 		Name (ISTP, 1) /* Touchpad */
 
-		Method(_CRS, 0x0, NotSerialized)
+		Method(_CID, 0)
+		{
+			If (_OSI("Linux"))
+			{
+				Return ("PNP0C50")
+			} Else
+			{
+				Return ("SYNA0000")
+			}
+		}
+
+		Method(_CRS, 0x0, Serialized)
 		{
 			Name (RBUF, ResourceTemplate()
 			{
