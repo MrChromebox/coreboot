@@ -245,6 +245,8 @@ void romstage_common(const struct romstage_params *params)
 	#endif
 	}
 
+	setup_sdram_meminfo(params->pei_data);
+
 	handoff = romstage_handoff_find_or_add();
 	if (handoff != NULL)
 		handoff->s3_resume = wake_from_s3;
