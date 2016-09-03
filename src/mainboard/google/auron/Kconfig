@@ -1,3 +1,6 @@
+config BOARD_GOOGLE_AURON # dummy option to be selected by variant boards
+	def_bool n
+
 if BOARD_GOOGLE_AURON
 
 config BOARD_SPECIFIC_OPTIONS # dummy
@@ -61,6 +64,12 @@ config EC_GOOGLE_CHROMEEC_BOARDNAME
 config GBB_HWID
 	string
 	depends on CHROMEOS
-	default "AURON TEST A-A 9944"
+	default "PAINE TEST A-A 8843" if BOARD_GOOGLE_AURON_PAINE
+	default "YUNA TEST A-A 3347" if BOARD_GOOGLE_AURON_YUNA
+
+config DEVICETREE
+	string
+	default "devicetree.paine.cb" if BOARD_GOOGLE_AURON_PAINE
+	default "devicetree.yuna.cb" if BOARD_GOOGLE_AURON_YUNA
 
 endif
