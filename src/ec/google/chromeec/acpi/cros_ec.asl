@@ -18,6 +18,10 @@ Device (CREC)
 	Name (_HID, "GOOG0004")
 	Name (_UID, 1)
 	Name (_DDN, "EC Command Device")
+	Method (_STA, 0, NotSerialized)
+        {
+            Return (0xB)  /* return 0xB to hide device from Windows */
+        }
 
 #ifdef EC_ENABLE_MKBP_DEVICE
 	Device (CKSC)
