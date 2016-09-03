@@ -155,6 +155,7 @@ void smbios_fill_dimm_manufacturer_from_id(uint16_t mod_id, struct smbios_type17
 							    "Kingston");
 			break;
 		case 0xad00:
+		case 0xad80:
 			t->manufacturer = smbios_add_string(t->eos,
 							    "Hynix");
 			break;
@@ -175,6 +176,7 @@ void smbios_fill_dimm_manufacturer_from_id(uint16_t mod_id, struct smbios_type17
 							    "GSkill");
 			break;
 		case 0xce00:
+		case 0xce80:
 			t->manufacturer = smbios_add_string(t->eos,
 							    "Samsung");
 			break;
