@@ -196,6 +196,7 @@ typedef enum {
 	SMBIOS_PHYS_MEMORY_ARRAY = 16,
 	SMBIOS_MEMORY_DEVICE = 17,
 	SMBIOS_MEMORY_ARRAY_MAPPED_ADDRESS = 19,
+	SMBIOS_MEMORY_DEVICE_MAPPED_ADDRESS = 20,
 	SMBIOS_SYSTEM_BOOT_INFORMATION = 32,
 	SMBIOS_IPMI_DEVICE_INFORMATION = 38,
 	SMBIOS_ONBOARD_DEVICES_EXTENDED_INFORMATION = 41,
@@ -456,6 +457,35 @@ struct smbios_type17 {
 	u16 configured_voltage;
 	u8 eos[2];
 } __packed;
+
+struct smbios_type19 {
+	u8 type;
+	u8 length;
+	u16 handle;
+	u32 phys_addr_start;
+	u32 phys_addr_end;
+	u16 memory_array_handle;
+	u8 partition_width;
+	u64 ext_phys_addr_start;
+	u64 ext_phys_addr_end;
+	char eos[2];
+} __attribute__((packed));
+
+struct smbios_type20 {
+	u8 type;
+	u8 length;
+	u16 handle;
+	u32 addr_start;
+	u32 addr_end;
+	u16 memory_device_handle;
+	u16 memory_array_mapped_address_handle;
+	u8 partition_row_pos;
+	u8 interleave_pos;
+	u8 interleave_depth;
+	u64 ext_addr_start;
+	u64 ext_addr_end;
+	char eos [2];
+} __attribute__((packed));
 
 struct smbios_type32 {
 	u8 type;

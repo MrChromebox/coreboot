@@ -34,6 +34,10 @@
 #include <vendorcode/google/chromeos/gnvs.h>
 #endif
 
+static int type16_table_handle = 0;
+static int type17_table_handle = 0;
+static int type19_table_handle = 0;
+
 static u8 smbios_checksum(u8 *p, u32 length)
 {
 	u8 ret = 0;
@@ -285,6 +289,7 @@ static int create_smbios_type17_for_dimm(struct dimm_info *dimm,
 		t->size = 0x7fff;
 		t->extended_size = dimm->dimm_size & 0x7fffffff;
 	}
+	t->phys_memory_array_handle=type16_table_handle;
 	t->data_width = 8 * (1 << (dimm->bus_width & 0x7));
 	t->total_width = t->data_width + 8 * ((dimm->bus_width & 0x18) >> 3);
 
@@ -326,6 +331,8 @@ static int create_smbios_type17_for_dimm(struct dimm_info *dimm,
 	t->memory_error_information_handle = 0xFFFE;
 	t->attributes = dimm->rank_per_dimm;
 	t->handle = *handle;
+	if (type17_table_handle == 0)
+		type17_table_handle = *handle;
 	*handle += 1;
 	t->length = sizeof(struct smbios_type17) - 2;
 	return t->length + smbios_string_table_len(t->eos);
@@ -594,6 +601,31 @@ static int smbios_write_type11(unsigned long *current, int *handle)
 	return len;
 }
 
+static int smbios_write_type16(unsigned long *current, int handle)
+{
+	struct smbios_type16 *t = (struct smbios_type16 *)*current;
+	memset(t, 0, sizeof(struct smbios_type16));
+	int len = sizeof(struct smbios_type16);
+	struct memory_info *meminfo;
+	meminfo = cbmem_find(CBMEM_ID_MEMINFO);
+	if (meminfo == NULL)
+		return 0;	/* can't find mem info in cbmem */
+
+	printk(BIOS_INFO, "Create SMBIOS type 16\n");
+	t->type = SMBIOS_PHYS_MEMORY_ARRAY;
+	t->location = 0x3;				/* on mainboard */
+	t->use = 0x3;					/* system memory */
+	t->memory_error_correction = 0x3;		/* none */
+	t->maximum_capacity = 0x01000000;		/* 16GB */
+	t->memory_error_information_handle = 0xFFFE;	/* not provided */
+	t->number_of_memory_devices = meminfo->dimm_cnt;
+	t->handle = handle;
+	type16_table_handle = handle; /* save handle for use/reference in type19 table */
+	t->length = len - 2;
+	*current += len;
+	return len;
+}
+
 static int smbios_write_type17(unsigned long *current, int *handle)
 {
 	int len = sizeof(struct smbios_type17);
@@ -611,6 +643,82 @@ static int smbios_write_type17(unsigned long *current, int *handle)
 		struct dimm_info *dimm;
 		dimm = &meminfo->dimm[i];
 		len = create_smbios_type17_for_dimm(dimm, current, handle);
+		*current += len;
+		totallen += len;
+	}
+	return totallen;
+}
+
+static int smbios_write_type19(unsigned long *current, int handle)
+{
+	struct smbios_type19 *t = (struct smbios_type19 *)*current;
+	memset(t, 0, sizeof(struct smbios_type19));
+	int len = sizeof(struct smbios_type19);
+	int i;
+
+	struct memory_info *meminfo;
+	meminfo = cbmem_find(CBMEM_ID_MEMINFO);
+	if (meminfo == NULL)
+		return 0;	/* can't find mem info in cbmem */
+
+	printk(BIOS_INFO, "Create SMBIOS type 19\n");
+	t->type = SMBIOS_MEMORY_ARRAY_MAPPED_ADDRESS;
+	t->memory_array_handle = type16_table_handle;
+	t->phys_addr_start = 0;
+
+	for (i = 0; i < meminfo->dimm_cnt && i < ARRAY_SIZE(meminfo->dimm); i++) {
+		struct dimm_info *dimm;
+		dimm = &meminfo->dimm[i];
+		t->phys_addr_end += dimm->dimm_size;
+	}
+	t->phys_addr_end = (t->phys_addr_end << 10) - 1;
+	t->partition_width = meminfo->dimm_cnt;
+	t->handle = handle;
+	type19_table_handle = handle;	/* save handle for use/reference in type20 table */
+	t->length = len - 2;
+	*current += len;
+	return len;
+}
+
+static int smbios_write_type20_table(unsigned long *current, int *handle, u32 addr_start, u32 addr_end)
+{
+	struct smbios_type20 *t = (struct smbios_type20 *)*current;
+	memset(t, 0, sizeof(struct smbios_type20));
+	int len = sizeof(struct smbios_type20);
+
+	t->type = SMBIOS_MEMORY_DEVICE_MAPPED_ADDRESS;
+	t->memory_device_handle = type17_table_handle++;
+	t->memory_array_mapped_address_handle = type19_table_handle;
+	t->addr_start = addr_start;
+	t->addr_end = addr_end;
+	t->partition_row_pos = 0xFF;
+	t->interleave_pos = 0xFF;
+	t->interleave_depth = 0xFF;
+	t->handle = *handle;
+	*handle += 1;
+	t->length = len - 2;
+	return len;
+}
+
+static int smbios_write_type20(unsigned long *current, int *handle)
+{
+	u32 start_addr = 0;
+	int len;
+	int totallen = 0;
+	int i;
+
+	struct memory_info *meminfo;
+	meminfo = cbmem_find(CBMEM_ID_MEMINFO);
+	if (meminfo == NULL)
+		return 0;	/* can't find mem info in cbmem */
+
+	printk(BIOS_INFO, "Create SMBIOS type 20\n");
+	for (i = 0; i < meminfo->dimm_cnt && i < ARRAY_SIZE(meminfo->dimm); i++) {
+		struct dimm_info *dimm;
+		dimm = &meminfo->dimm[i];
+		u32 end_addr = start_addr + (dimm->dimm_size << 10) - 1;
+		len = smbios_write_type20_table(current, handle, start_addr, end_addr);
+		start_addr += (end_addr + 1);
 		*current += len;
 		totallen += len;
 	}
@@ -752,7 +860,13 @@ unsigned long smbios_write_tables(unsigned long current)
 	if (IS_ENABLED(CONFIG_ELOG))
 		update_max(len, max_struct_size,
 			elog_smbios_write_type15(&current,handle++));
+	update_max(len, max_struct_size, smbios_write_type16(&current,
+		handle++));
 	update_max(len, max_struct_size, smbios_write_type17(&current,
+		&handle));
+	update_max(len, max_struct_size, smbios_write_type19(&current,
+		handle++));
+	update_max(len, max_struct_size, smbios_write_type20(&current,
 		&handle));
 	update_max(len, max_struct_size, smbios_write_type32(&current,
 		handle++));
@@ -770,6 +884,7 @@ unsigned long smbios_write_tables(unsigned long current)
 	se->minor_version = 7;
 	se->max_struct_size = max_struct_size;
 	se->struct_count = handle;
+	se->smbios_bcd_revision = 0x27;
 	memcpy(se->intermediate_anchor_string, "_DMI_", 5);
 
 	se->struct_table_address = (u32)tables;
