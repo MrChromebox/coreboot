@@ -32,62 +32,121 @@ Scope (\_SB)
 	{
 		Name(_HID, EisaId("PNP0C0C"))
 	}
+}
 
-	Device (TPAD)
+Scope (\_SB.PCI0.I2C0)
+{
+	Device (CTPA)
 	{
-		Name (_ADR, 0x0)
-		Name (_UID, 1)
-
-		// Report as a Sleep Button device so Linux will
-		// automatically enable it as a wake source
-		Name (_HID, EisaId("PNP0C0E"))
+		Name (_HID, "CYAP0000")
+		Name (_DDN, "Cypress Touchpad")
+		Name (_UID, 3)
+		Name (ISTP, 1) // Touchpad
 
 		Name (_CRS, ResourceTemplate()
 		{
+			I2cSerialBus (
+				0x67,                     // SlaveAddress
+				ControllerInitiated,      // SlaveMode
+				400000,                   // ConnectionSpeed
+				AddressingMode7Bit,       // AddressingMode
+				"\\_SB.PCI0.I2C0"        // ResourceSource
+			)
 			Interrupt (ResourceConsumer, Edge, ActiveLow)
 			{
 				BOARD_TRACKPAD_IRQ
 			}
-
-			VendorShort (ADDR)
-			{
-				BOARD_TRACKPAD_I2C_ADDR
-			}
 		})
+
+		Method (_STA)
+		{
+			If (LEqual (\S1EN, 1)) {
+				Return (0xF)
+			} Else {
+				Return (0x0)
+			}
+		}
 
 		Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x3 })
 
 		Method (_DSW, 3, NotSerialized)
 		{
 			Store (BOARD_TRACKPAD_WAKE_GPIO, Local0)
-
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
 				\_SB.PCI0.LPCB.GWAK (Local0)
 			}
 		}
+
+		// Allow device to power off in S0
+		Name (_S0W, 4)
 	}
-
-	Device (TSCR)
+	/*Device (ETPA)
 	{
-		Name (_ADR, 0x0)
-		Name (_UID, 2)
+		Name (_HID, "ELAN0000")
+		Name (_DDN, "Elan Touchpad")
+		Name (_UID, 1)
+                Name (ISTP, 1) // Touchpad
 
-		// Report as a Sleep Button device so Linux will
-		// automatically enable it as a wake source
-		Name (_HID, EisaId("PNP0C0E"))
-
-		Name (_CRS, ResourceTemplate()
+                Name (_CRS, ResourceTemplate()
 		{
+			I2cSerialBus (
+				0x15,                     // SlaveAddress
+				ControllerInitiated,      // SlaveMode
+				400000,                   // ConnectionSpeed
+				AddressingMode7Bit,       // AddressingMode
+				"\\_SB.PCI0.I2C0"        // ResourceSource
+			)
 			Interrupt (ResourceConsumer, Edge, ActiveLow)
 			{
-				BOARD_TOUCHSCREEN_IRQ
+				BOARD_TRACKPAD_IRQ
 			}
+		})
 
-			VendorShort (ADDR)
-			{
-				BOARD_TOUCHSCREEN_I2C_ADDR
+		Method (_STA)
+		{
+			If (LEqual (\S1EN, 1)) {
+				Return (0xF)
+			} Else {
+				Return (0x0)
 			}
+		}
+
+		Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x3 })
+
+		Method (_DSW, 3, NotSerialized)
+		{
+			Store (BOARD_TRACKPAD_WAKE_GPIO, Local0)
+			If (LEqual (Arg0, 1)) {
+				// Enable GPIO as wake source
+				\_SB.PCI0.LPCB.GWAK (Local0)
+			}
+		}
+          }*/
+}
+Scope (\_SB.PCI0.I2C1)
+{
+	Device (ATSA)
+	{
+		Name (_HID, "ATML0001")
+		Name (_DDN, "Atmel Touchscreen")
+		Name (_UID, 5)
+		Name (_S0W, 4)
+		Name (ISTP, 0) /* TouchScreen */
+		Name (GPIO, 25)
+		Name (_CRS, ResourceTemplate()
+		{
+			I2cSerialBus (
+				0x4a,                     // SlaveAddress
+				ControllerInitiated,      // SlaveMode
+				400000,                   // ConnectionSpeed
+				AddressingMode7Bit,       // AddressingMode
+				"\\_SB.PCI0.I2C1"        // ResourceSource
+			)
+
+			// GPIO54 (ball L3) is PIRQW: PIRQL_GSI + PIRQL - PIRQW = PIRQW_GSI
+			// 27 + 3 - 14 = 38
+			Interrupt (ResourceConsumer, Edge, ActiveLow) { 38 }
 		})
 
 		Name (_PRW, Package() { BOARD_TOUCHSCREEN_WAKE_GPIO, 0x3 })
@@ -95,10 +154,18 @@ Scope (\_SB)
 		Method (_DSW, 3, NotSerialized)
 		{
 			Store (BOARD_TOUCHSCREEN_WAKE_GPIO, Local0)
-
 			If (LEqual (Arg0, 1)) {
 				// Enable GPIO as wake source
 				\_SB.PCI0.LPCB.GWAK (Local0)
+			}
+		}
+
+		Method (_STA)
+		{
+			If (LEqual (\S2EN, 1)) {
+				Return (0xF)
+			} Else {
+				Return (0x0)
 			}
 		}
 	}

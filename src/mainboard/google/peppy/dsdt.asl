@@ -27,7 +27,6 @@ DefinitionBlock(
 {
 	// Some generic macros
 	#include "acpi/platform.asl"
-	#include "acpi/mainboard.asl"
 
 	// global NVS and variables
 	#include <southbridge/intel/lynxpoint/acpi/globalnvs.asl>
@@ -47,6 +46,9 @@ DefinitionBlock(
 			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 		}
 	}
+
+	// Mainboard specific
+	#include "acpi/mainboard.asl"
 
 	// Thermal handler
 	#include "acpi/thermal.asl"
