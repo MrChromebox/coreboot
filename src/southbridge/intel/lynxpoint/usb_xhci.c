@@ -273,55 +273,20 @@ static void usb_xhci_clock_gating(struct device *dev)
 
 static void usb_xhci_init(struct device *dev)
 {
+	struct resource *res = find_resource(dev, PCI_BASE_ADDRESS_0);
 	u32 reg32;
-	u8 *mem_base = usb_xhci_mem_base(dev);
 	struct southbridge_intel_lynxpoint_config *config = dev->chip_info;
 
 	/* D20:F0:74h[1:0] = 00b (set D0 state) */
 	pci_update_config16(dev, XHCI_PWR_CTL_STS, ~PWR_CTL_SET_MASK, PWR_CTL_SET_D0);
 
+	/* Disable Compliance Mode Entry */
+	reg32 = read32(res2mmio(res, 0x80ec, 0));
+	reg32 |= (1 << 0);
+	write32(res2mmio(res, 0x80ec, 0), reg32);
+
 	/* Enable clock gating first */
 	usb_xhci_clock_gating(dev);
-
-	reg32 = read32(mem_base + 0x8144);
-	if (pch_is_lp()) {
-		/* XHCIBAR + 8144h[8,7,6] = 111b */
-		reg32 |= (1 << 8) | (1 << 7) | (1 << 6);
-	} else {
-		/* XHCIBAR + 8144h[8,7,6] = 100b */
-		reg32 &= ~((1 << 7) | (1 << 6));
-		reg32 |= (1 << 8);
-	}
-	write32(mem_base + 0x8144, reg32);
-
-	if (pch_is_lp()) {
-		/* XHCIBAR + 816Ch[19:0] = 000e0038h */
-		reg32 = read32(mem_base + 0x816c);
-		reg32 &= ~0x000fffff;
-		reg32 |= 0x000e0038;
-		write32(mem_base + 0x816c, reg32);
-
-		/* D20:F0:B0h[17,14,13] = 100b */
-		pci_update_config32(dev, 0xb0, ~((1 << 14) | (1 << 13)), 1 << 17);
-	}
-
-	reg32 = pci_read_config32(dev, 0x50);
-	if (pch_is_lp()) {
-		/* D20:F0:50h[28:0] = 0FCE2E5Fh */
-		reg32 &= ~0x1fffffff;
-		reg32 |= 0x0fce2e5f;
-	} else {
-		/* D20:F0:50h[26:0] = 07886E9Fh */
-		reg32 &= ~0x07ffffff;
-		reg32 |= 0x07886e9f;
-	}
-	pci_write_config32(dev, 0x50, reg32);
-
-	/* D20:F0:44h[31] = 1 (Access Control Bit) */
-	pci_or_config32(dev, 0x44, 1 << 31);
-
-	/* D20:F0:40h[31,23] = 10b (OC Configuration Done) */
-	pci_update_config32(dev, 0x40, ~(1 << 23), 1 << 31); /* unsupported request */
 
 	if (acpi_is_wakeup_s3()) {
 		/* Reset ports that are disabled or
