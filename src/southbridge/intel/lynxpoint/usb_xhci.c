@@ -289,9 +289,9 @@ static void usb_xhci_clock_gating(device_t dev)
 
 static void usb_xhci_init(device_t dev)
 {
+	struct resource *res = find_resource(dev, PCI_BASE_ADDRESS_0);
 	u32 reg32;
 	u16 reg16;
-	u8 *mem_base = usb_xhci_mem_base(dev);
 	config_t *config = dev->chip_info;
 
 	/* D20:F0:74h[1:0] = 00b (set D0 state) */
@@ -300,56 +300,13 @@ static void usb_xhci_init(device_t dev)
 	reg16 |= PWR_CTL_SET_D0;
 	pci_write_config16(dev, XHCI_PWR_CTL_STS, reg16);
 
+	/* Disable Compliance Mode Entry */
+	reg32 = read32(res2mmio(res, 0x80ec, 0));
+	reg32 |= (1 << 0);
+	write32(res2mmio(res, 0x80ec, 0), reg32);
+
 	/* Enable clock gating first */
 	usb_xhci_clock_gating(dev);
-
-	reg32 = read32(mem_base + 0x8144);
-	if (pch_is_lp()) {
-		/* XHCIBAR + 8144h[8,7,6] = 111b */
-		reg32 |= (1 << 8) | (1 << 7) | (1 << 6);
-	} else {
-		/* XHCIBAR + 8144h[8,7,6] = 100b */
-		reg32 &= ~((1 << 7) | (1 << 6));
-		reg32 |= (1 << 8);
-	}
-	write32(mem_base + 0x8144, reg32);
-
-	if (pch_is_lp()) {
-		/* XHCIBAR + 816Ch[19:0] = 000e0038h */
-		reg32 = read32(mem_base + 0x816c);
-		reg32 &= ~0x000fffff;
-		reg32 |= 0x000e0038;
-		write32(mem_base + 0x816c, reg32);
-
-		/* D20:F0:B0h[17,14,13] = 100b */
-		reg32 = pci_read_config32(dev, 0xb0);
-		reg32 &= ~((1 << 14) | (1 << 13));
-		reg32 |= (1 << 17);
-		pci_write_config32(dev, 0xb0, reg32);
-	}
-
-	reg32 = pci_read_config32(dev, 0x50);
-	if (pch_is_lp()) {
-		/* D20:F0:50h[28:0] = 0FCE2E5Fh */
-		reg32 &= ~0x1fffffff;
-		reg32 |= 0x0fce2e5f;
-	} else {
-		/* D20:F0:50h[26:0] = 07886E9Fh */
-		reg32 &= ~0x07ffffff;
-		reg32 |= 0x07886e9f;
-	}
-	pci_write_config32(dev, 0x50, reg32);
-
-	/* D20:F0:44h[31] = 1 (Access Control Bit) */
-	reg32 = pci_read_config32(dev, 0x44);
-	reg32 |= (1UL << 31);
-	pci_write_config32(dev, 0x44, reg32);
-
-	/* D20:F0:40h[31,23] = 10b (OC Configuration Done) */
-	reg32 = pci_read_config32(dev, 0x40);
-	reg32 &= ~(1 << 23); /* unsupported request */
-	reg32 |= (1UL << 31);
-	pci_write_config32(dev, 0x40, reg32);
 
 	if (acpi_is_wakeup_s3()) {
 		/* Reset ports that are disabled or
