@@ -32,7 +32,7 @@ Device (DPTF)
 	Method (_STA)
 	{
 		If (LEqual (\DPTE, One)) {
-			Return (0xF)
+			Return (0xB)
 		} Else {
 			Return (0x0)
 		}
