@@ -234,6 +234,11 @@ Device (IOSF)
 		Memory32Fixed (ReadWrite, 0, 12, RBAR)
 	})
 
+	Method (_STA)
+	{
+		Return (0xB)  /* hide from Windows */
+	}
+
 	Method (_CRS)
 	{
 		CreateDwordField (^RBUF, ^RBAR._BAS, RBAS)
