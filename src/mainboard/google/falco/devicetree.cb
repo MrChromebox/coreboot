@@ -78,6 +78,9 @@ chip northbridge/intel/haswell
 			# Force enable ASPM for PCIe Port 1
 			register "pcie_port_force_aspm" = "0x01"
 
+			# Route all USB ports to XHCI per default
+			register "xhci_default" = "1"
+
 			# Disable PCIe CLKOUT 1-5 and CLKOUT_XDP
 			register "icc_clock_disable" = "0x013e0000"
 
