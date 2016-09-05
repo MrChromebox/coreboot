@@ -49,6 +49,14 @@ DefinitionBlock(
 		}
 	}
 
+	Scope (\_SB.PCI0.RP01)
+	{
+		Device (WLAN)
+		{
+			Name (_ADR, Zero)
+		}
+	}
+
 	// Mainboard specific
 	#include "acpi/mainboard.asl"
 
