@@ -19,7 +19,7 @@ const u32 cim_verb_data[] = {
 	/* coreboot specific header */
 	0x10ec0283,	// Codec Vendor / Device ID: Realtek ALC283
 	0x10ec0283,	// Subsystem ID
-	0x0000000d,	// Number of jacks (NID entries)
+	0x0000000e,	// Number of jacks (NID entries)
 
 	0x0017ff00,	// Function Reset
 	0x0017ff00,	// Double Function Reset
@@ -31,8 +31,8 @@ const u32 cim_verb_data[] = {
 	/* Bits 19:8 - Verb ID */
 	/* Bits 7:0  - Payload */
 
-	/* NID 0x01, HDA Codec Subsystem ID Verb Table: 0x10ec0283 */
-	AZALIA_SUBVENDOR(0x0, 0x10ec0283),
+	/* NID 0x01, HDA Codec Subsystem ID Verb Table */
+	AZALIA_SUBVENDOR(0x0, 0x11790670),
 
 	/* Pin Widget Verb Table */
 
@@ -49,30 +49,30 @@ const u32 cim_verb_data[] = {
 	/* Pin Complex (NID 0x17) MONO Out - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x17, 0x411111f0),
 
-	/* Pin Complex (NID 0x18) Disabled */
+	/* Pin Complex (NID 0x18) MIC1 PORTB - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x18, 0x411111f0),
 
-	/* Pin Complex (NID 0x19)  MIC2 - 3.5mm Jack */
+	/* Pin Complex (NID 0x19) MIC2 - 3.5mm Jack */
 	// group2, cap 0
 	// black, jack detect
 	// Mic in, 3.5mm Jack
 	// connector, External left panel
 	AZALIA_PIN_CFG(0x0, 0x19, 0x03a11020),
 
-	/* Pin Complex (NID 0x1A)  LINE1 - Disabled */
+	/* Pin Complex (NID 0x1A) LINE1 - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x1a, 0x411111f0),
 
-	/* Pin Complex (NID 0x1B)  LINE2 - Disabled */
+	/* Pin Complex (NID 0x1B) LINE2 - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x1b, 0x411111f0),
 
-	/* Pin Complex (NID 0x1D)  PCBeep */
+	/* Pin Complex (NID 0x1D) PCBeep */
 	// eapd low on ex-amp, laptop, custom enable
 	// mute spkr on hpout
 	// pcbeep en able, checksum
 	// no physical, Internal, Location N/A
 	AZALIA_PIN_CFG(0x0, 0x1d, 0x4015812d),
 
-	/* Pin Complex (NID 0x1E)  SPDIF-OUT - Disabled*/
+	/* Pin Complex (NID 0x1E) SPDIF-OUT - Disabled*/
 	AZALIA_PIN_CFG(0x0, 0x1e, 0x411111f0),
 
 	/* Pin Complex (NID 0x21) HP-OUT - 3.5mm Jack*/
@@ -88,6 +88,12 @@ const u32 cim_verb_data[] = {
 	0x02040c20,
 	0x0205001b,
 	0x0204081b,
+
+	/* Tuned jack detection */
+	0x02050043,
+	0x0204A614,
+	0x02050047,
+	0x02049470,
 };
 
 const u32 pc_beep_verbs[] = {

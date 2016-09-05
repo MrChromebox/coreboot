@@ -24,46 +24,51 @@ const u32 cim_verb_data[] = {
 	/* coreboot specific header */
 	0x10ec0283,	// Codec Vendor / Device ID: Realtek ALC283
 	0x10ec0283,	// Subsystem ID
-	0x0000000c,	// Number of jacks (NID entries)
+	0x0000000e,	// Number of jacks (NID entries)
 
-	/* NID 0x01, HDA Codec Subsystem ID Verb Table: 0x10ec0283 */
-	AZALIA_SUBVENDOR(0x0, 0x10ec0283),
+	0x0017ff00,	// Function Reset
+	0x0017ff00,	// Double Function Reset
+	0x000F0000,	// Pad - get vendor id
+	0x000F0002,	// Pad - get revision id
+
+	/* NID 0x01, HDA Codec Subsystem ID Verb Table */
+	AZALIA_SUBVENDOR(0x0, 0x11790670),
 
 	/* Pin Widget Verb Table */
 
-	/* Pin Complex (NID 0x12) DMIC */
+	/* Pin Complex (NID 0x12) DMIC - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x12, 0x411111f0),
 
-	/* Pin Complex (NID 0x14) SPKR-OUT PORTD */
+	/* Pin Complex (NID 0x14) SPKR-OUT PORTD - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x14, 0x401111f0),
 
-	/* Pin Complex (NID 0x17)  */
+	/* Pin Complex (NID 0x17) MONO Out - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x17, 0x411111f0),
 
-	/* Pin Complex (NID 0x18)  MIC1 PORTB */
+	/* Pin Complex (NID 0x18) MIC1 PORTB */
 	// group 1, cap 1
 	// black, jack detect
 	// mic in, analog
 	// connector, left panel
 	AZALIA_PIN_CFG(0x0, 0x19, 0x03a71011),
 
-	/* Pin Complex (NID 0x19)  MIC2 PORTF */
+	/* Pin Complex (NID 0x19) MIC2 PORTF - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x18, 0x411111f0),
 
-	/* Pin Complex (NID 0x1A)  LINE1 PORTC */
+	/* Pin Complex (NID 0x1A) LINE1 PORTC - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x1a, 0x411111f0),
 
-	/* Pin Complex (NID 0x1B)  LINE2 PORTE */
+	/* Pin Complex (NID 0x1B) LINE2 PORTE - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x1a, 0x411111f0),
 
-	/* Pin Complex (NID 0x1d)  PCBeep */
+	/* Pin Complex (NID 0x1d) PCBeep */
 	// eapd low on ex-amp, laptop, custom enable
 	// mute spkr on hpout
 	// pcbeep en able, checksum
 	// no physical, internal
 	AZALIA_PIN_CFG(0x0, 0x1d, 0x4015812d),
 
-	/* Pin Complex (NID 0x1E)  SPDIF-OUT */
+	/* Pin Complex (NID 0x1E) SPDIF-OUT - Disabled */
 	AZALIA_PIN_CFG(0x0, 0x1e, 0x411111f0),
 
 	/* Pin Complex (NID 0x21) HPOUT PORT-I */
@@ -79,6 +84,12 @@ const u32 cim_verb_data[] = {
 	0x02040c20,
 	0x0205001b,
 	0x0204081b,
+
+	/* Tuned jack detection */
+	0x02050043,
+	0x0204A614,
+	0x02050047,
+	0x02049470,
 };
 
 const u32 pc_beep_verbs[] = {
