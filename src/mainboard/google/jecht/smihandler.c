@@ -66,6 +66,7 @@ void mainboard_smi_sleep(u8 slp_typ)
 			set_gpio(GPIO_USB_CTL_1, 0);
 		}
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 		set_power_led(LED_OFF);
 		break;
