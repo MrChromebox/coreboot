@@ -68,6 +68,7 @@ void mainboard_smi_sleep(u8 slp_typ)
 		/* Enable DCP mode */
 		set_gpio(GPIO_USB_CTL_1, 0);
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 		set_power_led(SIO_GPIO_BLINK_GPIO10, LED_OFF);
 		break;

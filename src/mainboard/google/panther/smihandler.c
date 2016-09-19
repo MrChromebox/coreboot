@@ -14,6 +14,7 @@
  * GNU General Public License for more details.
  */
 
+#include <arch/acpi.h>
 #include <arch/io.h>
 #include <console/console.h>
 #include <cpu/intel/haswell/haswell.h>
@@ -57,13 +58,14 @@ void mainboard_smi_sleep(u8 slp_typ)
 {
 	/* Enable/Disable power LED blinking for Tricky */
 	switch (slp_typ) {
-	    case 3:
+	    case ACPI_S3:
             it8772f_gpio_led(IT8772F_GPIO_DEV, 2 /* set */, 0xF7 /* select */,
 			    0x04 /* polarity: inverting */, 0x04 /* 1=pullup */,
 			    0x04 /* output */, 0x00, /* 0=Alternate function */
 			    SIO_GPIO_BLINK_GPIO22, IT8772F_GPIO_BLINK_FREQUENCY_1_4_HZ);
 		    break;
-	    case 5:
+	    case ACPI_S4:
+	    case ACPI_S5:
             it8772f_gpio_led(IT8772F_GPIO_DEV, 2 /* set */, 0xF7 /* select */,
 			    0x04 /* polarity: inverting */, 0x00 /* 0=pulldown */,
 			    0x04 /* output */, 0x04 /* 1=Simple IO function */,
