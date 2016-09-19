@@ -66,6 +66,7 @@ void mainboard_smi_sleep(u8 slp_typ)
 			0x01 /* output */, 0x00, /* 0=Alternate function */
 			SIO_GPIO_BLINK_GPIO10, IT8772F_GPIO_BLINK_FREQUENCY_1_HZ);
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 		it8772f_gpio_led(IT8772F_GPIO_DEV, 1 /* set */, 0x01 /* select */,
 			0x00 /* polarity: non-inverting */, 0x00 /* 0=pulldown */,
