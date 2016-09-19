@@ -94,6 +94,7 @@ void mainboard_smi_sleep(u8 slp_typ)
 		/* Enable wake events */
 		google_chromeec_set_wake_mask(MAINBOARD_EC_S3_WAKE_EVENTS);
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 		if (smm_get_gnvs()->s5u0 == 0) {
 			google_chromeec_set_usb_charge_mode(
