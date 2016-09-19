@@ -509,15 +509,6 @@ void intel_me8_finalize_smm(void)
 
 	/* Try to send EOP command so ME stops accepting other commands */
 	mkhi_end_of_post();
-
-	/* Make sure IO is disabled */
-	reg32 = pci_read_config32(PCH_ME_DEV, PCI_COMMAND);
-	reg32 &= ~(PCI_COMMAND_MASTER |
-		   PCI_COMMAND_MEMORY | PCI_COMMAND_IO);
-	pci_write_config32(PCH_ME_DEV, PCI_COMMAND, reg32);
-
-	/* Hide the PCI device */
-	RCBA32_OR(FD2, PCH_DISABLE_MEI1);
 }
 
 #else /* !__SMM__ */
@@ -673,13 +664,6 @@ static int intel_me_extend_valid(struct device *dev)
 	return 0;
 }
 
-/* Hide the ME virtual PCI devices */
-static void intel_me_hide(struct device *dev)
-{
-	dev->enabled = 0;
-	pch_enable(dev);
-}
-
 /* Check whether ME is present and do basic init */
 static void intel_me_init(struct device *dev)
 {
@@ -691,7 +675,6 @@ static void intel_me_init(struct device *dev)
 
 	switch (path) {
 	case ME_S3WAKE_BIOS_PATH:
-		intel_me_hide(dev);
 		break;
 
 	case ME_NORMAL_BIOS_PATH:
