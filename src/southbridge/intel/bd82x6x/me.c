@@ -191,7 +191,6 @@ static void intel_me_init(struct device *dev)
 #if CONFIG(HIDE_MEI_ON_ERROR)
 	case ME_ERROR_BIOS_PATH:
 #endif
-		intel_me_hide(dev);
 		break;
 
 	case ME_NORMAL_BIOS_PATH:
