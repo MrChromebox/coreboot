@@ -98,6 +98,7 @@ void mainboard_smi_sleep(uint8_t slp_typ)
 		/* Enable wake pin in GPE block. */
 		enable_gpe(WAKE_GPIO_EN);
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 		if (gnvs->s5u0 == 0)
 			google_chromeec_set_usb_charge_mode(
