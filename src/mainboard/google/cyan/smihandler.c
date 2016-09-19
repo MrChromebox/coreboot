@@ -119,6 +119,7 @@ void mainboard_smi_sleep(uint8_t slp_typ)
 		/* Enable wake pin in GPE block. */
 		enable_gpe(WAKE_GPIO_EN);
 		break;
+	case ACPI_S4:
 	case ACPI_S5:
 #if IS_ENABLED(CONFIG_EC_GOOGLE_CHROMEEC)
 		if (smm_get_gnvs()->s5u0 == 0)
