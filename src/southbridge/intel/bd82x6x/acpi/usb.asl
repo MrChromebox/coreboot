@@ -40,13 +40,38 @@ Device (EHC1)
 	{
 		Name (_ADR, 0x00000000)
 
+		Method (GPLD, 2, Serialized)
+                {
+			Name (PCKG, Package (0x01)
+			{
+				Buffer (0x10) {}
+			})
+			CreateField (DerefOf (Index (PCKG, Zero)), Zero, 0x07, REV)
+			Store (One, REV)
+			CreateField (DerefOf (Index (PCKG, Zero)), 0x40, One, VISI)
+			Store (Arg0, VISI)
+			CreateField (DerefOf (Index (PCKG, Zero)), 0x57, 0x08, GPOS)
+			Store (Arg1, GPOS)
+			Return (PCKG)
+                }
+
 		// How many are there?
-		Device (PRT1) { Name (_ADR, 1) } // USB Port 0
-		Device (PRT2) { Name (_ADR, 2) } // USB Port 1
-		Device (PRT3) { Name (_ADR, 3) } // USB Port 2
-		Device (PRT4) { Name (_ADR, 4) } // USB Port 3
-		Device (PRT5) { Name (_ADR, 5) } // USB Port 4
-		Device (PRT6) { Name (_ADR, 6) } // USB Port 5
+		Device (PRT1)
+		{
+			Name (_ADR, 1)
+			Device (USB2)
+			{
+				Name (_ADR, 2)
+			}
+			Device (USB3)
+			{
+				Name (_ADR, 3)
+			}
+			Device (USB4)
+			{
+				Name (_ADR, 4)
+			}
+		}
 	}
 }
 
@@ -74,13 +99,34 @@ Device (EHC2)
 	{
 		Name (_ADR, 0x00000000)
 
+		Method (GPLD, 2, Serialized)
+                {
+			Name (PCKG, Package (0x01)
+			{
+				Buffer (0x10) {}
+			})
+			CreateField (DerefOf (Index (PCKG, Zero)), Zero, 0x07, REV)
+			Store (One, REV)
+			CreateField (DerefOf (Index (PCKG, Zero)), 0x40, One, VISI)
+			Store (Arg0, VISI)
+			CreateField (DerefOf (Index (PCKG, Zero)), 0x57, 0x08, GPOS)
+			Store (Arg1, GPOS)
+			Return (PCKG)
+                }
+
 		// How many are there?
-		Device (PRT1) { Name (_ADR, 1) } // USB Port 0
-		Device (PRT2) { Name (_ADR, 2) } // USB Port 1
-		Device (PRT3) { Name (_ADR, 3) } // USB Port 2
-		Device (PRT4) { Name (_ADR, 4) } // USB Port 3
-		Device (PRT5) { Name (_ADR, 5) } // USB Port 4
-		Device (PRT6) { Name (_ADR, 6) } // USB Port 5
+		Device (PRT1)
+		{
+			Name (_ADR, 1)
+			Device (USB1)
+			{
+				Name (_ADR, 1)
+			}
+			Device (USB3)
+			{
+				Name (_ADR, 3)
+			}
+		}
 	}
 }
 
