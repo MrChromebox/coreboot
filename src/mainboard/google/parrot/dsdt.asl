@@ -50,6 +50,9 @@ DefinitionBlock(
 		}
 	}
 
+	// USB ports
+	#include "acpi/usb.asl"
+
 	#include <vendorcode/google/chromeos/acpi/chromeos.asl>
 
 	/* Chipset specific sleep states */
