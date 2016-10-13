@@ -74,13 +74,8 @@ static struct smbus_bus_operations lops_smbus_bus = {
 
 static void smbus_set_subsystem(device_t dev, unsigned vendor, unsigned device)
 {
-	if (!vendor || !device) {
-		pci_write_config32(dev, PCI_SUBSYSTEM_VENDOR_ID,
-				pci_read_config32(dev, PCI_VENDOR_ID));
-	} else {
-		pci_write_config32(dev, PCI_SUBSYSTEM_VENDOR_ID,
-				((device & 0xffff) << 16) | (vendor & 0xffff));
-	}
+	pci_write_config32(dev, PCI_SUBSYSTEM_VENDOR_ID,
+				((0x04B4 & 0xffff) << 16) | (0x18D1 & 0xffff));
 }
 
 static struct pci_operations smbus_pci_ops = {
