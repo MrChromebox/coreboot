@@ -77,7 +77,7 @@ drivers_intel_gma_displays_ssdt_generate(const struct i915_gpu_controller_info *
 			acpigen_emit_byte(0xa4); /* ReturnOp.  */
 			acpigen_emit_namestring("^^XBCL");
 			acpigen_pop_len();
-
+#if CONFIG(NORTHBRIDGE_INTEL_SANDYBRIDGE)
 			/*
 			  Method (_BCM, 1, NotSerialized)
 			  {
@@ -88,7 +88,7 @@ drivers_intel_gma_displays_ssdt_generate(const struct i915_gpu_controller_info *
 			acpigen_emit_namestring("^^XBCM");
 			acpigen_emit_byte(0x68); /* Arg0Op.  */
 			acpigen_pop_len();
-
+#endif
 			/*
 			  Method (_BQC, 0, NotSerialized)
 			  {
