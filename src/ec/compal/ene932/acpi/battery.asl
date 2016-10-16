@@ -84,10 +84,6 @@ Device (BATX)
 		Multiply(Local1, 0x03, Local1)
 		Store (Local1, Index (PBIF, 6))
 
-		Store (ToString(BATD), Index (PBIF, 9))  // model
-		Store (ToHexString(BSN0), Index (PBIF, 10))  // serial
-		Store (ToString(BMFN), Index (PBIF, 12))  // venor
-
 		Store(BDN0, BTNM)	// Save the battery number
 
 		Return (PBIF)
