@@ -37,10 +37,6 @@ Device (PDRC)
 		Memory32Fixed(ReadWrite, CONFIG_CHROMEOS_RAMOOPS_RAM_START,
 					 CONFIG_CHROMEOS_RAMOOPS_RAM_SIZE)
 #endif
-
-		/* Required for SandyBridge sighting 3715511 */
-		Memory32Fixed(ReadWrite, 0x20000000, 0x00200000)
-		Memory32Fixed(ReadWrite, 0x40000000, 0x00200000)
 	})
 
 	// Current Resource Settings
