@@ -47,36 +47,41 @@ Scope (\_SB) {
 	}
 
 	Device (TPAD)
-	{
-		Name (_ADR, 0x0)
-		Name (_UID, 1)
-
-		// Report as a Sleep Button device so Linux will
-		// automatically enable it as a wake source
-		Name(_HID, EisaId("PNP0C0E"))
-
-		// Trackpad Wake is GPIO12, wake from S3
-		Name(_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x03 })
-
-		Name(_CRS, ResourceTemplate()
-		{
-
-			// PIRQA -> GSI16
-			Interrupt (ResourceConsumer, Level, ActiveLow)
-			{
-				BOARD_TRACKPAD_IRQ_DVT
-			}
-
-			// PIRQE -> GSI20
-			Interrupt (ResourceConsumer, Edge, ActiveLow)
-			{
-				BOARD_TRACKPAD_IRQ_PVT
-			}
-
-			// SMBUS Address 0x67
-			VendorShort (ADDR) { BOARD_TRACKPAD_I2C_ADDR }
-		})
-	}
+        {
+            Name (_ADR, Zero)  // _ADR: Address
+            Name (_UID, One)  // _UID: Unique ID
+            Name (_HID, "CYSM0000")  // _HID: Hardware ID
+            Name (PCRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                Interrupt (ResourceConsumer, Level, ActiveLow, Exclusive, ,, )
+                {
+                    0x00000014,
+                }
+                VendorShort ()
+                {
+                     0x67
+                }
+            })
+            Name (DCRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                Interrupt (ResourceConsumer, Level, ActiveLow, Exclusive, ,, )
+                {
+                    0x00000010,
+                }
+                VendorShort ()
+                {
+                     0x67
+                }
+            })
+            Method (_CRS, 0, NotSerialized)
+            {
+            	If (\TPIQ == 16){
+            		Return (DCRS)
+            	} Else {
+            		Return (PCRS)
+            	}
+            }
+        }
 
 	Device (MB) {
 		Name(_HID, EisaId("PNP0C01")) // System Board
