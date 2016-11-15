@@ -745,6 +745,7 @@ static void set_subsystem(device_t dev, unsigned vendor, unsigned device)
 static void southbridge_inject_dsdt(device_t dev)
 {
 	global_nvs_t *gnvs;
+	void *opregion;
 
 	gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
 	if (!gnvs) {
@@ -752,6 +753,8 @@ static void southbridge_inject_dsdt(device_t dev)
 		if (gnvs)
 			memset(gnvs, 0, sizeof(*gnvs));
 	}
+
+	opregion = igd_make_opregion();
 
 	if (gnvs) {
 		const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
@@ -768,6 +771,8 @@ static void southbridge_inject_dsdt(device_t dev)
 
 		/* Update the mem console pointer. */
 		gnvs->cbmc = (u32)cbmem_find(CBMEM_ID_CONSOLE);
+
+		gnvs->aslb = (u32)opregion;
 
 		gnvs->ndid = gfx->ndid;
 		memcpy(gnvs->did, gfx->did, sizeof(gnvs->did));
