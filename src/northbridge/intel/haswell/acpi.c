@@ -25,8 +25,10 @@
 #include <device/pci_ids.h>
 #include "haswell.h"
 #include <cbmem.h>
+#include <cbfs.h>
 #include <arch/acpigen.h>
 #include <cpu/cpu.h>
+#include <drivers/intel/gma/i915.h>
 
 unsigned long acpi_fill_mcfg(unsigned long current)
 {
@@ -99,6 +101,44 @@ static void *get_intel_vbios(void)
 	return NULL;
 }
 
+/* Reading VBT table from flash */
+const optionrom_vbt_t *get_uefi_vbt(uint32_t *vbt_len)
+{
+	size_t vbt_size;
+	union {
+		const optionrom_vbt_t *data;
+		uint32_t *signature;
+	} vbt;
+
+	/* Locate the vbt file in cbfs */
+	vbt.data = cbfs_boot_map_with_leak("vbt.bin", CBFS_TYPE_RAW, &vbt_size);
+	if (!vbt.data) {
+		printk(BIOS_INFO,
+			"FSP_INFO: VBT data file (vbt.bin) not found in CBFS");
+		return NULL;
+	}
+
+	/* Validate the vbt file */
+	if (*vbt.signature != VBT_SIGNATURE) {
+		printk(BIOS_WARNING,
+			"FSP_WARNING: Invalid signature in VBT data file (vbt.bin)!\n");
+		return NULL;
+	}
+	*vbt_len = vbt_size;
+	printk(BIOS_DEBUG, "FSP_INFO: VBT found at %p, 0x%08x bytes\n",
+		vbt.data, *vbt_len);
+
+#if IS_ENABLED(CONFIG_DISPLAY_VBT)
+	/* Display the vbt file contents */
+	printk(BIOS_DEBUG, "VBT Data:\n");
+	hexdump(vbt.data, *vbt_len);
+	printk(BIOS_DEBUG, "\n");
+#endif
+
+	/* Return the pointer to the vbt file data */
+	return vbt.data;
+}
+
 static int init_opregion_vbt(igd_opregion_t *opregion)
 {
 	void *vbios;
@@ -141,12 +181,16 @@ int init_igd_opregion(igd_opregion_t *opregion)
 
 	/* 8kb */
 	opregion->header.size = sizeof(igd_opregion_t) / 1024;
-	opregion->header.version = IGD_OPREGION_VERSION;
+	opregion->header.version = (IGD_OPREGION_VERSION << 24);
 
 	// FIXME We just assume we're mobile for now
 	opregion->header.mailboxes = MAILBOXES_MOBILE;
 
+	//FIXME: Value copied
+	opregion->header.pcon = 259;
+
 	// TODO Initialize Mailbox 1
+	opregion->mailbox1.clid = 1;
 
 	// TODO Initialize Mailbox 3
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
@@ -165,7 +209,28 @@ int init_igd_opregion(igd_opregion_t *opregion)
 	opregion->mailbox3.bclm[9] = IGD_WORD_FIELD_VALID + 0x5ae5;
 	opregion->mailbox3.bclm[10] = IGD_WORD_FIELD_VALID + 0x64ff;
 
-	init_opregion_vbt(opregion);
+	const optionrom_vbt_t *vbt;
+	uint32_t vbt_len;
+
+	vbt = get_uefi_vbt(&vbt_len);
+
+	if (!vbt)
+		init_opregion_vbt(opregion);
+	else {
+		opregion->header.dver[0] = '5';
+		opregion->header.dver[1] = '.';
+		opregion->header.dver[2] = '5';
+		opregion->header.dver[3] = '.';
+		opregion->header.dver[4] = '1';
+		opregion->header.dver[5] = '0';
+		opregion->header.dver[6] = '3';
+		opregion->header.dver[7] = '3';
+		opregion->header.dver[8] = '\0';
+
+		memcpy(opregion->vbt.gvd1, vbt, vbt->hdr_vbt_size <
+		sizeof(opregion->vbt.gvd1) ? vbt->hdr_vbt_size :
+		sizeof(opregion->vbt.gvd1));
+	}
 
 	/* TODO This needs to happen in S3 resume, too.
 	 * Maybe it should move to the finalize handler
@@ -187,4 +252,14 @@ int init_igd_opregion(igd_opregion_t *opregion)
 	enable_tco_sci();
 
 	return 0;
+}
+
+void *igd_make_opregion(void)
+{
+	igd_opregion_t *opregion;
+
+	printk(BIOS_DEBUG, "ACPI:    * IGD OpRegion\n");
+	opregion = cbmem_add(CBMEM_ID_IGD_OPREGION, sizeof (*opregion));
+	init_igd_opregion(opregion);
+	return opregion;
 }

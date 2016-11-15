@@ -216,6 +216,7 @@ void report_platform_info(void);
 #if !defined(__PRE_RAM__)
 #include "gma.h"
 int init_igd_opregion(igd_opregion_t *igd_opregion);
+const optionrom_vbt_t *get_uefi_vbt(uint32_t *vbt_len);
 #endif
 
 #endif
