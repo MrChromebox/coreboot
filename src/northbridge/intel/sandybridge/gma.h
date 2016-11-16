@@ -25,7 +25,10 @@ typedef struct {
 	u8	vbios_version[16];
 	u8	driver_version[16];
 	u32	mailboxes;
-	u8	reserved[164];
+	u32 dmod;
+	u32 pcon;
+	u16 dver[16];
+	u8	reserved[124];
 } __attribute__((packed)) opregion_header_t;
 
 #define IGD_OPREGION_SIGNATURE "IntelGraphicsMem"
