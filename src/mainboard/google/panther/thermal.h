@@ -17,9 +17,9 @@
 #define THERMAL_H
 
 /* Fan is OFF */
-#define FAN4_THRESHOLD_OFF	0
+#define FAN4_THRESHOLD_OFF	50
 #define FAN4_THRESHOLD_ON	0
-#define FAN4_PWM		0x00
+#define FAN4_PWM		0x40
 
 /* Fan is at LOW speed */
 #define FAN3_THRESHOLD_OFF	40
