@@ -56,4 +56,8 @@ mrc.cache-align := 0x10000
 mrc.cache-type := mrc_cache
 endif
 
+cbfs-files-$(CONFIG_ADD_VBT_DATA_FILE) += vbt.bin
+vbt.bin-file := $(call strip_quotes,$(CONFIG_VBT_FILE))
+vbt.bin-type := raw
+
 endif
