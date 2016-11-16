@@ -590,6 +590,7 @@ static void pch_lpc_read_resources(device_t dev)
 static void southcluster_inject_dsdt(device_t device)
 {
 	global_nvs_t *gnvs;
+	void *opregion;
 
 	gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
 	if (!gnvs) {
@@ -598,9 +599,14 @@ static void southcluster_inject_dsdt(device_t device)
 			memset(gnvs, 0, sizeof(*gnvs));
 	}
 
+	opregion = igd_make_opregion();
+
 	if (gnvs) {
 		const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
 		acpi_create_gnvs(gnvs);
+
+		gnvs->aslb = (u32)opregion;
+
 		gnvs->ndid = gfx->ndid;
 		memcpy(gnvs->did, gfx->did, sizeof(gnvs->did));
 		acpi_save_gnvs((unsigned long)gnvs);
