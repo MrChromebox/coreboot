@@ -425,9 +425,9 @@ static void igd_cdclk_init_broadwell(struct device *dev)
 			cdclk = GT_CDCLK_675;
 	}
 
-	/* CD clock frequency 675MHz not supported on ULT */
-	if (cpu_is_ult() && cdclk == GT_CDCLK_675)
-		cdclk = GT_CDCLK_540;
+	/* CD clock frequency 540/675MHz not supported on ULT */
+	if (cpu_is_ult() && cdclk > GT_CDCLK_450)
+		cdclk = GT_CDCLK_450;
 
 	/* Set variables based on CD Clock setting */
 	switch (cdclk) {
