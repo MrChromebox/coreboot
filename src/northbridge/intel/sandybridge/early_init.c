@@ -108,7 +108,7 @@ static void sandybridge_setup_graphics(void)
 
 	if (get_option(&gfxsize, "gfx_uma_size") != CB_SUCCESS) {
 		/* Setup IGD memory by setting GGC[7:3] = 1 for 32MB */
-		gfxsize = 0;
+		gfxsize = 2;
 	}
 	reg16 = pci_read_config16(PCI_DEV(0,0,0), GGC);
 	reg16 &= ~0x00f8;
