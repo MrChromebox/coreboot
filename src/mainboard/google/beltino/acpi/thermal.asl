@@ -155,9 +155,9 @@ Scope (\_TZ)
 
 		Method (_AC4) {
 			If (LLessEqual (\FLVL, 4)) {
-				Return (CTOK (FAN4_THRESHOLD_OFF))
+				Return (CTOK (0))
 			} Else {
-				Return (CTOK (FAN4_THRESHOLD_ON))
+				Return (CTOK (0))
 			}
 		}
 
