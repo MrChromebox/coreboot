@@ -11,8 +11,6 @@ void mainboard_fill_gnvs(struct global_nvs *gnvs)
 	/* TPM Present */
 	gnvs->tpmp = 1;
 
-	gnvs->f4of = FAN4_THRESHOLD_OFF;
-	gnvs->f4on = FAN4_THRESHOLD_ON;
 	gnvs->f4pw = FAN4_PWM;
 
 	gnvs->f3of = FAN3_THRESHOLD_OFF;
