@@ -14,8 +14,6 @@
  * GNU General Public License for more details.
  */
 
-#define ENABLE_TPM
-
 DefinitionBlock(
 	"dsdt.aml",
 	"DSDT",
