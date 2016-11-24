@@ -84,6 +84,7 @@ chip northbridge/intel/haswell
 					register "peci_tmpin" = "3"
 					# Enable FAN2
 					register "fan2_enable" = "true"
+					register "fan2_speed" = "0x47"
 
 					device pnp 2e.0 off end # FDC
 					device pnp 2e.1 on # Serial Port 1
