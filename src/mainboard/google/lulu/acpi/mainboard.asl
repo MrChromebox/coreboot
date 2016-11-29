@@ -72,7 +72,7 @@ Scope (\_SB.PCI0.I2C0)
 	Device (STPA)
 	{
 		Name (_HID, "SYNA0000")
-		Name (_CID, "PNP0C50")
+		Name (_CID, "ACPI0C50")
 		Name (_DDN, "Synaptics Touchpad")
 		Name (_UID, 1)
 		Name (ISTP, 1) /* Touchpad */
