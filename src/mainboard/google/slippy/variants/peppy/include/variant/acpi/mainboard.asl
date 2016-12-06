@@ -2,6 +2,7 @@
 
 Scope (\_SB.PCI0.I2C0)
 {
+#if CONFIG(ELAN_TRACKPAD_ACPI)
 	Device (ETPA)
 	{
 		Name (_HID, "ELAN0000")
@@ -44,6 +45,7 @@ Scope (\_SB.PCI0.I2C0)
 			}
 		}
           }
+#else
 	Device (CTPA)
 	{
 		Name (_HID, "CYAP0000")
@@ -89,6 +91,7 @@ Scope (\_SB.PCI0.I2C0)
 		// Allow device to power off in S0
 		Name (_S0W, 4)
 	}
+#endif
 }
 Scope (\_SB.PCI0.I2C1)
 {
