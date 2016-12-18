@@ -1019,6 +1019,93 @@ static char *dt_find_compat(const char *parent, const char *compat,
 }
 #endif /* __arm__ */
 
+char *_read_proc_iomem(void)
+{
+	int fd;
+	off_t size;
+	char *contents;
+
+	fd = open("/proc/iomem", O_RDONLY);
+
+	if (fd == -1) {
+		fprintf(stderr, "Unable to open /proc/iomem");
+		exit(1);
+	}
+
+	size = 1000000;
+
+	contents = malloc(size + 2);
+
+	if (contents == NULL) {
+		fprintf(stderr, "Unable to allocate buffer for reading /proc/iomem");
+		exit(1);
+	}
+
+	*(contents + size + 1) = 0x00;
+
+	if (read(fd, contents, size) < 1) {
+		fprintf(stderr, "Unable to read /proc/iomem");
+		exit(1);
+	}
+
+	close(fd);
+
+	return contents;
+}
+
+unsigned long long get_cbmem_start_addr(void)
+{
+	off_t size;
+	off_t curoff;
+	char *contents;
+	char *cur;
+	char *curn;
+	char *dash;
+	unsigned long long start = 0;
+
+	contents = _read_proc_iomem();
+
+	curoff = 0;
+
+	size = strlen(contents);
+
+	while (curoff < size)
+	{
+		// break up by newline
+		cur = contents + curoff;
+		curn = strstr(cur, "\n");
+
+		if (curn == NULL)
+			break;
+
+		*curn = 0x00;
+
+		// skip to next line if not CBMEM
+		if (strstr(cur, "GOOGCB00") == NULL)
+		{
+			curoff = curoff + curn - cur + 1;
+			continue;
+		}
+
+		//trim leading whitespace
+		while (cur[0] == 0x20) {
+			cur += 1;
+		}
+
+		dash = strstr(cur, "-");
+
+		if (dash == NULL) {
+			fprintf(stderr, "get_cbmem_start_addr: Line broke parser: %s", cur);
+			exit(1);
+		}
+
+		*dash   = 0x00;
+
+		start = strtoull(cur, NULL, 16);
+	}
+	return start;
+}
+
 int main(int argc, char** argv)
 {
 	int print_defaults = 1;
@@ -1030,6 +1117,7 @@ int main(int argc, char** argv)
 	int print_timestamps = 0;
 	int machine_readable_timestamps = 0;
 	unsigned int rawdump_id = 0;
+	unsigned long long start = 0;
 
 	int opt, option_index = 0;
 	static struct option long_options[] = {
@@ -1156,7 +1244,8 @@ int main(int argc, char** argv)
 	parse_cbtable(baseaddr, cb_table_size, 1);
 #else
 	int j;
-	static const int possible_base_addresses[] = { 0, 0xf0000 };
+	start = get_cbmem_start_addr();
+	int possible_base_addresses[] = { 0, start, 0xf0000 };
 
 	/* Find and parse coreboot table */
 	for (j = 0; j < ARRAY_SIZE(possible_base_addresses); j++) {
