@@ -44,6 +44,9 @@ DefinitionBlock(
 		}
 	}
 
+	//USB port entries
+	#include <variant/acpi/usb.asl>
+
 	// Thermal handler
 	#include "acpi/thermal.asl"
 
