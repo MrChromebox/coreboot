@@ -594,6 +594,21 @@ void google_chromeec_init(void)
 		udelay(1000);
 		hard_reset();
 		halt();
+	} else if (cec_resp.current_image != EC_IMAGE_RW) {
+		struct ec_params_reboot_ec reboot_ec;
+		/* Reboot the EC and make it come back in RW mode */
+		reboot_ec.cmd = EC_REBOOT_JUMP_RW;
+		reboot_ec.flags = 0;
+		cec_cmd.cmd_code = EC_CMD_REBOOT_EC;
+		cec_cmd.cmd_version = 0;
+		cec_cmd.cmd_data_in = &reboot_ec;
+		cec_cmd.cmd_size_in = sizeof(reboot_ec);
+		cec_cmd.cmd_size_out = 0; /* ignore response, if any */
+		cec_cmd.cmd_dev_index = 0;
+		printk(BIOS_DEBUG, "Rebooting with EC in RW mode:\n");
+		post_code(0); /* clear current post code */
+		google_chromeec_command(&cec_cmd);
+		udelay(1000);
 	}
 
 }
