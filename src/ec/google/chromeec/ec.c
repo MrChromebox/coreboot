@@ -15,9 +15,11 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <cbfs.h>
 #include <cbmem.h>
 #include <console/console.h>
 #include <arch/early_variables.h>
+#include <arch/acpi.h>
 #include <arch/io.h>
 #include <assert.h>
 #include <bootmode.h>
@@ -30,10 +32,12 @@
 #include <stdlib.h>
 #include <security/vboot/vboot_common.h>
 #include <timer.h>
+#include <assert.h>
 
 #include "chip.h"
 #include "ec.h"
 #include "ec_commands.h"
+#include "utility.h"
 
 #define INVALID_HCMD 0xFF
 
@@ -1071,6 +1075,9 @@ void google_chromeec_init(void)
 {
 	struct chromeec_command cec_cmd;
 	struct ec_response_get_version cec_resp = {{0}};
+	struct ec_response_get_version cec_resp2 = {{0}};
+
+	printk(BIOS_DEBUG, "Google Chrome EC: Initializing\n");
 
 	google_chromeec_hello();
 
@@ -1086,12 +1093,39 @@ void google_chromeec_init(void)
 		printk(BIOS_DEBUG,
 		       "Google Chrome EC: version command failed!\n");
 	} else {
-		printk(BIOS_DEBUG, "Google Chrome EC: version:\n");
-		printk(BIOS_DEBUG, "    ro: %s\n", cec_resp.version_string_ro);
-		printk(BIOS_DEBUG, "    rw: %s\n", cec_resp.version_string_rw);
-		printk(BIOS_DEBUG, "  running image: %d\n",
-		       cec_resp.current_image);
 		ec_image_type = cec_resp.current_image;
+	}
+
+	/* Check/update EC RW image if needed */
+	if (google_chromeec_swsync()) {
+		printk(BIOS_ERR, "ChromeEC: EC SW SYNC FAILED\n");
+	} else {
+		/* EC RW image is up to date, switch to it */
+		google_chromeec_reboot(0, EC_REBOOT_JUMP_RW, 0);
+		mdelay(100);
+		/* Use Hello cmd to "reset" EC now in RW mode */
+		google_chromeec_hello();
+	}
+
+	/* re-run version command & print */
+	cec_cmd.cmd_code = EC_CMD_GET_VERSION;
+	cec_cmd.cmd_version = 0;
+	cec_cmd.cmd_data_out = &cec_resp2;
+	cec_cmd.cmd_size_in = 0;
+	cec_cmd.cmd_size_out = sizeof(cec_resp2);
+	cec_cmd.cmd_dev_index = 0;
+	google_chromeec_command(&cec_cmd);
+
+	if (cec_cmd.cmd_code) {
+		printk(BIOS_DEBUG,
+		       "Google Chrome EC: version command failed!\n");
+	} else {
+		printk(BIOS_DEBUG, "Google Chrome EC: version:\n");
+		printk(BIOS_DEBUG, "    ro: %s\n", cec_resp2.version_string_ro);
+		printk(BIOS_DEBUG, "    rw: %s\n", cec_resp2.version_string_rw);
+		printk(BIOS_DEBUG, "  running image: %d\n",
+		       cec_resp2.current_image);
+		ec_image_type = cec_resp2.current_image;
 	}
 
 	google_chromeec_log_uptimeinfo();
@@ -1100,6 +1134,428 @@ void google_chromeec_init(void)
 int google_ec_running_ro(void)
 {
 	return (ec_image_type == EC_IMAGE_RO);
+}
+
+void google_chromeec_reboot_ro(void)
+{
+	/* Reboot the EC and make it come back in RO mode */
+	printk(BIOS_DEBUG, "Rebooting with EC in RO mode:\n");
+	post_code(0); /* clear current post code */
+	google_chromeec_reboot(0, EC_REBOOT_COLD, 0);
+	udelay(1000);
+	hard_reset();
+	halt();
+}
+
+/* Timeout waiting for EC hash calculation completion */
+static const int CROS_EC_HASH_TIMEOUT_MS = 2000;
+
+/* Time to delay between polling status of EC hash calculation */
+static const int CROS_EC_HASH_CHECK_DELAY_MS = 10;
+
+int google_chromeec_swsync(void)
+{
+	static struct ec_response_vboot_hash resp;
+	uint8_t *ec_hash;
+	int ec_hash_size;
+	uint8_t *ecrw_hash, *ecrw;
+	int need_update = 0, i;
+	size_t ecrw_size;
+
+	/* skip if on S3 resume path */
+	if (acpi_is_wakeup_s3())
+		return 0;
+
+	/* Get EC_RW hash from CBFS */
+	ecrw_hash = cbfs_boot_map_with_leak("ecrw.hash", CBFS_TYPE_RAW, NULL);
+
+	if (!ecrw_hash) {
+		/* Assume no EC update file for this board */
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: no EC_RW update available\n");
+		return 0;
+	}
+
+	/* Got an expected hash */
+	printk(BIOS_DEBUG, "ChromeEC SW Sync: Expected hash: ");
+	for (i = 0; i < SHA256_DIGEST_SIZE; i++)
+		printk(BIOS_DEBUG, "%02x", ecrw_hash[i]);
+	printk(BIOS_DEBUG, "\n");
+
+	/* Get hash of current EC-RW */
+	if (google_chromeec_read_hash(&resp)) {
+		printk(BIOS_ERR, "Failed to read current EC_RW hash.\n");
+		return -1;
+	}
+	ec_hash = resp.hash_digest;
+	ec_hash_size = resp.digest_size;
+	/* Check hash size */
+	if (ec_hash_size != SHA256_DIGEST_SIZE) {
+		printk(BIOS_ERR, "ChromeEC SW Sync: - "
+			 "read_hash says size %d, not %d\n",
+			 ec_hash_size, SHA256_DIGEST_SIZE);
+		return -1;
+	}
+
+	/* We got a proper hash */
+	printk(BIOS_DEBUG, "ChromeEC SW Sync: current EC_RW hash: ");
+	for (i = 0; i < SHA256_DIGEST_SIZE; i++)
+		printk(BIOS_DEBUG, "%02x", ec_hash[i]);
+	printk(BIOS_DEBUG, "\n");
+
+	/* compare hashes */
+	need_update = SafeMemcmp(ec_hash, ecrw_hash, SHA256_DIGEST_SIZE);
+
+	/* If in RW and need to update, return/reboot to RO */
+	if (need_update && ec_image_type == EC_IMAGE_RW) {
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW needs update but in RW; rebooting to RO\n");
+		google_chromeec_reboot_ro();
+		return -1;
+	}
+
+	/* Update EC if necessary */
+	if (need_update) {
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: updating EC_RW...\n");
+
+		/* Get ecrw image from CBFS */
+		ecrw = cbfs_boot_map_with_leak("ecrw", CBFS_TYPE_RAW, &ecrw_size);
+		if (!ecrw) {
+			printk(BIOS_ERR, "ChromeEC SW Sync: no ecrw image found in CBFS; cannot update\n");
+			return -1;
+		}
+
+		if (google_chromeec_flash_update_rw(ecrw, ecrw_size)) {
+			printk(BIOS_ERR, "ChromeEC SW Sync: Failed to update EC_RW.\n");
+			return -1;
+		}
+
+		/* Have EC recompute hash for new EC_RW block */
+		if (google_chromeec_read_hash(&resp) ) {
+			printk(BIOS_ERR, "ChromeEC SW Sync: Failed to read new EC_RW hash.\n");
+			return -1;
+		}
+
+		/* Compare new EC_RW hash to value from CBFS */
+		ec_hash = resp.hash_digest;
+		if(SafeMemcmp(ec_hash, ecrw_hash, SHA256_DIGEST_SIZE)) {
+			/* hash mismatch! */
+			printk(BIOS_DEBUG, "ChromeEC SW Sync: Expected hash: ");
+			for (i = 0; i < SHA256_DIGEST_SIZE; i++)
+				printk(BIOS_DEBUG, "%02x", ecrw_hash[i]);
+			printk(BIOS_DEBUG, "\n");
+			printk(BIOS_DEBUG, "ChromeEC SW Sync: EC hash: ");
+			for (i = 0; i < SHA256_DIGEST_SIZE; i++)
+				printk(BIOS_DEBUG, "%02x", ec_hash[i]);
+			printk(BIOS_DEBUG, "\n");
+			return -1;
+		}
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW hashes match\n");
+	} else {
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW is up to date\n");
+	}
+
+	printk(BIOS_DEBUG, "ChromeEC SW Sync: done\n");
+	return 0;
+}
+
+int google_chromeec_read_hash(struct ec_response_vboot_hash *hash)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_params_vboot_hash p;
+	int recalc_requested = 0;
+	uint64_t start = timer_us(0);
+
+	do {
+		/* Get hash if available. */
+		p.cmd = EC_VBOOT_HASH_GET;
+		cec_cmd.cmd_code = EC_CMD_VBOOT_HASH;
+		cec_cmd.cmd_version = 0;
+		cec_cmd.cmd_data_in = &p;
+		cec_cmd.cmd_data_out = hash;
+		cec_cmd.cmd_size_in = sizeof(p);
+		cec_cmd.cmd_size_out = sizeof(*hash);
+		cec_cmd.cmd_dev_index = 0;
+		printk(BIOS_DEBUG, "ChromeEC: Getting hash:\n");
+		if (google_chromeec_command(&cec_cmd))
+			return -1;
+
+		switch (hash->status) {
+		case EC_VBOOT_HASH_STATUS_NONE:
+			/* We have no valid hash - let's request a recalc
+			 * if we haven't done so yet. */
+			if (recalc_requested != 0) {
+				mdelay(CROS_EC_HASH_CHECK_DELAY_MS);
+				break;
+			}
+			printk(BIOS_DEBUG, "ChromeEC: No valid hash (status=%d size=%d). "
+			      "Compute one...\n", hash->status, hash->size);
+			p.cmd = EC_VBOOT_HASH_RECALC;
+			p.hash_type = EC_VBOOT_HASH_TYPE_SHA256;
+			p.nonce_size = 0;
+			p.offset = EC_VBOOT_HASH_OFFSET_RW;
+			p.size = 0;
+			cec_cmd.cmd_code = EC_CMD_VBOOT_HASH;
+			cec_cmd.cmd_version = 0;
+			cec_cmd.cmd_data_in = &p;
+			cec_cmd.cmd_data_out = hash;
+			cec_cmd.cmd_size_in = sizeof(p);
+			cec_cmd.cmd_size_out = sizeof(*hash);
+			cec_cmd.cmd_dev_index = 0;
+			printk(BIOS_DEBUG, "ChromeEC: Starting EC hash:\n");
+			if (google_chromeec_command(&cec_cmd))
+				return -1;
+			recalc_requested = 1;
+			/* Command will wait to return until hash is done/ready */
+			break;
+		case EC_VBOOT_HASH_STATUS_BUSY:
+			/* Hash is still calculating. */
+			mdelay(CROS_EC_HASH_CHECK_DELAY_MS);
+			break;
+		case EC_VBOOT_HASH_STATUS_DONE:
+		default:
+			/* We have a valid hash. */
+			break;
+		}
+	} while (hash->status != EC_VBOOT_HASH_STATUS_DONE &&
+		 timer_us(start) < CROS_EC_HASH_TIMEOUT_MS * 1000);
+	if (hash->status != EC_VBOOT_HASH_STATUS_DONE) {
+		printk(BIOS_DEBUG, "ChromeEC: Hash status not done: %d\n", hash->status);
+		return -1;
+	}
+	return 0;
+}
+
+int google_chromeec_flash_update_rw(const uint8_t *image, int image_size)
+{
+	uint32_t rw_offset, rw_size;
+	int ret;
+
+	/* get max size that can be written, offset to write */
+	if (google_chromeec_flash_offset(EC_FLASH_REGION_RW, &rw_offset, &rw_size))
+		return -1;
+	if (image_size > rw_size)
+		return -1;
+	/*
+	 * Erase the entire RW section, so that the EC doesn't see any garbage
+	 * past the new image if it's smaller than the current image.
+	 *
+	 */
+	ret = google_chromeec_flash_erase(rw_offset, rw_size);
+	if (ret)
+		return ret;
+	/* Write the image */
+	return(google_chromeec_flash_write(image, rw_offset, image_size));
+}
+
+int google_chromeec_flash_offset(enum ec_flash_region region,
+			 uint32_t *offset, uint32_t *size)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_params_flash_region_info p;
+	struct ec_response_flash_region_info r;
+	p.region = region;
+
+	/* Get offset and size */
+	cec_cmd.cmd_code = EC_CMD_FLASH_REGION_INFO;
+	cec_cmd.cmd_version = EC_VER_FLASH_REGION_INFO;
+	cec_cmd.cmd_data_in = &p;
+	cec_cmd.cmd_data_out = &r;
+	cec_cmd.cmd_size_in = sizeof(p);
+	cec_cmd.cmd_size_out = sizeof(r);
+	cec_cmd.cmd_dev_index = 0;
+	printk(BIOS_DEBUG, "Getting EC region info\n");
+	if (google_chromeec_command(&cec_cmd))
+		return -1;
+
+	if (offset)
+		*offset = r.offset;
+	if (size)
+		*size = r.size;
+	return 0;
+}
+
+int google_chromeec_flash_erase(uint32_t offset, uint32_t size)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_params_flash_erase p;
+	p.offset = offset;
+	p.size = size;
+
+	/* Erase block of size at offset */
+	cec_cmd.cmd_code = EC_CMD_FLASH_ERASE;
+	cec_cmd.cmd_version = 0;
+	cec_cmd.cmd_data_in = &p;
+	cec_cmd.cmd_size_in = sizeof(p);
+	cec_cmd.cmd_dev_index = 0;
+	printk(BIOS_DEBUG, "Erasing EC RW region\n");
+
+	return google_chromeec_command(&cec_cmd);
+}
+
+static uint32_t burst = 0;
+
+int google_chromeec_flash_write(const uint8_t *data, uint32_t offset, uint32_t size)
+{
+	//printk(BIOS_DEBUG, "google_chromeec_flash_write(): 0x%x bytes at 0x%x\n", size, offset);
+	burst = google_chromeec_flash_write_burst_size();
+	uint32_t end, off;
+	int ret;
+	if (!burst)
+		return -1;
+	end = offset + size;
+	printk(BIOS_DEBUG, "Writing EC RW region\n");
+	for (off = offset; off < end; off += burst, data += burst) {
+		uint32_t todo = MIN(end - off, burst);
+		if (todo < burst) {
+			uint8_t *buf = malloc(burst);
+			memcpy(buf, data, todo);
+			// Pad the buffer with a decent guess for erased data
+			// value.
+			memset(buf + todo, 0xff, burst - todo);
+			ret = google_chromeec_flash_write_block(buf,
+							off, burst);
+			free(buf);
+		} else {
+			ret = google_chromeec_flash_write_block(data,
+							off, burst);
+		}
+		if (ret)
+			return ret;
+	}
+	return 0;
+}
+
+/**
+ * Return optimal flash write burst size
+ */
+int google_chromeec_flash_write_burst_size(void)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_response_flash_info info;
+	uint32_t pdata_max_size = EC_LPC_HOST_PACKET_SIZE - sizeof(struct ec_host_request) -
+		sizeof(struct ec_params_flash_write);
+
+	/*
+	 * Determine whether we can use version 1 of the command with more
+	 * data, or only version 0.
+	 */
+	if (!google_chromeec_cmd_version_supported(EC_CMD_FLASH_WRITE, EC_VER_FLASH_WRITE))
+		return EC_FLASH_WRITE_VER0_SIZE;
+
+	/*
+	 * Determine step size.  This must be a multiple of the write block
+	 * size, and must also fit into the host parameter buffer.
+	 */
+	cec_cmd.cmd_code = EC_CMD_FLASH_INFO;
+	cec_cmd.cmd_version = 0;
+	cec_cmd.cmd_data_in = NULL;
+	cec_cmd.cmd_data_out = &info;
+	cec_cmd.cmd_size_in = 0;
+	cec_cmd.cmd_size_out = sizeof(info);
+	cec_cmd.cmd_dev_index = 0;
+	if (google_chromeec_command(&cec_cmd))
+		return -1;
+
+	return (pdata_max_size / info.write_block_size) *
+		info.write_block_size;
+}
+
+static uint8_t *buf = NULL;
+static uint32_t bufsize = 0;
+
+/**
+ * Write a single block to the flash
+ *
+ * Write a block of data to the EC flash. The size must not exceed the flash
+ * write block size which you can obtain from cros_ec_flash_write_burst_size().
+ *
+ * The offset starts at 0. You can obtain the region information from
+ * cros_ec_flash_offset() to find out where to write for a particular region.
+ *
+ * Attempting to write to the region where the EC is currently running from
+ * will result in an error.
+ *
+ * @param data		Pointer to data buffer to write
+ * @param offset	Offset within flash to write to.
+ * @param size		Number of bytes to write
+ * @return 0 if ok, -1 on error
+ */
+int google_chromeec_flash_write_block(const uint8_t *data,
+			uint32_t offset, uint32_t size)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_params_flash_write *p;
+
+	assert(data);
+	/* Make sure request fits in the allowed packet size */
+	if (bufsize == 0) {
+		bufsize = sizeof(*p) + size;
+		buf = malloc(bufsize);
+	} else if (bufsize != sizeof(*p) + size) {
+		free(buf);
+		bufsize = sizeof(*p) + size;
+		buf = malloc(bufsize);
+	}
+	if (bufsize > EC_LPC_HOST_PACKET_SIZE)
+		return -1;
+
+	p = (struct ec_params_flash_write *)buf;
+	p->offset = offset;
+	p->size = size;
+	memcpy(p + 1, data, size);
+
+	cec_cmd.cmd_code = EC_CMD_FLASH_WRITE;
+	cec_cmd.cmd_version = burst == EC_FLASH_WRITE_VER0_SIZE ? 0 : EC_VER_FLASH_WRITE;
+	cec_cmd.cmd_data_in = buf;
+	cec_cmd.cmd_data_out = NULL;
+	cec_cmd.cmd_size_in = bufsize;
+	cec_cmd.cmd_size_out = 0;
+	cec_cmd.cmd_dev_index = 0;
+
+	return google_chromeec_command(&cec_cmd);
+}
+
+/**
+ * Return non-zero if the EC supports the command and version
+ *
+ * @param cmd		Command to check
+ * @param ver		Version to check
+ * @return non-zero if command version supported; 0 if not.
+ */
+int google_chromeec_cmd_version_supported(int cmd, int ver)
+{
+	uint32_t mask = 0;
+	if (google_chromeec_get_cmd_versions(cmd, &mask))
+		return 0;
+	return (mask & EC_VER_MASK(ver)) ? 1 : 0;
+}
+
+/**
+ * Get the versions of the command supported by the EC.
+ *
+ * @param cmd		Command
+ * @param pmask		Destination for version mask; will be set to 0 on
+ *			error.
+ * @return 0 if success, <0 if error
+ */
+int google_chromeec_get_cmd_versions(int cmd, uint32_t *pmask)
+{
+	struct chromeec_command cec_cmd;
+	struct ec_params_get_cmd_versions p;
+	struct ec_response_get_cmd_versions r;
+	*pmask = 0;
+	p.cmd = cmd;
+	/* Get command versions */
+	cec_cmd.cmd_code = EC_CMD_GET_CMD_VERSIONS;
+	cec_cmd.cmd_version = 0;
+	cec_cmd.cmd_data_in = &p;
+	cec_cmd.cmd_data_out = &r;
+	cec_cmd.cmd_size_in = sizeof(p);
+	cec_cmd.cmd_size_out = sizeof(r);
+	cec_cmd.cmd_dev_index = 0;
+	if (google_chromeec_command(&cec_cmd))
+		return -1;
+	*pmask = r.version_mask;
+	return 0;
 }
 
 #endif /* ! __PRE_RAM__ */
