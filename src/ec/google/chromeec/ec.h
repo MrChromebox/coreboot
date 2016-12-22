@@ -357,6 +357,21 @@ struct usb_pd_port_caps {
  */
 int google_chromeec_get_pd_port_caps(int port,
 				struct usb_pd_port_caps *port_caps);
+#define SHA256_DIGEST_SIZE 32
+
+void google_chromeec_reboot_ro(void);
+void google_chromeec_reboot_rw(void);
+
+int google_chromeec_swsync(void);
+int google_chromeec_read_hash(struct ec_response_vboot_hash *hash);
+int google_chromeec_flash_update_rw(const uint8_t *image, int image_size);
+int google_chromeec_flash_offset(enum ec_flash_region region,
+			 uint32_t *offset, uint32_t *size);
+int google_chromeec_flash_write(const uint8_t *data, uint32_t offset, uint32_t size);
+int google_chromeec_flash_write_burst_size(void);
+int google_chromeec_flash_write_block_old(const uint8_t *data,
+			uint32_t offset, uint32_t size);
+int google_chromeec_cmd_version_supported(int cmd, int ver);
 
 /**
  * Get the keyboard configuration / layout information from EC
