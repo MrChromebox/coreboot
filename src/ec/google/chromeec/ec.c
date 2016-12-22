@@ -668,6 +668,10 @@ void google_chromeec_init(void)
 		udelay(1000);
 		hard_reset();
 		halt();
+	} else if (cec_resp.current_image != EC_IMAGE_RW) {
+		/* Reboot the EC and make it come back in RW mode */
+		google_chromeec_reboot(0, EC_REBOOT_JUMP_RW, 0);
+		udelay(1000);
 	}
 
 }
