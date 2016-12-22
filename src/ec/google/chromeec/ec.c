@@ -732,6 +732,13 @@ void google_chromeec_init(void)
 		       cec_resp.current_image);
 		ec_image_type = cec_resp.current_image;
 	}
+
+	if (cec_resp.current_image != EC_IMAGE_RW) {
+		/* Reboot the EC and make it come back in RW mode */
+		google_chromeec_reboot(0, EC_REBOOT_JUMP_RW, 0);
+		mdelay(20);
+	}
+
 }
 
 int google_ec_running_ro(void)
