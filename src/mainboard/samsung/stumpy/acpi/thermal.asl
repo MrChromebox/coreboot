@@ -114,9 +114,9 @@ Scope (\_TZ)
 
 		Method (_AC4) {
 			If (LLessEqual (\FLVL, 4)) {
-				Return (CTOK (\F4OF))
+				Return (CTOK (0))
 			} Else {
-				Return (CTOK (\F4ON))
+				Return (CTOK (0))
 			}
 		}
 
