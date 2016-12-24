@@ -91,6 +91,8 @@ chip northbridge/intel/sandybridge
 					register "peci_tmpin" = "3"
 					# Enable FAN3
 					register "fan3_enable" = "true"
+					# Default FAN3 speed
+					register "fan3_speed" = "0x90"
 
 					device pnp 2e.0 off end # FDC
 					device pnp 2e.1 on # Serial Port 1
