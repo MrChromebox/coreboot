@@ -13,6 +13,11 @@
  * GNU General Public License for more details.
  */
 
+#if IS_ENABLED(CONFIG_BOARD_GOOGLE_NINJA)
+/* Disable EC battery controls */
+#define CHROMEEC_DISABLE_BATTERY
+#endif
+
 /* mainboard configuration */
 #include <mainboard/google/rambi/ec.h>
 
