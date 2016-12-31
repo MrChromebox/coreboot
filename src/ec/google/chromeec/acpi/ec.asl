@@ -219,7 +219,7 @@ Device (EC0)
 #endif
 		\PNOT ()
 	}
-
+#ifndef CHROMEEC_DISABLE_BATTERY
 	// Battery Low Event
 	Method (_Q06, 0, NotSerialized)
 	{
@@ -240,7 +240,7 @@ Device (EC0)
 		Store ("EC: BATTERY INFO", Debug)
 		Notify (BAT0, 0x81)
 	}
-
+#endif
 	// Thermal Overload Event
 	Method (_Q0A, 0, NotSerialized)
 	{
@@ -273,14 +273,14 @@ Device (EC0)
 		Store ("EC: THERMAL SHUTDOWN", Debug)
 		Notify (\_TZ, 0x80)
 	}
-
+#ifndef CHROMEEC_DISABLE_BATTERY
 	// Battery Shutdown Imminent
 	Method (_Q11, 0, NotSerialized)
 	{
 		Store ("EC: BATTERY SHUTDOWN", Debug)
 		Notify (BAT0, 0x80)
 	}
-
+#endif
 	// Throttle Start
 	Method (_Q12, 0, NotSerialized)
 	{
@@ -307,14 +307,14 @@ Device (EC0)
 		Notify (ECPD, 0x80)
 	}
 #endif
-
+#ifndef CHROMEEC_DISABLE_BATTERY
 	// Battery Status
 	Method (_Q17, 0, NotSerialized)
 	{
 		Store ("EC: BATTERY STATUS", Debug)
 		Notify (BAT0, 0x80)
 	}
-
+#endif
 	// MKBP interrupt.
 	Method (_Q1B, 0, NotSerialized)
 	{
@@ -464,7 +464,9 @@ Device (EC0)
 	}
 
 	#include "ac.asl"
+#ifndef CHROMEEC_DISABLE_BATTERY
 	#include "battery.asl"
+#endif
 	#include "cros_ec.asl"
 
 #ifdef EC_ENABLE_ALS_DEVICE
