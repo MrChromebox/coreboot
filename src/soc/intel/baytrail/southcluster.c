@@ -1,3 +1,4 @@
+
 /*
  * This file is part of the coreboot project.
  *
@@ -26,11 +27,12 @@
 #include <device/pci_ids.h>
 #include <pc80/mc146818rtc.h>
 #include <drivers/uart/uart8250reg.h>
-
+#include <drivers/intel/gma/i915.h>
 #include <soc/iomap.h>
 #include <soc/irq.h>
 #include <soc/lpc.h>
 #include <soc/nvs.h>
+#include <soc/gfx.h>
 #include <soc/pci_devs.h>
 #include <soc/pmc.h>
 #include <soc/ramstage.h>
@@ -512,6 +514,7 @@ void southcluster_enable_dev(device_t dev)
 static void southcluster_inject_dsdt(device_t device)
 {
 	global_nvs_t *gnvs;
+	void *opregion;
 
 	gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
 	if (!gnvs) {
@@ -520,8 +523,13 @@ static void southcluster_inject_dsdt(device_t device)
 			memset(gnvs, 0, sizeof(*gnvs));
 	}
 
+	opregion = igd_make_opregion();
+
 	if (gnvs) {
 		acpi_create_gnvs(gnvs);
+		
+		gnvs->aslb = (u32)opregion;
+
 		acpi_save_gnvs((unsigned long)gnvs);
 		/* And tell SMI about it */
 		smm_setup_structures(gnvs, NULL, NULL);
