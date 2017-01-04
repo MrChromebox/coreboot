@@ -1,3 +1,4 @@
+
 /*
  * This file is part of the coreboot project.
  *
@@ -14,6 +15,7 @@
  */
 
 #include <arch/io.h>
+#include <bootstate.h>
 #include <console/console.h>
 #include <delay.h>
 #include <device/device.h>
@@ -21,11 +23,15 @@
 #include <device/pci_ids.h>
 #include <reg_script.h>
 #include <stdlib.h>
-
 #include <soc/gfx.h>
 #include <soc/iosf.h>
+#include <soc/pmc.h>
 #include <soc/pci_devs.h>
 #include <soc/ramstage.h>
+#include <cbmem.h>
+#include <cbfs.h>
+#include <types.h>
+#include <string.h>
 
 #include "chip.h"
 
@@ -379,6 +385,160 @@ static void gfx_init(device_t dev)
 	gfx_post_vbios_init(dev);
 }
 
+/* Reading VBT table from flash */
+const optionrom_vbt_t *get_uefi_vbt(uint32_t *vbt_len)
+{
+	size_t vbt_size;
+	union {
+		const optionrom_vbt_t *data;
+		uint32_t *signature;
+	} vbt;
+
+	/* Locate the vbt file in cbfs */
+	vbt.data = cbfs_boot_map_with_leak("vbt.bin", CBFS_TYPE_RAW, &vbt_size);
+	if (!vbt.data) {
+		printk(BIOS_INFO,
+			"FSP_INFO: VBT data file (vbt.bin) not found in CBFS");
+		return NULL;
+	}
+
+	/* Validate the vbt file */
+	if (*vbt.signature != VBT_SIGNATURE) {
+		printk(BIOS_WARNING,
+			"FSP_WARNING: Invalid signature in VBT data file (vbt.bin)!\n");
+		return NULL;
+	}
+	*vbt_len = vbt_size;
+	printk(BIOS_DEBUG, "FSP_INFO: VBT found at %p, 0x%08x bytes\n",
+		vbt.data, *vbt_len);
+
+#if IS_ENABLED(CONFIG_DISPLAY_VBT)
+	/* Display the vbt file contents */
+	printk(BIOS_DEBUG, "VBT Data:\n");
+	hexdump(vbt.data, *vbt_len);
+	printk(BIOS_DEBUG, "\n");
+#endif
+
+	/* Return the pointer to the vbt file data */
+	return vbt.data;
+}
+
+static void igd_finalize_opregion(void *unused)
+{
+	device_t igd;
+	igd_opregion_t *opregion;
+	u16 reg16;
+
+	igd = dev_find_slot(0, PCI_DEVFN(0x2, 0));
+	opregion = cbmem_find(CBMEM_ID_IGD_OPREGION);
+
+	if (!opregion)
+		return;
+
+	pci_write_config32(igd, ASLS, (u32)opregion);
+	reg16 = pci_read_config16(igd, SWSCI);
+	reg16 &= ~(1 << 0);
+	reg16 |= (1 << 15);
+	pci_write_config16(igd, SWSCI, reg16);
+}
+
+/* Initialize IGD OpRegion, called from ACPI code */
+int init_igd_opregion(igd_opregion_t *opregion)
+{
+	memset((void *)opregion, 0, sizeof(igd_opregion_t));
+
+	// FIXME if IGD is disabled, we should exit here.
+
+	memcpy(&opregion->header.signature, IGD_OPREGION_SIGNATURE,
+		sizeof(opregion->header.signature));
+
+	/* 8kb */
+	opregion->header.size = sizeof(igd_opregion_t) / 1024;
+
+	opregion->header.version = (IGD_OPREGION_VERSION << 24);
+
+	// For BYT, MailBOX2(SCI)is not supported.
+	opregion->header.mailboxes = (IGD_MBOX1 | IGD_MBOX3 | IGD_MBOX4);
+
+	//FIXME: Value copied
+	opregion->header.pcon = 20;
+
+	// TODO Initialize Mailbox 1
+	opregion->mailbox1.clid = 1;
+
+	// TODO Initialize Mailbox 3
+	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
+	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
+	opregion->mailbox3.pcft = 0; // should be (IMON << 1) & 0x3e
+	opregion->mailbox3.cblv = IGD_FIELD_VALID | IGD_INITIAL_BRIGHTNESS;
+	opregion->mailbox3.bclm[0] = IGD_WORD_FIELD_VALID + 0x0000;
+	opregion->mailbox3.bclm[1] = IGD_WORD_FIELD_VALID + 0x0a19;
+	opregion->mailbox3.bclm[2] = IGD_WORD_FIELD_VALID + 0x1433;
+	opregion->mailbox3.bclm[3] = IGD_WORD_FIELD_VALID + 0x1e4c;
+	opregion->mailbox3.bclm[4] = IGD_WORD_FIELD_VALID + 0x2866;
+	opregion->mailbox3.bclm[5] = IGD_WORD_FIELD_VALID + 0x327f;
+	opregion->mailbox3.bclm[6] = IGD_WORD_FIELD_VALID + 0x3c99;
+	opregion->mailbox3.bclm[7] = IGD_WORD_FIELD_VALID + 0x46b2;
+	opregion->mailbox3.bclm[8] = IGD_WORD_FIELD_VALID + 0x50cc;
+	opregion->mailbox3.bclm[9] = IGD_WORD_FIELD_VALID + 0x5ae5;
+	opregion->mailbox3.bclm[10] = IGD_WORD_FIELD_VALID + 0x64ff;
+
+	const optionrom_vbt_t *vbt;
+	uint32_t vbt_len;
+
+	vbt = get_uefi_vbt(&vbt_len);
+
+	if (vbt){
+		opregion->header.dver[0] = '7';
+		opregion->header.dver[1] = '.';
+		opregion->header.dver[2] = '0';
+		opregion->header.dver[3] = '.';
+		opregion->header.dver[4] = '1';
+		opregion->header.dver[5] = '0';
+		opregion->header.dver[6] = '1';
+		opregion->header.dver[7] = '1';
+		opregion->header.dver[8] = '\0';
+
+		memcpy(opregion->vbt.gvd1, vbt, vbt->hdr_vbt_size <
+		sizeof(opregion->vbt.gvd1) ? vbt->hdr_vbt_size :
+		sizeof(opregion->vbt.gvd1));
+	}
+
+	/* Set PCI registers */
+	igd_finalize_opregion((void *)opregion);
+
+	return 0;
+}
+
+void *igd_make_opregion(void)
+{
+	igd_opregion_t *opregion;
+
+	printk(BIOS_DEBUG, "ACPI:    * IGD OpRegion\n");
+	opregion = cbmem_add(CBMEM_ID_IGD_OPREGION, sizeof (*opregion));
+	init_igd_opregion(opregion);
+	return opregion;
+}
+
+const struct i915_gpu_controller_info *
+intel_gma_get_controller_info(void)
+{
+	device_t dev = dev_find_slot(0, PCI_DEVFN(0x2,0));
+	if (!dev) {
+		return NULL;
+	}
+	struct soc_intel_baytrail_config *chip = dev->chip_info;
+	return &chip->gfx;
+}
+
+static void gma_ssdt(device_t device)
+{
+	const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
+	if (gfx && IS_ENABLED(CONFIG_INTEL_GMA_ACPI)) {
+		drivers_intel_gma_displays_ssdt_generate(gfx);
+	}
+}
+
 static struct device_operations gfx_device_ops = {
 	.read_resources		= pci_dev_read_resources,
 	.set_resources		= pci_dev_set_resources,
@@ -392,3 +552,5 @@ static const struct pci_driver gfx_driver __pci_driver = {
 	.vendor	= PCI_VENDOR_ID_INTEL,
 	.device	= GFX_DEVID,
 };
+
+BOOT_STATE_INIT_ENTRY(BS_OS_RESUME, BS_ON_ENTRY, igd_finalize_opregion, NULL);
