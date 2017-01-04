@@ -26,6 +26,7 @@
 #define APM_CNT_FINALIZE	0xcb
 #define APM_CNT_LEGACY		0xcc
 #define APM_CNT_ROM_ARMOR	0xea
+#define APM_CNT_END_OF_DXE	0xcd
 #define APM_CNT_MBI_UPDATE	0xeb
 #define APM_CNT_SMMINFO		0xec
 #define APM_CNT_SMMSTORE	0xed
