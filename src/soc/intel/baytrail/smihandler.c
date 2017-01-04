@@ -204,14 +204,6 @@ static void soc_legacy(void)
 	struct device_nvs *dev_nvs = acpi_get_device_nvs();
 	u32 reg32;
 
-	/* LPE Device */
-	if (dev_nvs->lpe_en) {
-		reg32 = iosf_port58_read(LPE_PCICFGCTR1);
-		reg32 &=
-		~(LPE_PCICFGCTR1_PCI_CFG_DIS | LPE_PCICFGCTR1_ACPI_INT_EN);
-		iosf_port58_write(LPE_PCICFGCTR1, reg32);
-	}
-
 	/* SCC Devices */
 #define SCC_ACPI_MODE_DISABLE(name_) \
 	do { if (dev_nvs->scc_en[SCC_NVS_ ## name_]) { \
@@ -223,29 +215,30 @@ static void soc_legacy(void)
 	SCC_ACPI_MODE_DISABLE(MMC);
 	SCC_ACPI_MODE_DISABLE(SD);
 	SCC_ACPI_MODE_DISABLE(SDIO);
+}
 
-	 /* LPSS Devices */
-#define LPSS_ACPI_MODE_DISABLE(name_) \
-	do { if (dev_nvs->lpss_en[LPSS_NVS_ ## name_]) { \
-		reg32 = iosf_lpss_read(LPSS_ ## name_ ## _CTL); \
-		reg32 &= ~LPSS_CTL_PCI_CFG_DIS | ~LPSS_CTL_ACPI_INT_EN; \
-		iosf_lpss_write(LPSS_ ## name_ ## _CTL, reg32); \
+/*
+ * soc_end_of_dxe: A payload (Tianocore) has indicated that the
+ *   UEFI payload is being loaded. Switch SCC devices that are
+ *   in PCI mode to ACPI mode so that Windows will work.
+ *
+ */
+static void soc_end_of_dxe(void)
+{
+	struct device_nvs *dev_nvs = acpi_get_device_nvs();
+	u32 reg32;
+
+	/* SCC Devices */
+#define SCC_ACPI_MODE_ENABLE(name_) \
+	do { if (dev_nvs->scc_en[SCC_NVS_ ## name_]) { \
+		reg32 = iosf_scc_read(SCC_ ## name_ ## _CTL); \
+		reg32 |= (SCC_CTL_PCI_CFG_DIS | SCC_CTL_ACPI_INT_EN); \
+		iosf_scc_write(SCC_ ## name_ ## _CTL, reg32); \
 	} } while (0)
 
-	LPSS_ACPI_MODE_DISABLE(SIO_DMA1);
-	LPSS_ACPI_MODE_DISABLE(I2C1);
-	LPSS_ACPI_MODE_DISABLE(I2C2);
-	LPSS_ACPI_MODE_DISABLE(I2C3);
-	LPSS_ACPI_MODE_DISABLE(I2C4);
-	LPSS_ACPI_MODE_DISABLE(I2C5);
-	LPSS_ACPI_MODE_DISABLE(I2C6);
-	LPSS_ACPI_MODE_DISABLE(I2C7);
-	LPSS_ACPI_MODE_DISABLE(SIO_DMA2);
-	LPSS_ACPI_MODE_DISABLE(PWM1);
-	LPSS_ACPI_MODE_DISABLE(PWM2);
-	LPSS_ACPI_MODE_DISABLE(HSUART1);
-	LPSS_ACPI_MODE_DISABLE(HSUART2);
-	LPSS_ACPI_MODE_DISABLE(SPI);
+	SCC_ACPI_MODE_ENABLE(MMC);
+	SCC_ACPI_MODE_ENABLE(SD);
+	SCC_ACPI_MODE_ENABLE(SDIO);
 }
 
 static void southbridge_smi_store(void)
@@ -290,6 +283,10 @@ static void southbridge_smi_apmc(void)
 		if (CONFIG(SMMSTORE))
 			southbridge_smi_store();
 		break;
+	case APM_CNT_END_OF_DXE:
+		soc_end_of_dxe();
+		break;
+
 	}
 
 	mainboard_smi_apmc(reg8);
