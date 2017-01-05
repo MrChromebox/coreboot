@@ -550,6 +550,7 @@ static struct device_operations gfx_device_ops = {
 	.set_resources		= pci_dev_set_resources,
 	.enable_resources	= pci_dev_enable_resources,
 	.init			= gfx_init,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 	.ops_pci		= &soc_pci_ops,
 };
 
