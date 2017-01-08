@@ -38,6 +38,9 @@ DefinitionBlock(
 		{
 			//#include <soc/intel/baytrail/acpi/northcluster.asl>
 			#include <soc/intel/baytrail/acpi/southcluster.asl>
+#ifndef CONFIG_BOARD_GOOLE_NINJA
+			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
+#endif
 		}
 
 		/* Dynamic Platform Thermal Framework */
