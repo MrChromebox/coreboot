@@ -414,7 +414,7 @@ static void gma_ssdt(struct device *device)
 {
 	const struct i915_gpu_controller_info *gfx =
 			intel_gma_get_controller_info();
-	if (gfx && IS_ENABLED(CONFIG_INTEL_GMA_ACPI)) {
+	if (gfx && CONFIG(INTEL_GMA_ACPI)) {
 		drivers_intel_gma_displays_ssdt_generate(gfx);
 	}
 }
