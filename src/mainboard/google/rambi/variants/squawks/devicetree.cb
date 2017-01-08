@@ -1,5 +1,9 @@
 chip soc/intel/baytrail
 
+	# IGD Displays
+ 	register "gfx.ndid" = "3"
+ 	register "gfx.did" = "{ 0x80000100, 0x80000240, 0x80000410, 0x80000410, 0x00000005 }"
+
  	# SATA port enable mask (2 ports)
 	register "sata_port_map" = "0x1"
 	register "sata_ahci" = "0x1"
