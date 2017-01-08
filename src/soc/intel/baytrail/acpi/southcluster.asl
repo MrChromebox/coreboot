@@ -264,6 +264,6 @@ Scope (\_SB.PCI0)
 }
 
 // Integrated graphics 0:2.0
-#if IS_ENABLED(CONFIG_INTEL_GMA_ACPI)
+#if CONFIG(INTEL_GMA_ACPI)
 #include <drivers/intel/gma/acpi/pch.asl>
 #endif
