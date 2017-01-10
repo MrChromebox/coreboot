@@ -124,7 +124,7 @@ Scope (\_SB.PCI0.I2C2)
 		Method (_STA)
 		{
 			If (LEqual (\S2EN, 1)) {
-				Return (0xF)
+				Return (0xB)
 			} Else {
 				Return (0x0)
 			}
@@ -144,6 +144,11 @@ Scope (\_SB.PCI0.LPEA)
 		GpioInt (Level, ActiveHigh, Exclusive, PullNone,,
 			 "\\_SB.GPSC") { 15 }
 	})
+
+	Method (_DIS, 0x0, NotSerialized)
+	{
+	//Add a dummy disable function
+	}
 }
 
 #include <variant/acpi/mainboard.asl>
