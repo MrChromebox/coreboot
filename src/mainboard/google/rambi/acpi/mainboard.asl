@@ -114,6 +114,11 @@ Scope (\_SB.PCI0.LPEA)
 		GpioInt (Level, ActiveHigh, Exclusive, PullNone,,
 			 "\\_SB.GPSC") { 15 }
 	})
+
+	Method (_DIS, 0x0, NotSerialized)
+	{
+	//Add a dummy disable function
+	}
 }
 
 #include <variant/acpi/mainboard.asl>
