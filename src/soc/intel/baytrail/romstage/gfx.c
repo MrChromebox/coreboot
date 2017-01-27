@@ -34,7 +34,7 @@ void gfx_init(void)
 
 	ggc &= ~(GGC_GTT_SIZE_MASK | GGC_GSM_SIZE_MASK);
 	/* 32MB GSM is not supported with <C0 stepping. */
-	ggc |= GGC_GTT_SIZE_2MB | GGC_GSM_SIZE_64MB;
+	ggc |= GGC_GTT_SIZE_2MB | GGC_GSM_SIZE_128MB;
 	/* Enable VGA decoding as well. */
 	ggc &= ~(GGC_VGA_DISABLE);
 
