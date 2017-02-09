@@ -3,7 +3,8 @@
 // Scope is \_SB.PCI0.LPCB
 
 Device (SIO) {
-	Name (_ADR, 0x2E)
+	Name (_HID, EisaId ("PNP0A05"))
+
 	OperationRegion (SIOA, SystemIO, 0x2E, 0x02)
 	Field (SIOA, ByteAcc, NoLock, Preserve)
 	{
@@ -157,7 +158,7 @@ Device (SIO) {
 	Device (SKBC)		// Keyboard
 	{
 		Name (_HID, EISAID("PNP0303"))
-		Name (_CID, EISAID("PNP030B"))
+		Name (_CID, Package() { EISAID("PNP030B"), "GGL0303" } )
 
 		Method (_STA, 0, NotSerialized) {
 			Return (ISEN (LKBC))
