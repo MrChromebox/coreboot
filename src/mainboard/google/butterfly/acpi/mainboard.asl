@@ -28,13 +28,10 @@ Scope (\_SB) {
 	}
 
 	Device (TPAD)
-	{
-		Name (_ADR, 0x0)
-		Name (_UID, 1)
-
-		// Report as a Sleep Button device so Linux will
-		// automatically enable it as a wake source
-		Name(_HID, EisaId("PNP0C0E"))
+        {
+		Name (_ADR, 0)		// _ADR: Address
+		Name (_UID, 1)		// _UID: Unique ID
+		Name (_HID, "CYSM0000")	// _HID: Hardware ID
 
 		// Trackpad Wake is GPIO11, wake from S3
 		Name(_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x03 })
@@ -42,7 +39,7 @@ Scope (\_SB) {
 		Name(_CRS, ResourceTemplate()
 		{
 			// PIRQG -> GSI22
-			Interrupt (ResourceConsumer, EDGE, ActiveLow)
+			Interrupt (ResourceConsumer, Level, ActiveLow, Exclusive, ,, )
 			{
 				BOARD_TRACKPAD_IRQ
 			}
@@ -51,7 +48,6 @@ Scope (\_SB) {
 			VendorShort (ADDR) { BOARD_TRACKPAD_I2C_ADDR }
 		})
 	}
-
 }
 
 // Battery information
