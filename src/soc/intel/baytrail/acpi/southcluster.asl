@@ -155,7 +155,12 @@ Name (MCRS, ResourceTemplate()
 	DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
 			Cacheable, ReadWrite,
 			0x00000000, 0x00000000, 0x00000000, 0x00000000,
-			0x00000000,,, PMEM)
+			0x00000000,,, LMEM)
+
+	DwordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
+			Cacheable, ReadWrite,
+			0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                        0x00000000,,, PMEM)
 
 	// TPM Area (0xfed40000-0xfed44fff)
 	DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
@@ -168,9 +173,17 @@ Method (_CRS, 0, Serialized)
 {
 
 	// Update PCI resource area
-	CreateDwordField(MCRS, ^PMEM._MIN, PMIN)
-	CreateDwordField(MCRS, ^PMEM._MAX, PMAX)
-	CreateDwordField(MCRS, ^PMEM._LEN, PLEN)
+	CreateDwordField(MCRS, ^LMEM._MIN, LMIN)
+	CreateDwordField(MCRS, ^LMEM._MAX, LMAX)
+	CreateDwordField(MCRS, ^LMEM._LEN, LLEN)
+
+	Store (LPFW, LMIN)
+	Store (0x00100000, LLEN)
+	Subtract (Add (LMIN, LLEN), One, LMAX)
+
+	CreateDWordField (MCRS, ^PMEM._MIN, PMIN)
+	CreateDWordField (MCRS, ^PMEM._MAX, PMAX)
+	CreateDWordField (MCRS, ^PMEM._LEN, PLEN)
 
 	// TOLM is BMBOUND accessible from IOSF so is saved in NVS
 	Store (\TOLM, PMIN)
