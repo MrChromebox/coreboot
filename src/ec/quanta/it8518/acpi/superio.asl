@@ -24,8 +24,9 @@ Device (SIO)
 	Device (PS2K)		// Keyboard
 	{
 		Name (_UID, 0)
-		Name (_HID, EISAID("PNP0303"))
-		Name (_CID, EISAID("PNP030B"))
+		Name (_ADR, 0)
+		Name (_HID, EISAID("GGL0303"))
+		Name (_CID, EISAID("PNP0303"))
 
 		Method (_STA, 0, NotSerialized)
 		{
