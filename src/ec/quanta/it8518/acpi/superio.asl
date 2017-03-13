@@ -17,6 +17,7 @@
 
 Device (SIO)
 {
+	Name (_HID, EisaId("PNP0A05"))
 	Name (_UID, 0)
 	Name (_ADR, 0)
 
@@ -25,8 +26,8 @@ Device (SIO)
 	{
 		Name (_UID, 0)
 		Name (_ADR, 0)
-		Name (_HID, EISAID("PNP0303"))
-		Name (_CID, EISAID("PNP030B"))
+		Name (_HID, EISAID("GGL0303"))
+		Name (_CID, EISAID("PNP0303"))
 
 		Method (_STA, 0, NotSerialized)
 		{
@@ -37,7 +38,7 @@ Device (SIO)
 		{
 			FixedIO (0x60, 0x01)
 			FixedIO (0x64, 0x01)
-			IRQNoFlags () {1}
+			IRQ (Edge, ActiveHigh, Exclusive) { 0x01 } // IRQ 1
 		})
 
 		Name (_PRS, ResourceTemplate()
@@ -46,7 +47,7 @@ Device (SIO)
 			{
 				FixedIO (0x60, 0x01)
 				FixedIO (0x64, 0x01)
-				IRQNoFlags () {1}
+				IRQ (Edge, ActiveHigh, Exclusive) { 0x01 } // IRQ 1
 			}
 			EndDependentFn ()
 		})
