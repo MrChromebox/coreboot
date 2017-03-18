@@ -40,7 +40,12 @@ Device (GPSC)
 		Return (^RBUF)
 	}
 
-	Method (_STA)
+	Method (_HRV)
+	{
+ 		Return (0x06)
+	}
+
+ 	Method (_STA)
 	{
 		Return (0xF)
 	}
@@ -67,6 +72,11 @@ Device (GPNC)
 		CreateDwordField (^RBUF, ^RMEM._BAS, RBAS)
 		Add (IO_BASE_ADDRESS, IO_BASE_OFFSET_GPNCORE, RBAS)
 		Return (^RBUF)
+	}
+
+	Method (_HRV)
+	{
+ 		Return (0x06)
 	}
 
 	Method (_STA)
@@ -96,6 +106,11 @@ Device (GPSS)
 		CreateDwordField (^RBUF, ^RMEM._BAS, RBAS)
 		Add (IO_BASE_ADDRESS, IO_BASE_OFFSET_GPSSUS, RBAS)
 		Return (^RBUF)
+	}
+
+	Method (_HRV)
+	{
+ 		Return (0x06)
 	}
 
 	Method (_STA)
