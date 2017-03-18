@@ -18,8 +18,8 @@ Device (LPEA)
 {
 	Name (_HID, "80860F28")
 	Name (_CID, "80860F28")
-	Name (_UID, 1)
 	Name (_DDN, "Low Power Audio Controller")
+	Name (_SUB, "80867270")
 	Name (_PR0, Package () { PLPE })
 
 	Name (RBUF, ResourceTemplate()
