@@ -27,9 +27,6 @@ DefinitionBlock(
 			#include <soc/intel/baytrail/acpi/southcluster.asl>
 			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 		}
-
-		/* Dynamic Platform Thermal Framework */
-		#include "acpi/dptf.asl"
 	}
 
 	#include <southbridge/intel/common/acpi/sleepstates.asl>
