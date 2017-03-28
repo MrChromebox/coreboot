@@ -43,9 +43,6 @@ DefinitionBlock(
 			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 #endif
 		}
-
-		/* Dynamic Platform Thermal Framework */
-		#include "acpi/dptf.asl"
 	}
 
 	#include <vendorcode/google/chromeos/acpi/chromeos.asl>
