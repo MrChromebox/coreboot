@@ -45,10 +45,12 @@ Scope (\_SB) {
 	{
 		Name (_ADR, 0x0)
 		Name (_UID, 1)
+		Name(_HID, "CYSM0000")
 
-		// Report as a Sleep Button device so Linux will
-		// automatically enable it as a wake source
-		Name(_HID, EisaId("PNP0C0E"))
+		Method (_STA)
+		{
+			Return (0xB)
+		}
 
 		// Trackpad Wake is GPIO12, wake from S3
 		Name(_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x03 })
