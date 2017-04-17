@@ -163,3 +163,12 @@ Scope (GFX0){
 		BDDC,   2048
 	}
 }
+
+Device (DPTF)
+{
+	Name (_ADR, 0x00040000)  // _ADR: Address
+	Method (_STA, 0, NotSerialized)  // _STA: Status
+	{
+		Return (0x0B)
+	}
+}
