@@ -63,7 +63,8 @@
 #define  APERTURE_SIZE_256MB	(1 << 1)
 #define  APERTURE_SIZE_512MB	(3 << 1)
 
-#define SWSCI		0xe8	/* SWSCI  enable */
+#undef SWSCI
+#define SWSCI		0xe0	/* SWSCI  enable */
 #define ASLS		0xfc	/* OpRegion Base */
 
 /* Panel control registers */
