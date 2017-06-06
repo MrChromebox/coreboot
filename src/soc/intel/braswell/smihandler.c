@@ -22,6 +22,7 @@
 #include <device/pci_def.h>
 #include <elog.h>
 #include <soc/nvs.h>
+#include <soc/iosf.h>
 #include <soc/pci_devs.h>
 #include <soc/pm.h>
 #include <spi-generic.h>
@@ -296,6 +297,52 @@ static void finalize(void)
 #endif
 }
 
+/*
+ * soc_legacy: A payload (Depthcharge) has indicated that the
+ *   legacy payload (SeaBIOS) is being loaded. Switch devices that are
+ *   in ACPI mode to PCI mode so that non-ACPI drivers may work.
+ *
+ */
+static void soc_legacy(void)
+{
+	u32 reg32;
+
+	/* SCC Devices */
+#define SCC_ACPI_MODE_DISABLE(name_) \
+	do { if (gnvs->dev.scc_en[SCC_NVS_ ## name_]) { \
+		reg32 = iosf_scc_read(SCC_ ## name_ ## _CTL); \
+		reg32 &= ~(SCC_CTL_PCI_CFG_DIS | SCC_CTL_ACPI_INT_EN); \
+		iosf_scc_write(SCC_ ## name_ ## _CTL, reg32); \
+	} } while (0)
+
+	SCC_ACPI_MODE_DISABLE(MMC);
+	SCC_ACPI_MODE_DISABLE(SD);
+	SCC_ACPI_MODE_DISABLE(SDIO);
+}
+
+/*
+ * soc_end_of_dxe: A payload (Tianocore) has indicated that the
+ *   UEFI payload is being loaded. Switch SCC devices that are
+ *   in PCI mode to ACPI mode so that Windows will work.
+ *
+ */
+static void soc_end_of_dxe(void)
+{
+	u32 reg32;
+
+	/* SCC Devices */
+#define SCC_ACPI_MODE_ENABLE(name_) \
+	do { if (gnvs->dev.scc_en[SCC_NVS_ ## name_]) { \
+		reg32 = iosf_scc_read(SCC_ ## name_ ## _CTL); \
+		reg32 |= (SCC_CTL_PCI_CFG_DIS | SCC_CTL_ACPI_INT_EN); \
+		iosf_scc_write(SCC_ ## name_ ## _CTL, reg32); \
+	} } while (0)
+
+	SCC_ACPI_MODE_ENABLE(MMC);
+	SCC_ACPI_MODE_ENABLE(SD);
+	SCC_ACPI_MODE_ENABLE(SDIO);
+}
+
 static void southbridge_smi_apmc(void)
 {
 	uint8_t reg8;
@@ -350,6 +397,12 @@ static void southbridge_smi_apmc(void)
 #endif
 	case APM_CNT_FINALIZE:
 		finalize();
+		break;
+	case APM_CNT_LEGACY:
+		soc_legacy();
+		break;
+	case APM_CNT_END_OF_DXE:
+		soc_end_of_dxe();
 		break;
 	}
 

@@ -45,6 +45,7 @@ ramstage-y += xhci.c
 
 # Remove as ramstage gets fleshed out
 ramstage-y += placeholders.c
+smm-y += iosf.c
 smm-y += lpc_init.c
 smm-y += pmutil.c
 smm-y += smihandler.c
