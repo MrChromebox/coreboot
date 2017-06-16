@@ -8,7 +8,7 @@ config PAYLOAD_FILE
 
 choice
 	prompt "Tianocore payload"
-	default TIANOCORE_COREBOOTPAYLOAD
+	default TIANOCORE_UEFIPAYLOAD
 	help
 	  Select which type of payload Tianocore will build (default is CorebootPayload)
 	  CorebootPayload: MrChromebox's customized version of Tianocore which works on most
@@ -107,5 +107,21 @@ config TIANOCORE_BOOT_TIMEOUT
 	  The length of time in seconds for which the boot splash/menu prompt will be displayed.
 	  For boards with an internal display, the default value of 2s is generally sufficient.
 	  For boards without an internal display, a value of 5s is generally sufficient.
+
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "blobs/soc/intel/bdw/IntelGopDriver.efi" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
+	default "blobs/soc/intel/byt/IntelGopDriver.efi" if SOC_INTEL_BAYTRAIL
+	default "blobs/soc/intel/bsw/IntelGopDriver.efi" if SOC_INTEL_BRASWELL
+	default "blobs/soc/intel/kbl/IntelGopDriver.efi" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
+	default "blobs/soc/intel/glk/IntelGopDriver.efi" if SOC_INTEL_GEMINILAKE
+	default "blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
+	default "blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE
+	default "IntelGopDriver.efi"
 
 endif
