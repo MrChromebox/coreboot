@@ -41,10 +41,14 @@ ifneq ($(CONFIG_TIANOCORE_USE_8254_TIMER), y)
 TIMER=-DUSE_HPET_TIMER
 endif
 
+ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
+GOP=-DUSE_PLATFORM_GOP
+endif
+
 ifeq ($(CONFIG_TIANOCORE_TARGET_IA32), y)
-	BUILD_STR=-q -a IA32 -t COREBOOT -p $(bootloader)/$(bootloader)Ia32.dsc -b $(BUILD_TYPE) $(TIMER) $(build_flavor)
+	BUILD_STR=-q -a IA32 -t COREBOOT -p $(bootloader)/$(bootloader)Ia32.dsc -b $(BUILD_TYPE) $(TIMER) $(GOP) $(build_flavor)
 else
-	BUILD_STR=-q -a IA32 -a X64 -t COREBOOT -p $(bootloader)/$(bootloader)Ia32X64.dsc -b $(BUILD_TYPE) $(TIMER) $(build_flavor)
+	BUILD_STR=-q -a IA32 -a X64 -t COREBOOT -p $(bootloader)/$(bootloader)Ia32X64.dsc -b $(BUILD_TYPE) $(TIMER) $(GOP) $(build_flavor)
 endif
 
 all: clean build
@@ -93,6 +97,11 @@ build: update checktools
 			*) cp $(top)/$(CONFIG_TIANOCORE_BOOTSPLASH_FILE) \
 				$(project_dir)/$(logo_pkg)/Logo/Logo.bmp;; \
 		esac \
+	fi; \
+	if [ -n "$(CONFIG_TIANOCORE_GOP_DRIVER)" ]; then \
+		echo "Using GOP driver $(CONFIG_TIANOCORE_GOP_FILE)"; \
+		cp $(top)/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/$(bootloader)/IntelGopDriver.efi; \
+		cp $(top)/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/$(bootloader)/vbt.bin; \
 	fi; \
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
