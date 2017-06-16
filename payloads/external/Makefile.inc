@@ -133,7 +133,7 @@ payloads/external/depthcharge/depthcharge/build/depthcharge.elf depthcharge: $(D
 # Tianocore
 
 payloads/external/tianocore/tianocore/Build/UEFIPAYLOAD.fd tianocore: $(DOTCONFIG)
-	$(MAKE) -C payloads/external/tianocore all \
+	$(MAKE) -C payloads/external/tianocore clean all \
 		HOSTCC="$(HOSTCC)" \
 		CC="$(HOSTCC)" \
 		CONFIG_TIANOCORE_MASTER=$(CONFIG_TIANOCORE_MASTER) \
@@ -150,6 +150,9 @@ payloads/external/tianocore/tianocore/Build/UEFIPAYLOAD.fd tianocore: $(DOTCONFI
 		OBJCOPY_x86_64=$(OBJCOPY_x86_64) \
 		OBJCOPY_arm=$(OBJCOPY_arm) \
 		OBJCOPY_arm64=$(OBJCOPY_arm64) \
+		CONFIG_TIANOCORE_GOP_DRIVER=$(CONFIG_TIANOCORE_GOP_DRIVER) \
+		CONFIG_TIANOCORE_GOP_FILE=$(CONFIG_TIANOCORE_GOP_FILE) \
+		CONFIG_TIANOCORE_VBT_FILE=$(CONFIG_INTEL_GMA_VBT_FILE) \
 		MFLAGS= MAKEFLAGS=
 
 # FILO
