@@ -68,6 +68,11 @@ endif
 ifneq ($(CONFIG_TIANOCORE_SD_MMC_TIMEOUT),)
 BUILD_STR += -D SD_MMC_TIMEOUT=$(CONFIG_TIANOCORE_SD_MMC_TIMEOUT)
 endif
+# TIANOCORE_GOP_DRIVER		= FALSE
+ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
+BUILD_STR += -D USE_PLATFORM_GOP=TRUE
+endif
+
 #
 # The below are legacy options only available in CorebootPayloadPkg:
 #
@@ -132,6 +137,11 @@ build: update checktools
 			*) convert $(top)/$(CONFIG_TIANOCORE_BOOTSPLASH_FILE) \
 				BMP3:$(project_dir)/MdeModulePkg/Logo/Logo.bmp;; \
 		esac \
+	fi; \
+	if [ -n "$(CONFIG_TIANOCORE_GOP_DRIVER)" ]; then \
+		echo "Using GOP driver $(CONFIG_TIANOCORE_GOP_FILE)"; \
+		cp $(top)/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/UefiPayloadPkg/IntelGopDriver.efi; \
+		cp $(top)/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/UefiPayloadPkg/vbt.bin; \
 	fi; \
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
