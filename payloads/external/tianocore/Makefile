@@ -22,7 +22,7 @@ TAG-$(CONFIG_TIANOCORE_STABLE)=$(STABLE_COMMIT_ID)
 
 project_name=Tianocore
 project_dir=$(CURDIR)/tianocore
-project_git_repo=https://github.com/tianocore/edk2
+project_git_repo=https://github.com/MattDevo/edk2
 
 export EDK_TOOLS_PATH=$(project_dir)/BaseTools
 
@@ -70,27 +70,30 @@ config: checkout checktools
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
 		export WORKSPACE=$(project_dir); \
 		. ./edksetup.sh BaseTools
-	if [ "$$( $(CC) --version | grep "4\.8")" != "" ]; then \
-		echo "Compatible version of GCC found!"; \
-	else \
-		echo "Could not determine compatible GCC version. You need to install GCC 4.8!"; \
-		exit 1; \
-	fi
 
 build: config
 	echo "    build       $(project_name) $(TAG-y)"
+
+ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
+	echo "copying GOP driver from $(CONFIG_TIANOCORE_GOP_FILE)"
+	cp ~/coreboot/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/CorebootPayloadPkg/IntelGopDriver.efi
+	cp ~/coreboot/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/CorebootPayloadPkg/vbt.bin
+else
+	echo "not copying GOP driver; config: $(CONFIG_TIANOCORE_GOP_DRIVER)"
+endif
+
 ifeq ($(CONFIG_TIANOCORE_TARGET_IA32), y)
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
 		export WORKSPACE=$(project_dir); \
 		. ./edksetup.sh BaseTools; \
-		build -a IA32 -t GCC48 -p CorebootPayloadPkg/CorebootPayloadPkgIa32.dsc -b $(BUILD_TYPE)
+		build -a IA32 -t GCC5 -p CorebootPayloadPkg/CorebootPayloadPkgIa32.dsc -b $(BUILD_TYPE) -n 2
 else
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
 		export WORKSPACE=$(project_dir); \
 		. ./edksetup.sh BaseTools; \
-		build -a IA32 -a X64 -t GCC48 -p CorebootPayloadPkg/CorebootPayloadPkgIa32X64.dsc -b $(BUILD_TYPE)
+		build -a IA32 -a X64 -t GCC5 -p CorebootPayloadPkg/CorebootPayloadPkgIa32X64.dsc -b $(BUILD_TYPE) -n 2
 endif
 	mv $(project_dir)/Build/CorebootPayloadPkg*/*/FV/UEFIPAYLOAD.fd $(project_dir)/Build/UEFIPAYLOAD.fd
 

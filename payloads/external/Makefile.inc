@@ -115,7 +115,7 @@ payloads/external/depthcharge/depthcharge/build/depthcharge.elf depthcharge: $(D
 		OVERRIDE_DEFCONFIG=$(CONFIG_LP_DEFCONFIG_OVERRIDE)
 
 payloads/external/tianocore/tianocore/Build/UEFIPAYLOAD.fd tianocore: $(DOTCONFIG)
-	$(MAKE) -C payloads/external/tianocore all \
+	$(MAKE) -C payloads/external/tianocore clean all \
 		HOSTCC="$(HOSTCC)" \
 		CC="$(HOSTCC)" \
 		CONFIG_TIANOCORE_MASTER=$(CONFIG_TIANOCORE_MASTER) \
@@ -124,6 +124,9 @@ payloads/external/tianocore/tianocore/Build/UEFIPAYLOAD.fd tianocore: $(DOTCONFI
 		CONFIG_TIANOCORE_REVISION_ID=$(CONFIG_TIANOCORE_REVISION_ID) \
 		CONFIG_TIANOCORE_DEBUG=$(CONFIG_TIANOCORE_DEBUG) \
 		CONFIG_TIANOCORE_TARGET_IA32=$(CONFIG_TIANOCORE_TARGET_IA32) \
+		CONFIG_TIANOCORE_GOP_DRIVER=$(CONFIG_TIANOCORE_GOP_DRIVER) \
+		CONFIG_TIANOCORE_GOP_FILE=$(CONFIG_TIANOCORE_GOP_FILE) \
+		CONFIG_TIANOCORE_VBT_FILE=$(CONFIG_VBT_FILE) \
 		MFLAGS= MAKEFLAGS=
 
 filo:

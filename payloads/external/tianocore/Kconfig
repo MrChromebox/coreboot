@@ -51,4 +51,12 @@ config TIANOCORE_DEBUG
 	help
 	  Generate a debug build instead of a release build.
 
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on ADD_VBT_DATA_FILE || ADD_GMA_VBT_DATA_FILE
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "IntelGopDriver.efi"
 endif
