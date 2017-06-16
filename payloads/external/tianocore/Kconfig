@@ -8,7 +8,7 @@ config PAYLOAD_FILE
 
 choice
 	prompt "Tianocore version"
-	default TIANOCORE_STABLE
+	default TIANOCORE_MASTER
 	help
 	  Select which version of Tianocore to build (default is to build stable)
 	  stable: a version of Tianocore that builds without any errors
@@ -88,4 +88,12 @@ config TIANOCORE_RELEASE
 
 endchoice
 
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT_DATA_FILE
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "IntelGopDriver.efi"
 endif
