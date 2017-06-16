@@ -24,7 +24,7 @@ TAG-$(CONFIG_TIANOCORE_REVISION)=$(CONFIG_TIANOCORE_REVISION_ID)
 
 project_name=Tianocore
 project_dir=$(CURDIR)/tianocore
-project_git_repo=https://github.com/tianocore/edk2
+project_git_repo=https://github.com/MrChromebox/edk2
 
 export EDK_TOOLS_PATH=$(project_dir)/BaseTools
 
@@ -67,12 +67,6 @@ $(project_dir)/.version_$(TAG-y): fetch
 			git checkout master; \
 			git branch -D coreboot 2>/dev/null; \
 			git checkout -b coreboot $(TAG-y); \
-		for patch in $(CURDIR)/patches/*.patch; do \
-			echo "Applying $$patch"; \
-			cd $(project_dir); \
-			git am --keep-cr --ignore-space-change $$patch || \
-				( echo " Error when applying patches.\n"; git am --abort; exit 1; ); \
-		done; \
 		if ! [ "$(TAG-y)" = "origin/master" ] ; then \
 			touch $(project_dir)/.version_$(STABLE_COMMIT_ID); \
 		fi; \
@@ -92,6 +86,15 @@ checktools:
 build: $(project_dir)/.version_$(TAG-y) checktools
 	unset CC; $(MAKE) -C $(project_dir)/BaseTools
 	echo " build $(project_name) $(TAG-y)"
+
+ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
+	echo "copying GOP driver from $(CONFIG_TIANOCORE_GOP_FILE)"
+	cp ~/dev/coreboot/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/CorebootPayloadPkg/IntelGopDriver.efi
+	cp ~/dev/coreboot/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/CorebootPayloadPkg/vbt.bin
+else
+	echo "not copying GOP driver; config: $(CONFIG_TIANOCORE_GOP_DRIVER)"
+endif
+
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
 		export WORKSPACE=$(project_dir); \
