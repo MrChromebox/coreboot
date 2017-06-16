@@ -175,6 +175,23 @@ config TIANOCORE_SD_MMC_TIMEOUT
 	  The amount of time allowed to initialize the SD Card reader and/or eMMC drive.
 	  Most only require 1000μs, but certain readers can take 1000000μs.
 
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "3rdparty/blobs/soc/intel/bdw/IntelGopDriver.efi" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
+	default "3rdparty/blobs/soc/intel/byt/IntelGopDriver.efi" if SOC_INTEL_BAYTRAIL
+	default "3rdparty/blobs/soc/intel/bsw/IntelGopDriver.efi" if SOC_INTEL_BRASWELL
+	default "3rdparty/blobs/soc/intel/kbl/IntelGopDriver.efi" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
+	default "3rdparty/blobs/soc/intel/glk/IntelGopDriver.efi" if SOC_INTEL_GEMINILAKE
+	default "3rdparty/blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
+	default "3rdparty/blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE || SOC_INTEL_WHISKEYLAKE
+	default "3rdparty/blobs/soc/intel/tgl/IntelGopDriver.efi" if SOC_INTEL_TIGERLAKE
+	default "IntelGopDriver.efi"
+
 endif
 
 if TIANOCORE_COREBOOTPAYLOAD
