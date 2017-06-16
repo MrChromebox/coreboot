@@ -102,4 +102,13 @@ config TIANOCORE_BOOTSPLASH_FILE
 	  If an absolute path is not given, the path will assumed to be
 	  relative to the coreboot root directory.
 
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "IntelGopDriver.efi"
+
 endif
