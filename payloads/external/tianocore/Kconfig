@@ -81,6 +81,22 @@ config TIANOCORE_BOOTSPLASH_FILE
 	  If an absolute path is not given, the path will assumed to be
 	  relative to the coreboot root directory.
 
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "blobs/soc/intel/bdw/IntelGopDriver.efi" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
+	default "blobs/soc/intel/byt/IntelGopDriver.efi" if SOC_INTEL_BAYTRAIL
+	default "blobs/soc/intel/bsw/IntelGopDriver.efi" if SOC_INTEL_BRASWELL
+	default "blobs/soc/intel/kbl/IntelGopDriver.efi" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
+	default "blobs/soc/intel/glk/IntelGopDriver.efi" if SOC_INTEL_GEMINILAKE
+	default "blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
+	default "blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE
+	default "IntelGopDriver.efi"
+
 endif
 
 config TIANOCORE_BOOT_TIMEOUT

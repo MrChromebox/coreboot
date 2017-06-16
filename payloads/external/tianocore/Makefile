@@ -34,9 +34,13 @@ ifeq ($(CONFIG_TIANOCORE_CBMEM_LOGGING),y)
 CBMEM=-D USE_CBMEM_FOR_CONSOLE=TRUE
 endif
 
+ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
+GOP=-DUSE_PLATFORM_GOP
+endif
+
 TIMEOUT=-D PLATFORM_BOOT_TIMEOUT=$(CONFIG_TIANOCORE_BOOT_TIMEOUT)
 
-BUILD_STR=-q -a IA32 -a X64 -p UefiPayloadPkg/UefiPayloadPkg.dsc -t COREBOOT -b $(BUILD_TYPE) $(TIMEOUT) $(build_flavor) $(CBMEM)
+BUILD_STR=-q -a IA32 -a X64 -p UefiPayloadPkg/UefiPayloadPkg.dsc -t COREBOOT -b $(BUILD_TYPE) $(TIMEOUT) $(build_flavor) $(CBMEM) $(GOP)
 
 all: clean build
 
@@ -84,6 +88,11 @@ build: update checktools
 			*) cp $(top)/$(CONFIG_TIANOCORE_BOOTSPLASH_FILE) \
 				$(project_dir)/MdeModulePkg/Logo/Logo.bmp;; \
 		esac \
+	fi; \
+	if [ -n "$(CONFIG_TIANOCORE_GOP_DRIVER)" ]; then \
+		echo "Using GOP driver $(CONFIG_TIANOCORE_GOP_FILE)"; \
+		cp $(top)/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/UefiPayloadPkg/IntelGopDriver.efi; \
+		cp $(top)/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/UefiPayloadPkg/vbt.bin; \
 	fi; \
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
