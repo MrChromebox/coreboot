@@ -8,7 +8,7 @@ config PAYLOAD_FILE
 
 choice
 	prompt "Tianocore version"
-	default TIANOCORE_STABLE
+	default TIANOCORE_REVISION
 	help
 	  Select which version of Tianocore to build (default is to build stable)
 	  stable: MrChromebox's customized version of Tianocore which works on most
@@ -36,7 +36,7 @@ endchoice
 config TIANOCORE_REVISION_ID
 	string "Insert a commit's SHA-1 or a branch name"
 	depends on TIANOCORE_REVISION
-	default "upstream/master"
+	default "origin/master"
 	help
 	   The commit's SHA-1 or branch name of the revision to use.
 
@@ -106,5 +106,14 @@ config TIANOCORE_BOOTSPLASH_FILE
 
 	  If an absolute path is not given, the path will assumed to be
 	  relative to the coreboot root directory.
+
+config TIANOCORE_GOP_DRIVER
+	bool "Add a GOP driver to the Tianocore build"
+	depends on INTEL_GMA_ADD_VBT
+
+config TIANOCORE_GOP_FILE
+	string "GOP driver file"
+	depends on TIANOCORE_GOP_DRIVER
+	default "IntelGopDriver.efi"
 
 endif
