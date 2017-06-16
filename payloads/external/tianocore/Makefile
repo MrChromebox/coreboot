@@ -100,6 +100,11 @@ build: update checktools
 				$(project_dir)/CorebootPayloadPkg/Logo/Logo.bmp;; \
 		esac \
 	fi; \
+	if [ -n $(CONFIG_TIANOCORE_GOP_DRIVER) ]; then \
+		echo "Using GOP driver $(CONFIG_TIANOCORE_GOP_FILE)"; \
+		cp $(top)/$(CONFIG_TIANOCORE_GOP_FILE) $(project_dir)/CorebootPayloadPkg/IntelGopDriver.efi; \
+		cp $(top)/$(CONFIG_TIANOCORE_VBT_FILE) $(project_dir)/CorebootPayloadPkg/vbt.bin; \
+	fi; \
 	cd $(project_dir); \
 		export EDK_TOOLS_PATH=$(project_dir)/BaseTools; \
 		export WORKSPACE=$(project_dir); \
