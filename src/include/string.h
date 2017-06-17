@@ -10,6 +10,10 @@
 #define STRINGIFY(x)	_STRINGIFY(x)
 #endif
 
+/* Convert 8-bit char to 16-bit */
+#define STR16_(str) (u ## str)
+#define STR16(str) STR16_(str)
+
 void *memcpy(void *dest, const void *src, size_t n);
 void *memmove(void *dest, const void *src, size_t n);
 void *memset(void *s, int c, size_t n);
