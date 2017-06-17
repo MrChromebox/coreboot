@@ -100,8 +100,14 @@ static enum cb_err init_opregion_vbt_cbfs(igd_opregion_t *opregion)
 		return CB_ERR;
 	}
 
+	/* Inject GOP driver version */
+#if CONFIG_SET_GOP_DRIVER_VERSION
+	memcpy(opregion->header.dver, STR16(CONFIG_GOP_DRIVER_VERSION),
+		2 * strlen(CONFIG_GOP_DRIVER_VERSION));
+#else
 	memcpy(opregion->header.vbios_version, vbt.data->coreblock_biosbuild,
 		ARRAY_SIZE(vbt.data->coreblock_biosbuild));
+#endif
 	memcpy(opregion->vbt.gvd1, vbt.data, vbt.data->hdr_vbt_size <
 		sizeof(opregion->vbt.gvd1) ? vbt.data->hdr_vbt_size :
 		sizeof(opregion->vbt.gvd1));
