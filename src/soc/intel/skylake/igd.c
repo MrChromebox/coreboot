@@ -126,6 +126,9 @@ static int update_igd_opregion(igd_opregion_t *opregion)
 {
 	u16 reg16;
 
+	/* Initialize Mailbox 1 */
+	opregion->mailbox1.clid = 1;
+
 	/* Initialize Mailbox 3 */
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
 	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
