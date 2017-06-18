@@ -17,6 +17,8 @@
 #include <arch/acpi.h>
 #include <arch/io.h>
 #include <bootmode.h>
+#include <bootstate.h>
+#include <cbmem.h>
 #include <chip.h>
 #include <console/console.h>
 #include <delay.h>
@@ -27,6 +29,7 @@
 #include <soc/intel/common/opregion.h>
 #include <soc/acpi.h>
 #include <soc/cpu.h>
+#include <soc/nvs.h>
 #include <soc/pm.h>
 #include <soc/ramstage.h>
 #include <soc/systemagent.h>
@@ -121,11 +124,33 @@ static void igd_init(struct device *dev)
 #endif
 }
 
+static void igd_finalize_opregion(void *opregion)
+{
+	u16 reg16;
+	global_nvs_t *gnvs;
+
+	if (opregion) {
+		pci_write_config32(SA_DEV_IGD, ASLS, (u32)opregion);
+	} else {
+		/* GNVS has been already set up on S3 resume path*/
+		gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
+
+		if (!gnvs)
+			return;
+
+		pci_write_config32(SA_DEV_IGD, ASLS, (u32)gnvs->aslb);
+	}
+
+	/* Intel's Windows driver relies on this: */
+	reg16 = pci_read_config16(SA_DEV_IGD, SWSCI);
+	reg16 &= ~GSSCIE;
+	reg16 |= SMISCISEL;
+	pci_write_config16(SA_DEV_IGD, SWSCI, reg16);
+}
+
 /* Initialize IGD OpRegion, called from ACPI code */
 static int update_igd_opregion(igd_opregion_t *opregion)
 {
-	u16 reg16;
-
 	/* Initialize Mailbox 1 */
 	opregion->mailbox1.clid = 1;
 
@@ -146,20 +171,17 @@ static int update_igd_opregion(igd_opregion_t *opregion)
 	opregion->mailbox3.bclm[9] = IGD_WORD_FIELD_VALID + 0x5ae5;
 	opregion->mailbox3.bclm[10] = IGD_WORD_FIELD_VALID + 0x64ff;
 
-	/* TODO This may need to happen in S3 resume */
-	pci_write_config32(SA_DEV_IGD, ASLS, (u32)opregion);
-	reg16 = pci_read_config16(SA_DEV_IGD, SWSCI);
-	reg16 &= ~GSSCIE;
-	reg16 |= SMISCISEL;
-	pci_write_config16(SA_DEV_IGD, SWSCI, reg16);
+	/* Set PCI registers */
+	igd_finalize_opregion(opregion);
 
-	return 0;
+	return CB_SUCCESS;
 }
 
 static unsigned long write_acpi_igd_opregion(device_t device,
 				unsigned long current, struct acpi_rsdp *rsdp)
 {
 	igd_opregion_t *opregion;
+	global_nvs_t *gnvs;
 
 	/* If GOP is not used, exit here */
 	if (!IS_ENABLED(CONFIG_ADD_VBT_DATA_FILE))
@@ -173,9 +195,18 @@ static unsigned long write_acpi_igd_opregion(device_t device,
 	opregion = (igd_opregion_t *)current;
 	init_igd_opregion(opregion);
 	update_igd_opregion(opregion);
+
+	/* GNVS has been already set up */
+	gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
+	if (gnvs) {
+		/* IGD OpRegion Base Address */
+		gnvs->aslb = (u32)(uintptr_t)opregion;
+	} else {
+		printk(BIOS_ERR, "Error: GNVS table not found.\n");
+	}
+
 	current += sizeof(igd_opregion_t);
 	current = acpi_align_current(current);
-
 	printk(BIOS_DEBUG, "current = %lx\n", current);
 	return current;
 }
@@ -208,3 +239,5 @@ static const struct pci_driver igd_driver __pci_driver = {
 	.vendor	 = PCI_VENDOR_ID_INTEL,
 	.devices = pci_device_ids,
 };
+
+BOOT_STATE_INIT_ENTRY(BS_OS_RESUME, BS_ON_ENTRY, igd_finalize_opregion, NULL);
