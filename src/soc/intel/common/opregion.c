@@ -43,8 +43,13 @@ enum cb_err init_igd_opregion(igd_opregion_t *opregion)
 
 	memcpy(&opregion->header.signature, IGD_OPREGION_SIGNATURE,
 					sizeof(opregion->header.signature));
-	memcpy(opregion->header.vbios_version, vbt->coreblock_biosbuild,
-					ARRAY_SIZE(vbt->coreblock_biosbuild));
+	if (IS_ENABLED(CONFIG_SET_GOP_DRIVER_VERSION)) {
+		memcpy(opregion->header.dver, STR16(CONFIG_GOP_DRIVER_VERSION),
+			2 * strlen(CONFIG_GOP_DRIVER_VERSION));
+	} else {
+		memcpy(opregion->header.vbios_version, vbt->coreblock_biosbuild,
+			ARRAY_SIZE(vbt->coreblock_biosbuild));
+	}
 	/* Extended VBT support */
 	if (vbt->hdr_vbt_size > sizeof(opregion->vbt.gvd1)) {
 		ext_vbt = cbmem_add(CBMEM_ID_EXT_VBT, vbt->hdr_vbt_size);

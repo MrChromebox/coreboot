@@ -115,6 +115,23 @@ config VBT_FILE
 	help
 	  The path and filename of the VBT binary.
 
+config SET_GOP_DRIVER_VERSION
+	bool "Set the GOP Driver version"
+	depends on ADD_VBT_DATA_FILE
+	default y if ADD_VBT_DATA_FILE
+	help
+	  Inject the GOP driver version into the OpRegion ACPI table.
+
+config GOP_DRIVER_VERSION
+	string "GOP Driver version"
+	depends on SET_GOP_DRIVER_VERSION
+	default "5.5.1034" if SOC_INTEL_BROADWELL
+	default "7.0.1011" if SOC_INTEL_BAYTRAIL
+	default "8.0.1028" if SOC_INTEL_BRASWELL
+	default "9.0.1063" if SOC_INTEL_SKYLAKE
+	help
+	  Must be in the format X.Y.ZZZZ
+
 config SOC_INTEL_COMMON_GFX_OPREGION
 	bool
 	default n
