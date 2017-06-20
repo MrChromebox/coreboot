@@ -350,7 +350,10 @@ intel_gma_init_igd_opregion(igd_opregion_t *opregion)
 	// TODO Initialize Mailbox 1
 	opregion->mailbox1.clid = 1;
 
-	// TODO Initialize Mailbox 3
+	//From Intel OpRegion reference doc
+	opregion->header.pcon = 279;
+
+	// Initialize Mailbox 3
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
 	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
 	opregion->mailbox3.pcft = 0; // should be (IMON << 1) & 0x3e
