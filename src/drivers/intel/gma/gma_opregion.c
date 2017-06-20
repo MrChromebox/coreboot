@@ -122,21 +122,28 @@ enum cb_err init_igd_opregion(igd_opregion_t *opregion)
 
 	memset((void *)opregion, 0, sizeof(igd_opregion_t));
 
-	// FIXME if IGD is disabled, we should exit here.
+	/* If IGD is disabled, exit here */
+	if (pci_read_config16(dev_find_slot(0, PCI_DEVFN(0x2, 0)),
+			 PCI_VENDOR_ID) == 0xFFFF)
+		return CB_ERR;
 
 	memcpy(&opregion->header.signature, IGD_OPREGION_SIGNATURE,
 		sizeof(opregion->header.signature));
 
 	/* 8kb */
 	opregion->header.size = sizeof(igd_opregion_t) / 1024;
-	opregion->header.version = IGD_OPREGION_VERSION;
+	opregion->header.version = (IGD_OPREGION_VERSION << 24);
 
 	// FIXME We just assume we're mobile for now
 	opregion->header.mailboxes = MAILBOXES_MOBILE;
 
-	// TODO Initialize Mailbox 1
+	//From Intel OpRegion reference doc
+	opregion->header.pcon = 279;
 
-	// TODO Initialize Mailbox 3
+	// Initialize Mailbox 1
+	opregion->mailbox1.clid = 1;
+
+	// Initialize Mailbox 3
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
 	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
 	opregion->mailbox3.pcft = 0; // should be (IMON << 1) & 0x3e
