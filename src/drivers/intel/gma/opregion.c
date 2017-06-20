@@ -291,9 +291,13 @@ intel_gma_init_igd_opregion(igd_opregion_t *opregion)
 	// FIXME We just assume we're mobile for now
 	opregion->header.mailboxes = MAILBOXES_MOBILE;
 
-	// TODO Initialize Mailbox 1
+	//From Intel OpRegion reference doc
+	opregion->header.pcon = 279;
 
-	// TODO Initialize Mailbox 3
+	// Initialize Mailbox 1
+	opregion->mailbox1.clid = 1;
+
+	// Initialize Mailbox 3
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
 	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
 	opregion->mailbox3.pcft = 0; // should be (IMON << 1) & 0x3e
