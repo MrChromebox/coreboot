@@ -57,7 +57,9 @@ typedef struct {
 	u16	cid1; /* 0x3d - Wifi Country Identifier */
 	u16	u2we; /* 0x3f - USB2 Wake Enable Bitmap */
 	u8	u3we; /* 0x41 - USB3 Wake Enable Bitmap */
-	u8	unused[190];
+	u8	rsvd[114];
+	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */
+	u8	unused[72];
 
 	/* ChromeOS specific (0x100 - 0xfff) */
 	chromeos_acpi_t chromeos;
