@@ -24,7 +24,7 @@
 
 /* IGD PCI Configuration register */
 #define ASLS           0xfc            /* OpRegion Base */
-#if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL)
+#if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL) || IS_ENABLED(CONFIG_SOC_INTEL_BRASWELL)
 #define SWSCI          0xe0            /* SWSCI Register */
 #else
 #define SWSCI          0xe8            /* SWSCI Register */

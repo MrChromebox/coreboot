@@ -71,6 +71,10 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	TOLM,	 32,	/* 0x34 - Top of Low Memory */
 	CBMC,	 32,	/* 0x38 - coreboot mem console pointer */
 
+	/* IGD OpRegion */
+	Offset (0xb4),
+	ASLB,	32,	// 0xb4 - IGD OpRegion Base Address
+
 	/* ChromeOS specific */
 	Offset (0x100),
 	#include <vendorcode/google/chromeos/acpi/gnvs.asl>

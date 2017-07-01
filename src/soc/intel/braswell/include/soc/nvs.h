@@ -63,7 +63,9 @@ typedef struct global_nvs_t {
 	u32	cmem; /* 0x30 - CBMEM TOC */
 	u32	tolm; /* 0x34 - Top of Low Memory */
 	u32	cbmc; /* 0x38 - coreboot memconsole */
-	u8	rsvd3[196];
+	u8	rsvd3[120];
+	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */
+	u8	unused[72];
 
 	/* ChromeOS specific (0x100-0xfff) */
 	chromeos_acpi_t chromeos;
