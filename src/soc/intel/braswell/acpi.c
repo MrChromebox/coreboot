@@ -17,6 +17,7 @@
 
 #include <arch/acpi.h>
 #include <arch/acpigen.h>
+#include <bootstate.h>
 #include <arch/cpu.h>
 #include <arch/io.h>
 #include <arch/smp/mpspec.h>
@@ -31,7 +32,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <ec/google/chromeec/ec.h>
-#include <fsp/gop.h>
+#include <soc/intel/common/opregion.h>
 #include <rules.h>
 #include <soc/acpi.h>
 #include <soc/gfx.h>
@@ -473,15 +474,47 @@ unsigned long acpi_madt_irq_overrides(unsigned long current)
 	return current;
 }
 
+static void igd_finalize_opregion(void *opregion)
+{
+	device_t igd;
+	u16 reg16;
+	global_nvs_t *gnvs;
+
+	igd = dev_find_slot(0, PCI_DEVFN(0x2, 0));
+
+	if (opregion) {
+		pci_write_config32(igd, ASLS, (u32)opregion);
+	} else {
+		/* GNVS has been already set up on S3 resume path*/
+		gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
+
+		if (!gnvs)
+			return;
+
+		pci_write_config32(igd, ASLS, (u32)gnvs->aslb);
+	}
+
+	/* Intel's Windows driver relies on this: */
+	reg16 = pci_read_config16(igd, SWSCI);
+	reg16 &= ~(1 << 0);
+	reg16 |= (1 << 15);
+	pci_write_config16(igd, SWSCI, reg16);
+}
+
 /* Initialize IGD OpRegion, called from ACPI code */
 static int update_igd_opregion(igd_opregion_t *opregion)
 {
-	u16 reg16;
-	struct device *igd;
+	/* For BSW, MailBOX2(SCI) is not supported */
+	opregion->header.mailboxes = 0x0;
+	opregion->header.mailboxes = (IGD_MBOX1 | IGD_MBOX3 | IGD_MBOX4);
 
-	/* TODO Initialize Mailbox 1 */
+	/* Calculated from Intel reference doc */
+	opregion->header.pcon = 20;
 
-	/* TODO Initialize Mailbox 3 */
+	/* Initialize Mailbox 1 */
+	opregion->mailbox1.clid = 1;
+
+	/* Initialize Mailbox 3 */
 	opregion->mailbox3.bclp = IGD_BACKLIGHT_BRIGHTNESS;
 	opregion->mailbox3.pfit = IGD_FIELD_VALID | IGD_PFIT_STRETCH;
 	opregion->mailbox3.pcft = 0; /* should be (IMON << 1) & 0x3e */
@@ -498,17 +531,8 @@ static int update_igd_opregion(igd_opregion_t *opregion)
 	opregion->mailbox3.bclm[9] = IGD_WORD_FIELD_VALID + 0x5ae5;
 	opregion->mailbox3.bclm[10] = IGD_WORD_FIELD_VALID + 0x64ff;
 
-	/*
-	 * TODO This needs to happen in S3 resume, too.
-	 * Maybe it should move to the finalize handler
-	 */
-	igd = dev_find_slot(0, PCI_DEVFN(GFX_DEV, GFX_FUNC));
-
-	pci_write_config32(igd, ASLS, (u32)opregion);
-	reg16 = pci_read_config16(igd, SWSCI);
-	reg16 &= ~(1 << 0);
-	reg16 |= (1 << 15);
-	pci_write_config16(igd, SWSCI, reg16);
+	/* Set PCI registers */
+	igd_finalize_opregion((void *)opregion);
 
 	return 0;
 }
@@ -518,7 +542,8 @@ unsigned long southcluster_write_acpi_tables(device_t device,
 					     struct acpi_rsdp *rsdp)
 {
 	acpi_header_t *ssdt2;
-
+	global_nvs_t *gnvs = cbmem_find(CBMEM_ID_ACPI_GNVS);
+	
 	current = acpi_write_hpet(device, current, rsdp);
 	current = acpi_align_current(current);
 
@@ -528,6 +553,9 @@ unsigned long southcluster_write_acpi_tables(device_t device,
 		printk(BIOS_DEBUG, "ACPI:    * IGD OpRegion\n");
 		opregion = (igd_opregion_t *)current;
 		if (init_igd_opregion(opregion) == CB_SUCCESS) {
+			if (gnvs) {
+				gnvs->aslb = (u32)opregion;
+			}
 			update_igd_opregion(opregion);
 			current += sizeof(igd_opregion_t);
 			current = acpi_align_current(current);
@@ -585,3 +613,5 @@ void southcluster_inject_dsdt(device_t device)
 __attribute__((weak)) void acpi_create_serialio_ssdt(acpi_header_t *ssdt)
 {
 }
+
+BOOT_STATE_INIT_ENTRY(BS_OS_RESUME, BS_ON_ENTRY, igd_finalize_opregion, NULL);
