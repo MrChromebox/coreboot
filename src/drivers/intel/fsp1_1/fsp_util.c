@@ -78,10 +78,6 @@ FSP_INFO_HEADER *find_fsp(uintptr_t fsp_base_address)
 	if (*image_id != FSP_IMAGE_ID)
 		return (FSP_INFO_HEADER *)ERROR_FSP_SIG_MISMATCH;
 
-	/* Verify the FSP Revision */
-	if (fsp_ptr.fih->ImageRevision != FSP_IMAGE_REV)
-		return (FSP_INFO_HEADER *)ERROR_FSP_REV_MISMATCH;
-
 	return fsp_ptr.fih;
 }
 
