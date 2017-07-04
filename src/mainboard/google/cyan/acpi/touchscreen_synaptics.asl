@@ -77,8 +77,6 @@ Scope (\_SB.PCI0.I2C1)
 			}
 		}
 
-		Name (_PRW, Package() { BOARD_TOUCHSCREEN_WAKE_GPIO, 0x3 })
-
 		/* Allow device to power off in S0 */
 		Name (_S0W, 4)
 	}
