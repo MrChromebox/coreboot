@@ -20,7 +20,7 @@ ramstage-$(CONFIG_INTEL_INT15) += int15.c
 endif
 ramstage-$(CONFIG_INTEL_GMA_ACPI) += acpi.c
 ramstage-$(CONFIG_INTEL_GMA_ACPI) += opregion.c
-
+ramstage-$(CONFIG_INTEL_GMA_OPREGION) += gma_opregion.c
 
 ifeq ($(CONFIG_MAINBOARD_USE_LIBGFXINIT),y)
 

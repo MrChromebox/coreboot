@@ -25,7 +25,7 @@
 #include <cpu/x86/msr.h>
 #include <cpu/x86/mtrr.h>
 #include <southbridge/intel/bd82x6x/nvs.h>
-#include <northbridge/intel/common/gma_opregion.h>
+#include <drivers/intel/gma/gma_opregion.h>
 #include <cbmem.h>
 
 #include "chip.h"

@@ -30,7 +30,7 @@
 #include <pc80/vga.h>
 #include <pc80/vga_io.h>
 #include <southbridge/intel/ibexpeak/nvs.h>
-#include <northbridge/intel/common/gma_opregion.h>
+#include <drivers/intel/gma/gma_opregion.h>
 #include <cbmem.h>
 
 #include "chip.h"

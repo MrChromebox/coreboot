@@ -19,7 +19,7 @@
 #include <arch/acpi.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
-#include <drivers/intel/gma/intel_bios.h>
+#include "intel_bios.h"
 #include "gma_opregion.h"
 
 static void *get_intel_vbios(void)

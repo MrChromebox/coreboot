@@ -24,7 +24,7 @@
 #include <drivers/intel/gma/i915_reg.h>
 #include <drivers/intel/gma/i915.h>
 #include <cpu/intel/haswell/haswell.h>
-#include <northbridge/intel/common/gma_opregion.h>
+#include <drivers/intel/gma/gma_opregion.h>
 #include <southbridge/intel/lynxpoint/nvs.h>
 #include <stdlib.h>
 #include <string.h>

@@ -20,7 +20,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <southbridge/intel/fsp_bd82x6x/nvs.h>
-#include <northbridge/intel/common/gma_opregion.h>
+#include <drivers/intel/gma/gma_opregion.h>
 #include <drivers/intel/gma/intel_bios.h>
 
 #include <cbmem.h>

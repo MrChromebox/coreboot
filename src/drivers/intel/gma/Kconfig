@@ -32,6 +32,9 @@ config INTEL_GMA_ACPI
 	bool
 	default n
 
+config INTEL_GMA_OPREGION
+	def_bool n
+
 config INTEL_GMA_SSC_ALTERNATE_REF
 	bool
 	default n
