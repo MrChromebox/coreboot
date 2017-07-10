@@ -562,25 +562,6 @@ static void gma_pm_init_post_vbios(struct device *dev)
 	}
 }
 
-/* Enable SCI to ACPI _GPE._L06 */
-static void gma_enable_swsci(void)
-{
-	u16 reg16;
-
-	/* Clear DMISCI status */
-	reg16 = inw(DEFAULT_PMBASE + TCO1_STS);
-	reg16 &= DMISCI_STS;
-	outw(reg16, DEFAULT_PMBASE + TCO1_STS);
-
-	/* Clear ACPI TCO status */
-	outl(TCOSCI_STS, DEFAULT_PMBASE + GPE0_STS);
-
-	/* Enable ACPI TCO SCIs */
-	reg16 = inw(DEFAULT_PMBASE + GPE0_EN);
-	reg16 |= TCOSCI_EN;
-	outw(reg16, DEFAULT_PMBASE + GPE0_EN);
-}
-
 static void gma_func0_init(struct device *dev)
 {
 	intel_gma_init_igd_opregion();
@@ -615,8 +596,6 @@ static void gma_func0_init(struct device *dev)
 				gfx_set_init_done(1);
 		}
 	}
-
-	gma_enable_swsci();
 }
 
 static void gma_generate_ssdt(const struct device *device)
