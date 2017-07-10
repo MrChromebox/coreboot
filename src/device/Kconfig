@@ -623,6 +623,25 @@ config INTEL_GMA_VBT_FILE
 	help
 	  The path and filename of the VBT binary.
 
+config SET_GOP_DRIVER_VERSION
+	bool "Set the GOP Driver version"
+	depends on INTEL_GMA_ADD_VBT
+	default y if INTEL_GMA_ADD_VBT
+	help
+	  Inject the GOP driver version into the OpRegion ACPI table.
+
+config GOP_DRIVER_VERSION
+	string "GOP Driver version"
+	depends on SET_GOP_DRIVER_VERSION
+	default "2.0.1024" if NORTHBRIDGE_INTEL_SANDYBRIDGE
+	default "3.0.1030" if NORTHBRIDGE_INTEL_IVYBRIDGE
+	default "5.5.1034" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
+	default "7.0.1011" if SOC_INTEL_BAYTRAIL
+	default "8.0.1038" if SOC_INTEL_BRASWELL
+	default "9.0.1079" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
+	help
+	  Must be in the format X.Y.ZZZZ
+
 config SOFTWARE_I2C
 	bool "Enable I2C controller emulation in software"
 	default n
