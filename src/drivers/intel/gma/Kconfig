@@ -50,6 +50,22 @@ config VBT_FILE
 	help
 	  The path and filename of the VBT binary.
 
+config SET_GOP_DRIVER_VERSION
+	bool "Set the GOP Driver version"
+	depends on ADD_GMA_VBT_DATA_FILE
+	default y if ADD_GMA_VBT_DATA_FILE
+	help
+	  Inject the GOP driver version into the OpRegion ACPI table.
+
+config GOP_DRIVER_VERSION
+	string "GOP Driver version"
+	depends on SET_GOP_DRIVER_VERSION
+	default "2.0.1024" if NORTHBRIDGE_INTEL_SANDYBRIDGE
+	default "3.0.1030" if NORTHBRIDGE_INTEL_IVYBRIDGE
+	default "5.5.1034" if NORTHBRIDGE_INTEL_HASWELL
+	help
+	  Must be in the format X.Y.ZZZZ
+
 config INTEL_GMA_SSC_ALTERNATE_REF
 	bool
 	default n
