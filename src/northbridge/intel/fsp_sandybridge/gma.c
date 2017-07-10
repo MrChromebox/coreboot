@@ -98,30 +98,10 @@ static void gma_ssdt(device_t device)
 	drivers_intel_gma_displays_ssdt_generate(gfx);
 }
 
-/* Enable SCI to ACPI _GPE._L06 */
-static void gma_enable_swsci(void)
-{
-	u16 reg16;
-
-	/* clear DMISCI status */
-	reg16 = inw(DEFAULT_PMBASE + TCO1_STS);
-	reg16 &= DMISCI_STS;
-	outw(DEFAULT_PMBASE + TCO1_STS, reg16);
-
-	/* clear acpi tco status */
-	outl(DEFAULT_PMBASE + GPE0_STS, TCOSCI_STS);
-
-	/* enable acpi tco scis */
-	reg16 = inw(DEFAULT_PMBASE + GPE0_EN);
-	reg16 |= TCOSCI_EN;
-	outw(DEFAULT_PMBASE + GPE0_EN, reg16);
-}
-
 static void gma_init(struct device *dev)
 {
 	pci_dev_init(dev);
 
-	gma_enable_swsci();
 	intel_gma_restore_opregion();
 }
 
