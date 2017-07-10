@@ -47,3 +47,7 @@ ramstage-y += text_fb/gma.adb
 endif
 
 endif # CONFIG_MAINBOARD_USE_LIBGFXINIT
+
+cbfs-files-$(CONFIG_ADD_GMA_VBT_DATA_FILE) += vbt.bin
+vbt.bin-file := $(call strip_quotes,$(CONFIG_VBT_FILE))
+vbt.bin-type := raw

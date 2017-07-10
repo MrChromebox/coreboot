@@ -35,6 +35,21 @@ config INTEL_GMA_ACPI
 config INTEL_GMA_OPREGION
 	def_bool n
 
+config ADD_GMA_VBT_DATA_FILE
+	bool "Add a Video Bios Table (VBT) binary to CBFS"
+	depends on INTEL_GMA_OPREGION
+	default y if !VGA_BIOS
+	help
+	  Add a VBT file data file to CBFS. The VBT describes the integrated
+	  GPU and connections, and is needed in leiu of a VBIOS in order to
+	  initialize the display.
+
+config VBT_FILE
+	string "VBT binary path and filename"
+	depends on ADD_GMA_VBT_DATA_FILE
+	help
+	  The path and filename of the VBT binary.
+
 config INTEL_GMA_SSC_ALTERNATE_REF
 	bool
 	default n
