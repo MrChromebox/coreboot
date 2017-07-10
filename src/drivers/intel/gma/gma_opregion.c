@@ -15,6 +15,8 @@
 
 #include <types.h>
 #include <string.h>
+#include <cbfs.h>
+#include <cbmem.h>
 #include <console/console.h>
 #include <arch/acpi.h>
 #include <device/pci.h>
@@ -49,7 +51,7 @@ static void *get_intel_vbios(void)
 	return NULL;
 }
 
-static enum cb_err init_opregion_vbt(igd_opregion_t *opregion)
+static enum cb_err init_opregion_vbt_vbios(igd_opregion_t *opregion)
 {
 	void *vbios;
 	vbios = get_intel_vbios();
@@ -71,6 +73,38 @@ static enum cb_err init_opregion_vbt(igd_opregion_t *opregion)
 	memcpy(opregion->header.vbios_version, vbt->coreblock_biosbuild, 4);
 	memcpy(opregion->vbt.gvd1, vbt, vbt->hdr_vbt_size < 7168 ?
 						vbt->hdr_vbt_size : 7168);
+
+	return CB_SUCCESS;
+}
+
+/* Reading VBT table from flash */
+static enum cb_err init_opregion_vbt_cbfs(igd_opregion_t *opregion)
+{
+	size_t vbt_size;
+	union {
+		const optionrom_vbt_t *data;
+		uint32_t *signature;
+	} vbt;
+
+	/* Locate the vbt file in cbfs */
+	vbt.data = cbfs_boot_map_with_leak("vbt.bin", CBFS_TYPE_RAW, &vbt_size);
+	if (!vbt.data) {
+		printk(BIOS_ERR, "vbt.bin not found in CBFS!\n");
+		return CB_ERR;
+	}
+	printk(BIOS_DEBUG, "VBT found at %p\n", vbt.data);
+
+	/* Validate the vbt file */
+	if (*vbt.signature != VBT_SIGNATURE) {
+		printk(BIOS_ERR, "Invalid signature in VBT data file (vbt.bin)!\n");
+		return CB_ERR;
+	}
+
+	memcpy(opregion->header.vbios_version, vbt.data->coreblock_biosbuild,
+		ARRAY_SIZE(vbt.data->coreblock_biosbuild));
+	memcpy(opregion->vbt.gvd1, vbt.data, vbt.data->hdr_vbt_size <
+		sizeof(opregion->vbt.gvd1) ? vbt.data->hdr_vbt_size :
+		sizeof(opregion->vbt.gvd1));
 
 	return CB_SUCCESS;
 }
@@ -113,7 +147,11 @@ enum cb_err init_igd_opregion(igd_opregion_t *opregion)
 	opregion->mailbox3.bclm[9] = IGD_WORD_FIELD_VALID + 0x5ae5;
 	opregion->mailbox3.bclm[10] = IGD_WORD_FIELD_VALID + 0x64ff;
 
-	ret = init_opregion_vbt(opregion);
+	if (IS_ENABLED(CONFIG_ADD_GMA_VBT_DATA_FILE))
+		ret = init_opregion_vbt_cbfs(opregion);
+	else
+		ret = init_opregion_vbt_vbios(opregion);
+
 	if (ret != CB_SUCCESS)
 		return ret;
 
