@@ -2,3 +2,7 @@ config SOUTHBRIDGE_INTEL_COMMON
 	def_bool n
 config SOUTHBRIDGE_INTEL_COMMON_GPIO
 	def_bool n
+config SOUTHBRIDGE_INTEL_COMMON_SMBUS
+	def_bool n
+config SOUTHBRIDGE_INTEL_COMMON_SPI
+	def_bool n

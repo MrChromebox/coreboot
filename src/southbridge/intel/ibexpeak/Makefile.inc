@@ -35,7 +35,6 @@ ramstage-y += ../bd82x6x/reset.c
 ramstage-y += ../bd82x6x/watchdog.c
 
 ramstage-$(CONFIG_ELOG) += ../bd82x6x/elog.c
-ramstage-y += ../common/spi.c
 ramstage-y += madt.c
 smm-$(CONFIG_SPI_FLASH_SMM) += ../common/spi.c
 

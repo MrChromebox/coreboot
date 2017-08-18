@@ -13,6 +13,7 @@
  * GNU General Public License for more details.
  */
 
+#include <arch/early_variables.h>
 #include <stdint.h>
 #include <cpu/x86/msr.h>
 #include <timer.h>
@@ -22,7 +23,7 @@ static struct monotonic_counter {
 	int initialized;
 	struct mono_time time;
 	uint32_t last_value;
-} mono_counter;
+} g_mono_counter CAR_GLOBAL;
 
 static inline uint32_t read_counter_msr(void)
 {
@@ -37,23 +38,24 @@ static inline uint32_t read_counter_msr(void)
 
 void timer_monotonic_get(struct mono_time *mt)
 {
+	struct monotonic_counter *mono_counter = car_get_var_ptr(&g_mono_counter);
 	uint32_t current_tick;
 	uint32_t usecs_elapsed;
 
-	if (!mono_counter.initialized) {
-		mono_counter.last_value = read_counter_msr();
-		mono_counter.initialized = 1;
+	if (!mono_counter->initialized) {
+		mono_counter->last_value = read_counter_msr();
+		mono_counter->initialized = 1;
 	}
 
 	current_tick = read_counter_msr();
-	usecs_elapsed = (current_tick - mono_counter.last_value) / 24;
+	usecs_elapsed = (current_tick - mono_counter->last_value) / 24;
 
 	/* Update current time and tick values only if a full tick occurred. */
 	if (usecs_elapsed) {
-		mono_time_add_usecs(&mono_counter.time, usecs_elapsed);
-		mono_counter.last_value = current_tick;
+		mono_time_add_usecs(&mono_counter->time, usecs_elapsed);
+		mono_counter->last_value = current_tick;
 	}
 
 	/* Save result. */
-	*mt = mono_counter.time;
+	*mt = mono_counter->time;
 }

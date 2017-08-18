@@ -15,6 +15,7 @@ ramstage-y += tsc_freq.c
 romstage-y += tsc_freq.c
 smm-y += tsc_freq.c
 ramstage-y += spi.c
+romstage-y += spi.c
 smm-y += spi.c
 ramstage-y += chip.c
 ramstage-y += gfx.c

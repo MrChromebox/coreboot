@@ -11,6 +11,7 @@ subdirs-y += ../../../cpu/x86/cache
 subdirs-y += ../../../lib/fsp
 subdirs-y += fsp
 
+romstage-y += spi.c
 ramstage-y += spi.c
 ramstage-y += cpu.c
 ramstage-y += chip.c
