@@ -57,7 +57,8 @@ Device (SIO)
 #ifdef SIO_ENABLE_PS2M
 	Device (PS2M)		// Mouse
 	{
-		Name (_HID, EISAID("PNP0F13"))
+		Name (_HID, EISAID("LEN2011"))
+		Name (_CID, EISAID("PNP0F13"))
 
 		Method (_STA, 0, NotSerialized)
 		{
