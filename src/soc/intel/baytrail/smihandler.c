@@ -135,10 +135,10 @@ static void southbridge_smi_sleep(void)
 		wbinvd();
 		break;
 	case ACPI_S4:
-		printk(BIOS_DEBUG, "SMI#: Entering S4 (Suspend-To-Disk)\n");
-		break;
 	case ACPI_S5:
-		printk(BIOS_DEBUG, "SMI#: Entering S5 (Soft Power off)\n");
+		printk(BIOS_DEBUG, (slp_typ == ACPI_S4) ?
+				"SMI#: Entering S4 (Suspend-To-Disk)\n" :
+				"SMI#: Entering S5 (Soft Power off)\n");
 
 		/* Disable all GPE */
 		disable_all_gpe();
