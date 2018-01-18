@@ -77,8 +77,7 @@ static void lpe_enable_acpi_mode(device_t dev)
 
 	/* Save BAR0, BAR1, and firmware base  to ACPI NVS */
 	assign_device_nvs(dev, &gnvs->dev.lpe_bar0, PCI_BASE_ADDRESS_0);
-	/* LPE seems does not have BAR at PCI_BASE_ADDRESS_1 so disable it. */
-	/* assign_device_nvs(dev, &gnvs->dev.lpe_bar1, PCI_BASE_ADDRESS_1);  */
+	assign_device_nvs(dev, &gnvs->dev.lpe_bar1, PCI_BASE_ADDRESS_2);
 	assign_device_nvs(dev, &gnvs->dev.lpe_fw, FIRMWARE_PCI_REG_BASE);
 
 	/* Device is enabled in ACPI mode */
@@ -165,7 +164,16 @@ static void lpe_init(device_t dev)
 
 static void lpe_read_resources(device_t dev)
 {
+	struct resource *res;
 	pci_dev_read_resources(dev);
+
+	res = new_resource(dev, PCI_BASE_ADDRESS_2);
+	res->base = 0;
+	res->size = 0x1000;
+	res->limit = 0xffffffff;
+	res->gran = 0x0c;
+	res->align = 0x0c;
+	res->flags = IORESOURCE_MEM;
 
 	reserved_ram_resource(dev, FIRMWARE_PCI_REG_BASE,
 			      FIRMWARE_PHYS_BASE >> 10,
