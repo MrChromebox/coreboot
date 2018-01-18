@@ -37,6 +37,7 @@ DefinitionBlock(
 		Device (PCI0)
 		{
 			#include <acpi/southcluster.asl>
+			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 #if IS_ENABLED(CONFIG_BOARD_GOOGLE_TERRA)
 			#include <variant/acpi/cpu.asl>
 #else
