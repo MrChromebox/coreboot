@@ -24,6 +24,7 @@
 #define _SOC_CHIP_H_
 
 #include <stdint.h>
+#include <drivers/intel/gma/i915.h>
 #include <fsp/util.h>
 #include <intelblocks/lpc_lib.h>
 #include <soc/pci_devs.h>
@@ -174,6 +175,8 @@ struct soc_intel_braswell_config {
 	UINT8  I2C4Frequency;
 	UINT8  I2C5Frequency;
 	UINT8  I2C6Frequency;
+
+	struct i915_gpu_controller_info gfx;
 };
 
 #endif /* _SOC_CHIP_H_ */
