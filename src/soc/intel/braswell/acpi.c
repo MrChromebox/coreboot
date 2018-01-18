@@ -30,6 +30,7 @@
 #include <cpu/x86/tsc.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
+#include <drivers/intel/gma/i915.h>
 #include <ec/google/chromeec/ec.h>
 #include <drivers/intel/gma/opregion.h>
 #include <rules.h>
@@ -535,7 +536,10 @@ void southcluster_inject_dsdt(struct device *device)
 	}
 
 	if (gnvs) {
+		const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
 		acpi_create_gnvs(gnvs);
+		gnvs->ndid = gfx->ndid;
+		memcpy(gnvs->did, gfx->did, sizeof(gnvs->did));
 		/* Fill in the Wifi Region id */
 		if (IS_ENABLED(CONFIG_HAVE_REGULATORY_DOMAIN))
 			gnvs->cid1 = wifi_regulatory_domain();
