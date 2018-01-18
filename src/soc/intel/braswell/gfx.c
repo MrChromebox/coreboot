@@ -21,6 +21,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <drivers/intel/gma/opregion.h>
+#include <drivers/intel/gma/i915.h>
 #include <reg_script.h>
 #include <soc/gfx.h>
 #include <soc/nvs.h>
@@ -92,10 +93,30 @@ void gma_set_gnvs_aslb(void *gnvs, uintptr_t aslb)
 		gnvs_ptr->aslb = aslb;
 }
 
+const struct i915_gpu_controller_info *
+intel_gma_get_controller_info(void)
+{
+	device_t dev = dev_find_slot(0, PCI_DEVFN(0x2, 0));
+	if (!dev) {
+		return NULL;
+	}
+	struct soc_intel_braswell_config *chip = dev->chip_info;
+	return &chip->gfx;
+}
+
+static void gma_ssdt(device_t device)
+{
+	const struct i915_gpu_controller_info *gfx = intel_gma_get_controller_info();
+	if (gfx && IS_ENABLED(CONFIG_INTEL_GMA_ACPI)) {
+		drivers_intel_gma_displays_ssdt_generate(gfx);
+	}
+}
+
 static struct device_operations gfx_device_ops = {
 	.read_resources		= pci_dev_read_resources,
 	.set_resources		= pci_dev_set_resources,
 	.enable_resources	= pci_dev_enable_resources,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 	.init			= gfx_init,
 	.ops_pci		= &soc_pci_ops,
 };
