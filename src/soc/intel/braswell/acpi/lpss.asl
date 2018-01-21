@@ -535,7 +535,7 @@ Device (UAR1)
 	Method (_STA)
 	{
 		If (LEqual (\SCEN, 1)) {
-			Return (0xF)
+			Return (0xB)
 		} Else {
 			Return (0x0)
 		}
