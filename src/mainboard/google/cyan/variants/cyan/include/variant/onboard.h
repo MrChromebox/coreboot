@@ -59,7 +59,7 @@
 /* SD CARD gpio */
 #define SDCARD_CD			81
 
-#define AUDIO_CODEC_HID			"193C9890"
+#define AUDIO_CODEC_HID			"193C9891"
 #define AUDIO_CODEC_CID			"193C9890"
 #define AUDIO_CODEC_DDN			"Maxim 98090 Codec  "
 #define AUDIO_CODEC_I2C_ADDR		0x10
