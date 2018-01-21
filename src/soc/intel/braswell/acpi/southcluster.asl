@@ -262,6 +262,11 @@ Device (IOSF)
 		Store (Add (MCFG_BASE_ADDRESS, 0xD0), RBAS)
 		Return (^RBUF)
 	}
+
+	Method (_STA)
+	{
+		Return (0xB)
+	}
 }
 
 /* LPC Bridge 0:1f.0 */
