@@ -46,7 +46,7 @@ Scope (\_SB.PCI0.I2C2)
 					"\\_SB.PCI0.I2C2",	/* ResourceSource: I2C bus controller name */
 				)
 
-				GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault,,
+				GpioInt (Edge, ActiveHigh, ExclusiveAndWake, PullDefault,,
 					"\\_SB.GPSE") { BOARD_JACK_MAXIM_GPIO_INDEX }
 			} )
 			Return (SBUF)
@@ -89,7 +89,7 @@ Scope (\_SB.PCI0.I2C2)
 					"\\_SB.PCI0.I2C2",	/* ResourceSource: I2C bus controller name */
 				)
 
-				GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault,,
+				GpioInt (Edge, ActiveHigh, ExclusiveAndWake, PullDefault,,
 					"\\_SB.GPSW") { BOARD_JACK_TI_GPIO_INDEX }
 
 			} )
@@ -109,7 +109,7 @@ Scope (\_SB.PCI0.LPEA)
 	Name (GBUF, ResourceTemplate ()
 	{
 		/* Jack Detect (index 0) */
-		GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault,,
+		GpioInt (Edge, ActiveBoth, ExclusiveAndWake, PullDefault,,
 			"\\_SB.GPSE") { BOARD_JACK_MAXIM_GPIO_INDEX }
 	})
 }
