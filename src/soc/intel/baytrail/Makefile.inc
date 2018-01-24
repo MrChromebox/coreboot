@@ -56,8 +56,6 @@ ramstage-y += placeholders.c
 
 postcar-y += ../../../cpu/intel/car/non-evict/exit_car.S
 
-cpu_microcode_bins += 3rdparty/blobs/soc/intel/baytrail/microcode.bin
-
 CPPFLAGS_common += -Isrc/soc/intel/baytrail/include
 
 # If an MRC file is an ELF file determine the entry address and first loadable
