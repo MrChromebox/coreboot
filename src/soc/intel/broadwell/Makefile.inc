@@ -69,8 +69,6 @@ smm-y      += xhci.c
 
 ramstage-srcs += src/mainboard/$(MAINBOARDDIR)/hda_verb.c
 
-cpu_microcode_bins += 3rdparty/blobs/soc/intel/broadwell/microcode.bin
-
 CPPFLAGS_common += -Isrc/soc/intel/broadwell/include
 
 # If an MRC file is an ELF file determine the entry address and first loadable
