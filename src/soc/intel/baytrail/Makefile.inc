@@ -54,8 +54,6 @@ ramstage-y += hda.c
 # Remove as ramstage gets fleshed out
 ramstage-y += placeholders.c
 
-cpu_microcode_bins += 3rdparty/blobs/soc/intel/baytrail/microcode.bin
-
 CPPFLAGS_common += -Isrc/soc/intel/baytrail/include
 
 # If an MRC file is an ELF file determine the entry address and first loadable
