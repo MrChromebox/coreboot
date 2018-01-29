@@ -270,3 +270,8 @@ Scope (\_SB.PCI0)
 	// LPE Device
 	#include "lpe.asl"
 }
+
+// Integrated graphics 0:2.0
+#if CONFIG(INTEL_GMA_ACPI)
+#include <drivers/intel/gma/acpi/pch.asl>
+#endif
