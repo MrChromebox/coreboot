@@ -19,6 +19,7 @@
 #ifndef _BAYTRAIL_CHIP_H_
 #define _BAYTRAIL_CHIP_H_
 
+#include <drivers/intel/gma/i915.h>
 #include <stdint.h>
 
 struct soc_intel_baytrail_config {
@@ -85,6 +86,8 @@ struct soc_intel_baytrail_config {
 	uint16_t gpu_pipeb_power_cycle_delay;
 	int gpu_pipeb_pwm_freq_hz;
 	int disable_ddr_2x_refresh_rate;
+
+	struct i915_gpu_controller_info gfx;
 };
 
 extern struct chip_operations soc_intel_baytrail_ops;
