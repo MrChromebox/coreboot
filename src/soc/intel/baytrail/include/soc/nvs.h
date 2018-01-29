@@ -60,7 +60,16 @@ typedef struct global_nvs_t {
 	u32	obsolete_cmem; /* 0x30 - CBMEM TOC */
 	u32	tolm; /* 0x34 - Top of Low Memory */
 	u32	cbmc; /* 0x38 - coreboot memconsole */
-	u8	rsvd3[122];
+
+	/* ACPI Display Controls */
+	u16	cste; /* 0x3c - current display state */
+	u16	nste; /* 0x3e - next display state */
+	u16	sste; /* 0x40 - set display state */
+
+	u8	ndid; /* 0x42 - number of device ids */
+	u32	did[5]; /* 0x43 - 4a device id 1..5 */
+
+	u8	rsvd3[94];
 
 	/* IGD OpRegion */
 	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */
@@ -95,7 +104,7 @@ typedef struct global_nvs_t {
 	u8	imon; /* 0xf3 - current graphics turbo imon value */
 	u8	mmio; /* 0xf4 - 64bit mmio support */
 
-	u8	unused[9];
+	u8	unused[10];
 
 	/* ChromeOS specific (0x100-0xfff)*/
 	chromeos_acpi_t chromeos;

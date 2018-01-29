@@ -398,6 +398,26 @@ static void gfx_init(device_t dev)
 	intel_gma_restore_opregion();
 }
 
+const struct i915_gpu_controller_info *
+intel_gma_get_controller_info(void)
+{
+	device_t dev = dev_find_slot(0, PCI_DEVFN(0x2, 0));
+	if (!dev)
+		return NULL;
+
+	struct soc_intel_baytrail_config *chip = dev->chip_info;
+	return &chip->gfx;
+}
+
+static void gma_ssdt(device_t device)
+{
+	const struct i915_gpu_controller_info *gfx =
+			intel_gma_get_controller_info();
+	if (gfx && IS_ENABLED(CONFIG_INTEL_GMA_ACPI)) {
+		drivers_intel_gma_displays_ssdt_generate(gfx);
+	}
+}
+
 static unsigned long
 gma_write_acpi_tables(struct device *const dev,
 		      unsigned long current,
@@ -429,6 +449,7 @@ static struct device_operations gfx_device_ops = {
 	.set_resources		= pci_dev_set_resources,
 	.enable_resources	= pci_dev_enable_resources,
 	.init			= gfx_init,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 	.ops_pci		= &soc_pci_ops,
 	.write_acpi_tables	= gma_write_acpi_tables,
 };
