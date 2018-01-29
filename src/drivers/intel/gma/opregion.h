@@ -24,7 +24,11 @@
 
 /* IGD PCI Configuration register */
 #define ASLS           0xfc            /* OpRegion Base */
+#if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL)
+#define SWSCI          0xe0            /* SWSCI Register */
+#else
 #define SWSCI          0xe8            /* SWSCI Register */
+#endif
 #define GSSCIE         (1 << 0)        /* SCI Event trigger */
 #define SMISCISEL      (1 << 15)       /* Select SMI or SCI event source */
 
