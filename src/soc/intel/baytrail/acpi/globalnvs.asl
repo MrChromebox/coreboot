@@ -17,6 +17,7 @@
 /* Global Variables */
 
 Name(\PICM, 0)		// IOAPIC/8259
+Name (\DSEN, 1)		// Display Output Switching Enable
 
 /* Global ACPI memory region. This region is used for passing information
  * between coreboot (aka "the system bios"), ACPI, and the SMI handler.
@@ -66,6 +67,16 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	CMEM,	 32,	// 0x30 - CBMEM TOC
 	TOLM,	 32,	// 0x34 - Top of Low Memory
 	CBMC,	 32,	// 0x38 - coreboot mem console pointer
+
+	CSTE,	16,	// 0x3c - Current display state
+	NSTE,	16,	// 0x3e - Next display state
+	SSTE,	16,	// 0x40 - Set display state
+	NDID,	 8,	// 0x42 - Number of Device IDs
+	DID1,	32,	// 0x43 - 0x39 - Device ID 1
+	DID2,	32,	// 0x47 - 0x3d - Device ID 2
+	DID3,	32,	// 0x4b - 0x41 - Device ID 3
+	DID4,	32,	// 0x4f - 0x45 - Device ID 4
+	DID5,	32,	// 0x53 - 0x49 - Device ID 5
 
 	/* IGD OpRegion */
 	Offset (0xb4),
