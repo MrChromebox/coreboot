@@ -34,10 +34,10 @@ chip soc/intel/skylake
 	register "InternalGfx" = "1"
 	register "SkipExtGfxScan" = "1"
 	register "Device4Enable" = "1"
-	register "HeciEnabled" = "0"
+	register "HeciEnabled" = "1"
 	register "SaGv" = "3"
 	register "FspSkipMpInit" = "1"
-	register "PmTimerDisabled" = "1"
+	register "PmTimerDisabled" = "0"
 
 	register "pirqa_routing" = "PCH_IRQ11"
 	register "pirqb_routing" = "PCH_IRQ10"
@@ -208,7 +208,7 @@ chip soc/intel/skylake
 			chip drivers/i2c/generic
 				register "hid" = ""ELAN0000""
 				register "desc" = ""ELAN Touchpad""
-				register "irq" = "ACPI_IRQ_EDGE_LOW(GPP_B3_IRQ)"
+				register "irq" = "ACPI_IRQ_LEVEL_LOW(GPP_B3_IRQ)"
 				register "wake" = "GPE0_DW0_05"
 				device i2c 15 on end
 			end
