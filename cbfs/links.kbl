@@ -1,0 +1,5 @@
+pci8086,5906.rom seavgabios.rom # Kabylake GT1 SULTM
+pci8086,591e.rom seavgabios.rom # Kabylake GT2 SULXM
+pci8086,5916.rom seavgabios.rom # Kabylake GT2 SULTM
+pci8086,5917.rom seavgabios.rom # Kabylake GT2 SULTMR
+pci8086,591b.rom seavgabios.rom # Kabylake GT2 SHALM

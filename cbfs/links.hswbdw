@@ -1,0 +1,6 @@
+pci8086,0a06.rom pci8086,0406.rom # HSW U GT1
+pci8086,0a16.rom pci8086,0406.rom # HSW U GT2
+pci8086,0a26.rom pci8086,0406.rom # HSW U GT3
+pci8086,1606.rom pci8086,0406.rom # BDW U GT1
+pci8086,1616.rom pci8086,0406.rom # BDW U GT2
+pci8086,1626.rom pci8086,0406.rom # BDW U GT3
