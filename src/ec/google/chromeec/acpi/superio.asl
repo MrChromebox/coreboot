@@ -143,14 +143,14 @@ Scope (\_SB.PCI0)
 	Device (PS2K)		// Keyboard
 	{
 #if IS_ENABLED(CONFIG_SOC_INTEL_BAYTRAIL)|| IS_ENABLED(CONFIG_SOC_INTEL_BRASWELL)
-		Name (_UID, 1)
-		Name (_ADR, 1)
+	Name (_UID, 1)
+	Name (_ADR, 1)
 #else
-		Name (_UID, 0)
-		Name (_ADR, 0)
+	Name (_UID, 0)
+	Name (_ADR, 0)
 #endif
-		Name (_HID, EISAID("GGL0303"))
-		Name (_CID, EISAID("PNP0303"))
+	Name (_HID, EISAID("GGL0303"))
+	Name (_CID, EISAID("PNP0303"))
 
 		Method (_STA, 0, NotSerialized) {
 			Return (0x0F)
