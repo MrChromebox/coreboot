@@ -1,0 +1,11 @@
+CONFIG_USE_AMD_BLOBS=y
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_VBOOT=y
+CONFIG_VGA_BIOS=y
+CONFIG_BOARD_GOOGLE_DEWATT=y
+CONFIG_PSP_VERSTAGE_FILE="3rdparty/blobs/mainboard/google/guybrush/dewatt_psp_verstage.signed.bin"
+CONFIG_PSP_VERSTAGE_SIGNING_TOKEN="3rdparty/blobs/mainboard/google/guybrush/monkey_island_shiraz.stkn"
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_FILE="3rdparty/blobs/mainboard/google/guybrush/dewatt/ec.RW.flat"
+CONFIG_RUN_FSP_GOP=y
+# CONFIG_SMMSTORE is not set

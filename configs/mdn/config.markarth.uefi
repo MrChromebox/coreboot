@@ -1,0 +1,10 @@
+CONFIG_USE_AMD_BLOBS=y
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_VBOOT=y
+CONFIG_VGA_BIOS=y
+CONFIG_BOARD_GOOGLE_MARKARTH=y
+CONFIG_SPL_TABLE_FILE="3rdparty/amd_blobs/mendocino/PSP/TypeId0x55_SplTableBl_MDN.sbin"
+CONFIG_PSP_VERSTAGE_FILE="3rdparty/blobs/mainboard/google/skyrim/markarth_psp_verstage.signed.bin"
+CONFIG_PSP_VERSTAGE_SIGNING_TOKEN="3rdparty/blobs/mainboard/google/skyrim/skyrim_shiraz.stkn"
+CONFIG_RUN_FSP_GOP=y
+# CONFIG_SMMSTORE is not set

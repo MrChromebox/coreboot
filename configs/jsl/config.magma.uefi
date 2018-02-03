@@ -1,0 +1,13 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/dedede/magma/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/dedede/magma/me.bin"
+CONFIG_BOARD_GOOGLE_MAGOLOR=y
+CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME="Magma"
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_FSP_M_FILE="3rdparty/blobs/mainboard/google/dedede/magma/fspm.bin"
+CONFIG_FSP_S_FILE="3rdparty/blobs/mainboard/google/dedede/magma/fsps.bin"
+CONFIG_ADD_FSP_BINARIES=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_FILE="3rdparty/blobs/mainboard/google/dedede/magma/ec.RW.flat"
+CONFIG_HAVE_ME_BIN=y
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
