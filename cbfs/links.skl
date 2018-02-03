@@ -1,0 +1,3 @@
+pci8086,1906.rom pci8086,0406.rom # SKL GT1 ULT
+pci8086,1916.rom pci8086,0406.rom # SKL GT2 ULT
+pci8086,191e.rom pci8086,0406.rom # SKL GT2 ULX
