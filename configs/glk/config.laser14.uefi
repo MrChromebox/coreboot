@@ -1,0 +1,14 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_INCLUDE_NHLT_BLOBS=y
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/octopus/phaser/flashdescriptor.bin"
+CONFIG_BOARD_GOOGLE_PHASER=y
+CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME="Laser14"
+CONFIG_NEED_IFWI=y
+CONFIG_IFWI_FILE_NAME="3rdparty/blobs/mainboard/google/octopus/phaser/ifwi.bin"
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_ADD_FSP_BINARIES=y
+CONFIG_CPU_MICROCODE_CBFS_EXTERNAL_BINS=y
+CONFIG_CPU_UCODE_BINARIES="3rdparty/blobs/mainboard/google/octopus/phaser/cpu_microcode_blob.bin"
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_FILE="3rdparty/blobs/mainboard/google/octopus/phaser/ec.RW.flat"
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
