@@ -1,0 +1,10 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/poppy/nami/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/poppy/nami/me.bin"
+CONFIG_BOARD_GOOGLE_NAMI=y
+CONFIG_OEM_BIN_FILE="3rdparty/blobs/mainboard/google/poppy/nami/oem.bin"
+CONFIG_INCLUDE_NHLT_BLOBS_NAMI=y
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_HAVE_ME_BIN=y
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+CONFIG_NO_GFX_INIT=y
