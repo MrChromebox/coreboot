@@ -1,0 +1,10 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_MAINBOARD_VENDOR="Google"
+CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/butterfly/vbt.bin"
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/butterfly/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/butterfly/me.bin"
+CONFIG_BOARD_GOOGLE_BUTTERFLY=y
+CONFIG_PCIEXP_L1_SUB_STATE=y
+# CONFIG_USE_NATIVE_RAMINIT is not set
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+CONFIG_INTEL_GMA_ADD_VBT=y
