@@ -1,0 +1,15 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_NO_POST=y
+CONFIG_MAINBOARD_VENDOR="Google"
+CONFIG_CBFS_SIZE=0x300000
+CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/butterfly/vbt.bin"
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/butterfly/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/butterfly/me.bin"
+CONFIG_BOARD_GOOGLE_BUTTERFLY=y
+CONFIG_PCIEXP_L1_SUB_STATE=y
+# CONFIG_DRIVERS_UART_8250IO is not set
+CONFIG_CPU_MICROCODE_CBFS_EXTERNAL_BINS=y
+CONFIG_CPU_UCODE_BINARIES="3rdparty/blobs/soc/intel/snb/cpu_microcode_blob.bin"
+# CONFIG_USE_NATIVE_RAMINIT is not set
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+CONFIG_INTEL_GMA_ADD_VBT=y
