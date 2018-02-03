@@ -1,0 +1,12 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/drallion/vbt.bin"
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/drallion/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/drallion/me.bin"
+CONFIG_BOARD_GOOGLE_DRALLION=y
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_HAVE_ME_BIN=y
+CONFIG_HAVE_EC_BIN=y
+CONFIG_EC_BIN_PATH="3rdparty/blobs/mainboard/google/drallion/ec.bin"
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+CONFIG_SUBSYSTEM_VENDOR_ID=0x1028
+CONFIG_DRIVERS_PS2_KEYBOARD=y
