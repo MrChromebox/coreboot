@@ -1,0 +1,13 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_CBFS_SIZE=0x300000
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/cyan/reks/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/soc/intel/bsw/me.bin"
+CONFIG_BOARD_GOOGLE_REKS=y
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_FILE="3rdparty/blobs/mainboard/google/cyan/reks/ec.RW.flat"
+CONFIG_HAVE_ME_BIN=y
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+CONFIG_NO_GFX_INIT=y
+CONFIG_HAVE_FSP_BIN=y
+CONFIG_FSP_FILE="3rdparty/blobs/mainboard/google/cyan/reks/fsp.bin"

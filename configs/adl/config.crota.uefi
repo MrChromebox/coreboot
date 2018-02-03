@@ -1,0 +1,13 @@
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/brya/brya/crota/vbt.bin"
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/brya/brya/crota/flashdescriptor.bin"
+CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/brya/brya/crota/me.bin"
+CONFIG_BOARD_GOOGLE_CROTA=y
+CONFIG_HAVE_IFD_BIN=y
+CONFIG_FSP_HEADER_PATH="src/vendorcode/intel/fsp/fsp2_0/raptorlake"
+CONFIG_FSP_M_FILE="3rdparty/blobs/mainboard/google/brya/brya/crota/fspm.bin"
+CONFIG_FSP_S_FILE="3rdparty/blobs/mainboard/google/brya/brya/crota/fsps.bin"
+CONFIG_HAVE_ME_BIN=y
+CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
+# CONFIG_FSP_USE_REPO is not set
+CONFIG_ADD_FSP_BINARIES=y
