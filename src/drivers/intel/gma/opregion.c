@@ -351,6 +351,12 @@ enum cb_err intel_gma_init_igd_opregion(void)
 	/* Get the opregion version information */
 	opregion->header.opver = opregion_get_version();
 
+#if CONFIG(SET_GOP_DRIVER_VERSION)
+	/* Inject GOP driver version */
+	memcpy(opregion->header.dver, STR16(CONFIG_GOP_DRIVER_VERSION),
+			2 * strlen(CONFIG_GOP_DRIVER_VERSION));
+
+#endif
 	/* Extended VBT support */
 	if (is_ext_vbt_required(opregion, vbt)) {
 		/* Place extended VBT just after opregion */
