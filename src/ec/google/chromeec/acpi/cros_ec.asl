@@ -30,4 +30,8 @@ Device (CREC)
 		Name (_DDN, "EC MKBP Device")
 	}
 #endif
+	Method(_STA, 0)
+	{
+		Return (0xB)
+	}
 }
