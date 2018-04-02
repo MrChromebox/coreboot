@@ -964,24 +964,6 @@ static void lock_descriptor(const char *filename, char *image, int size)
 		/* TXE can only write Device Expansion */
 		fmba->flmstr2 |= 0x20 << wr_shift;
 		break;
-	case PLATFORM_SKLKBL:
-		/* CPU/BIOS can read descriptor, BIOS and GbE. */
-		fmba->flmstr1 |= 0xb << rd_shift;
-		/* CPU/BIOS can write BIOS and Gbe. */
-		fmba->flmstr1 |= 0xa << wr_shift;
-		/* ME can read descriptor, ME and GbE. */
-		fmba->flmstr2 |= 0xd << rd_shift;
-		/* ME can write ME. */
-		fmba->flmstr2 |= 0x4 << wr_shift;
-		/* GbE can read GbE and descriptor. */
-		fmba->flmstr3 |= 0x9 << rd_shift;
-		/* GbE can write GbE. */
-		fmba->flmstr3 |= 0x8 << wr_shift;
-		/* EC can read EC and descriptor. */
-		fmba->flmstr5 |= 0x101 << rd_shift;
-		/* EC can write EC region. */
-		fmba->flmstr5 |= 0x100 << wr_shift;
-		break;
 	default:
 		/* CPU/BIOS can read descriptor, BIOS, and GbE. */
 		fmba->flmstr1 |= 0xb << rd_shift;
