@@ -10,9 +10,9 @@ ramstage-y += da7219.c
 
 # DSP firmware settings files.
 ifeq ($(CONFIG_SOC_INTEL_KABYLAKE),y)
-NHLT_BLOB_PATH = 3rdparty/blobs/soc/intel/kabylake/nhlt-blobs
+NHLT_BLOB_PATH = blobs/soc/intel/kbl/nhlt-blobs
 else
-NHLT_BLOB_PATH = 3rdparty/blobs/soc/intel/skylake/nhlt-blobs
+NHLT_BLOB_PATH = blobs/soc/intel/skl/nhlt-blobs
 endif
 
 DMIC_2CH_48KHZ_16B = dmic-2ch-48khz-16b.bin
