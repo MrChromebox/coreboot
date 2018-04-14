@@ -113,17 +113,24 @@ static enum cb_err fetch_mac_string_vpd(u8 *macstrbuf, const u8 device_index)
 		/* Translate index number from integer to ascii */
 		key[DEVICE_INDEX_BYTE] = (device_index - 1) + '0';
 
-	if (fmap_locate_area_as_rdev("RO_VPD", &rdev)) {
-		printk(BIOS_ERR, "Error: Couldn't find RO_VPD region.");
-		return CB_ERR;
+	if (IS_ENABLED(CONFIG_CHROMEOS)) {
+		if (fmap_locate_area_as_rdev("RO_VPD", &rdev)) {
+			printk(BIOS_ERR, "Error: Couldn't find RO_VPD region.");
+			return CB_ERR;
+		}
+		search_address = rdev_mmap_full(&rdev);
+		search_length = region_device_sz(&rdev);
+	} else {
+		search_address = cbfs_boot_map_with_leak("vpd.bin",
+							CBFS_TYPE_RAW,
+							&search_length);
 	}
-	search_address = rdev_mmap_full(&rdev);
+
 	if (search_address == NULL) {
 		printk(BIOS_ERR, "LAN: VPD not found.\n");
 		return CB_ERR;
 	}
 
-	search_length = region_device_sz(&rdev);
 	offset = search(key, search_address, strlen(key),
 			search_length);
 
