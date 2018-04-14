@@ -89,24 +89,30 @@ static enum cb_err fetch_mac_vpd_key(u8 *macstrbuf, const char *vpd_key)
 	size_t search_length;
 	size_t offset;
 
-	if (fmap_locate_area_as_rdev("RO_VPD", &rdev)) {
-		printk(BIOS_ERR, "Error: Couldn't find RO_VPD region.");
-		return CB_ERR;
+	if (fmap_locate_area_as_rdev("RO_VPD", &rdev) == CB_SUCCESS)  {
+		search_address = rdev_mmap_full(&rdev);
+		search_length = region_device_sz(&rdev);
+	} else {
+		printk(BIOS_WARNING, "Warning: Couldn't find RO_VPD region.");
+		rdev.root = NULL;
+		search_address = cbfs_boot_map_with_leak("vpd.bin",
+							CBFS_TYPE_RAW,
+							&search_length);
 	}
-	search_address = rdev_mmap_full(&rdev);
+
 	if (search_address == NULL) {
 		printk(BIOS_ERR, "LAN: VPD not found.\n");
 		return CB_ERR;
 	}
 
-	search_length = region_device_sz(&rdev);
 	offset = search(vpd_key, search_address, strlen(vpd_key),
 			search_length);
 
 	if (offset == search_length) {
 		printk(BIOS_ERR,
 		       "Error: Could not locate '%s' in VPD\n", vpd_key);
-		rdev_munmap(&rdev, search_address);
+		if (rdev.root)
+			rdev_munmap(&rdev, search_address);
 		return CB_ERR;
 	}
 	printk(BIOS_DEBUG, "Located '%s' in VPD\n", vpd_key);
@@ -114,12 +120,14 @@ static enum cb_err fetch_mac_vpd_key(u8 *macstrbuf, const char *vpd_key)
 	offset += strlen(vpd_key) + 1;	/* move to next character */
 
 	if (offset + MACLEN > search_length) {
-		rdev_munmap(&rdev, search_address);
+		if (rdev.root)
+			rdev_munmap(&rdev, search_address);
 		printk(BIOS_ERR, "Search result too small!\n");
 		return CB_ERR;
 	}
 	memcpy(macstrbuf, search_address + offset, MACLEN);
-	rdev_munmap(&rdev, search_address);
+	if (rdev.root)
+		rdev_munmap(&rdev, search_address);
 
 	return CB_SUCCESS;
 }
