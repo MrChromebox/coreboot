@@ -1,5 +1,11 @@
 chip soc/intel/skylake
 
+	# IGD Displays
+	register "gfx.ndid" = "1"
+	# primary LCD panel
+	register "gfx.did" = "{ 0x00000110 }"
+	register "gfx.names" = {"LCD"}
+
 	register "gpu_pp_up_delay_ms"		  = "100"
 	register "gpu_pp_down_delay_ms"		  = "500"
 	register "gpu_pp_cycle_delay_ms"	  = "500"
