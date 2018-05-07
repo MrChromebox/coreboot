@@ -54,6 +54,7 @@ int nhlt_soc_add_nau88l25(struct nhlt *nhlt, int hwlink);
  */
 int nhlt_soc_add_ssm4567(struct nhlt *nhlt, int hwlink);
 
+
 /*
  * Add max98357a amplifier in stereo configuration on provide SSP link.
  * Return 0 on success, < 0 on error.
@@ -69,7 +70,7 @@ int nhlt_soc_add_max98373(struct nhlt *nhlt, int hwlink);
 /*
  * Add rt5514 DSP on provided SSP link. Return 0 on success, < 0 on error.
  */
-int nhlt_soc_add_rt5514(struct nhlt *nhlt, int hwlink, int num_channels);
+int nhlt_soc_add_rt5514(struct nhlt *nhlt, int hwlink, int num_channels, int virtual_slot);
 
 /*
  * Add rt5663 headset codec on provided SSP link. Return 0 on success, < 0
@@ -81,7 +82,7 @@ int nhlt_soc_add_rt5663(struct nhlt *nhlt, int hwlink);
  * Add max98927 amplifier in stereo configuration on provided SSP link.
  * Return 0 on success, < 0 on error.
  */
-int nhlt_soc_add_max98927(struct nhlt *nhlt, int hwlink);
+int nhlt_soc_add_max98927(struct nhlt *nhlt, int hwlink, int render_slot, int feedback_slot);
 
 /*
  * Add da7219 headset codec on provided SSP link. Return 0 on success, < 0
