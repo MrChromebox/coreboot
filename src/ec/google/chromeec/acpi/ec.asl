@@ -362,7 +362,15 @@ Device (EC0)
 		\_SB.DPTF.TPET()
 #endif
 #ifdef EC_ENABLE_TBMC_DEVICE
-		Notify (TBMC, 0x80)
+		If (LEqual(_OSI("Linux"), 1)) {
+			Notify (TBMC, 0x80)
+		} else {
+			If (LEqual ((^TBMD), One)) {
+				Notify (VBTN, 0xCC)
+			} Else {
+				Notify (VBTN, 0xCD)
+			}
+		}
 #endif
 	}
 
@@ -546,5 +554,6 @@ Device (EC0)
 
 #ifdef EC_ENABLE_TBMC_DEVICE
 	#include "tbmc.asl"
+	#include "vbtn.asl"
 #endif
 }
