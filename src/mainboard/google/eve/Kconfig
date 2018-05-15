@@ -64,6 +64,11 @@ config MAX_CPUS
 	int
 	default 8
 
+# expected by intel-vbtn driver
+config SMBIOS_ENCLOSURE_TYPE
+	hex
+	default 0x1f    # SMBIOS_ENCLOSURE_CONVERTIBLE
+
 config INCLUDE_NHLT_BLOBS
 	bool "Include blobs for audio."
 	select NHLT_RT5514
