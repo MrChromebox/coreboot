@@ -116,3 +116,74 @@ Method (PPKG)
 		})
 	}
 }
+
+Scope(\)
+{
+	Name (GCPC, Package ()
+	{
+		0x15, // 21 items
+		0x02, // version 2 (ver 1 vs 2 reported by OS in _OSC)
+
+		// 0x771 is IA32_HWP_CAPABILITIES (RO)
+
+		// Highest Performance
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x00, 0x771, 0x04,)},
+		// Nominal Performance -> Guaranteed Performance
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x08, 0x771, 0x04,)},
+		// Lowest Nonlinear Performance -> Most Efficient Performance
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x10, 0x771, 0x04,)},
+		// Lowest Performance
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x18, 0x771, 0x04,)},
+		// Guaranteed Performance Register
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x08, 0x771, 0x04,)},
+
+		// 0x774 is IA32_HWP_REQUEST (RW)
+
+		// Desired Performance Register
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x10, 0x774, 0x04,)},
+		// Minimum Performance Register
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x00, 0x774, 0x04,)},
+		// Maximum Performance Register
+		ResourceTemplate(){Register(FFixedHW, 0x08, 0x08, 0x774, 0x04,)},
+
+		// Unsupported
+
+		// Performance Reduction Tolerance Register
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)},
+		// Time Window Register
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)},
+		// Counter Wraparound Time
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)},
+
+		// 0xE7 is IA32_MPERF
+
+		// Reference Performance Counter Register
+		ResourceTemplate(){Register(FFixedHW, 0x40, 0x00, 0x0E7, 0x04,)},
+
+		// 0xE8 is IA32_APERF
+
+		// Delivered Performance Counter Register
+		ResourceTemplate(){Register(FFixedHW, 0x40, 0x00, 0x0E8, 0x04,)},
+
+		// 0x777 is IA32_HWP_STATUS
+
+		// Performance Limited Register
+		ResourceTemplate(){Register(FFixedHW, 0x01, 0x02, 0x777, 0x04,)},
+
+		// 0x770 is IA32_PM_ENABLE
+
+		// CPPC Enable Register
+		ResourceTemplate(){Register(FFixedHW, 0x01, 0x00, 0x770, 0x04,)},
+
+		0x1, // Autonomous Selection Enable
+
+		// Unsupported
+
+		// Autonomous Activity Window Register
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)},
+		// Energy Performance Preference Register
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)},
+		// Reference Performance
+		ResourceTemplate(){Register(SystemMemory, 0x00, 0x00, 0x0,,)}
+	})
+}
