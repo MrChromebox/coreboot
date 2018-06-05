@@ -535,11 +535,16 @@ void generate_cpu_entries(struct device *device)
 			generate_c_state_entries(is_s0ix_enable,
 				max_c_state);
 
-			if (config->eist_enable)
+			if (config->eist_enable) {
 				/* Generate P-state tables */
 				generate_p_state_entries(core_id,
 						cores_per_package);
-
+				/* DSDT is expected to provide CPPC package */
+				acpigen_write_method("_CPC", 0);
+				acpigen_emit_byte(RETURN_OP);
+				acpigen_emit_namestring("\\GCPC");
+				acpigen_pop_len();
+			}
 			acpigen_pop_len();
 		}
 	}
