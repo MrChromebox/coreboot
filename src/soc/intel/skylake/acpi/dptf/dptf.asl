@@ -3,6 +3,9 @@
 Device (DPTF)
 {
 	Name (_HID, EISAID ("INT3400"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 0)
 
 	Name (IDSP, Package()
