@@ -22,6 +22,9 @@
 
 Name (_HID, EISAID ("PNP0A08"))	/* PCIe */
 Name (_CID, EISAID ("PNP0A03"))	/* PCI */
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 
 Name (_BBN, 0)
 
@@ -292,6 +295,9 @@ Method (GDMB, 0, Serialized)
 Device (PDRC)
 {
 	Name (_HID, EISAID ("PNP0C02"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 
 	Name (BUF0, ResourceTemplate ()
