@@ -19,6 +19,9 @@
 Device (VBTN)
 {
 	Name (_HID, "INT33D6")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_DDN, "Tablet Virtual Buttons")
 
 	Method (VBDL, 0)
@@ -42,6 +45,7 @@ Device (VBTN)
 Device (VBTO)
 {
 	Name (_HID, "INT33D3")
+	// _SUB intentionally excluded due to driver issue
 	Name (_CID, "PNP0C60")
 	Method (_STA, 0)
 	{

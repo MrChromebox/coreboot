@@ -15,6 +15,9 @@ External (\_SB.DPTF.TCHG, DeviceObj)
 Device (EC0)
 {
 	Name (_HID, EISAID ("PNP0C09"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 	Name (_GPE, EC_SCI_GPI)
 	Name (TOFS, EC_TEMP_SENSOR_OFFSET)
@@ -98,6 +101,9 @@ Device (EC0)
 	Device (LID0)
 	{
 		Name (_HID, EisaId ("PNP0C0D"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Method (_LID, 0)
 		{
 			Return (^^LIDS)

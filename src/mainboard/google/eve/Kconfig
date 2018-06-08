@@ -75,4 +75,17 @@ config INCLUDE_NHLT_BLOBS
 config UART_FOR_CONSOLE
 	int
 	default 2
+
+config SUBSYSTEM_VENDOR_ID
+	hex
+	default 0x1AE0
+
+config SUBSYSTEM_DEVICE_ID
+	hex
+	default 0x006B
+
+config ACPI_SUBSYSTEM_ID
+	string
+	default "1AE0006B"
+
 endif
