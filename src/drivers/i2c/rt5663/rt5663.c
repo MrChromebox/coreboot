@@ -33,6 +33,12 @@ static void rt5663_fill_ssdt(const struct device *dev)
 	acpigen_write_scope(scope);
 	acpigen_write_device(acpi_device_name(dev));
 	acpigen_write_name_string("_HID", RT5663_ACPI_HID);
+	if (config->sub)
+		acpigen_write_name_string("_SUB", config->sub);
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	else
+		acpigen_write_name_string("_SUB", CONFIG_ACPI_SUBSYSTEM_ID);
+#endif
 	acpigen_write_name_integer("_UID", config->uid);
 	acpigen_write_name_string("_DDN", dev->chip_ops->name);
 	acpigen_write_STA(acpi_device_status(dev));

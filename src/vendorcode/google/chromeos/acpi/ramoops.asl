@@ -5,6 +5,9 @@ Scope (\_SB)
 	Device(RMOP)
 	{
 		Name (_HID, "GOOG9999")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_CID, "GOOG9999")
 		Name (_UID, 1)
 

@@ -299,6 +299,11 @@ struct soc_intel_skylake_config {
 	 */
 	u8 LockDownConfigRtcLock;
 
+	/* Subsystem Vendor ID of the SA devices*/
+	u16 DefaultSvid;
+	/* Subsystem ID of the SA devices*/
+	u16 DefaultSid;
+
 	/*
 	 * Determine if WLAN wake from Sx, corresponds to the
 	 * HOST_WLAN_PP_EN bit in the PWRM_CFG3 register.

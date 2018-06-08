@@ -32,6 +32,9 @@ static void max98373_fill_ssdt(const struct device *dev)
 	acpigen_write_scope(scope);
 	acpigen_write_device(acpi_device_name(dev));
 	acpigen_write_name_string("_HID", MAX98373_ACPI_HID);
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	acpigen_write_name_string("_SUB", CONFIG_ACPI_SUBSYSTEM_ID);
+#endif
 	acpigen_write_name_integer("_UID", config->uid);
 	if (config->desc)
 		acpigen_write_name_string("_DDN", config->desc);

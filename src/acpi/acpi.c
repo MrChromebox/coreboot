@@ -440,6 +440,9 @@ static void acpi_ssdt_write_cbtable(void)
 
 	acpigen_write_device("CTBL");
 	acpigen_write_coreboot_hid(COREBOOT_ACPI_ID_CBTABLE);
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	acpigen_write_name_string("_SUB", CONFIG_ACPI_SUBSYSTEM_ID);
+#endif
 	acpigen_write_name_integer("_UID", 0);
 	acpigen_write_STA(ACPI_STATUS_DEVICE_HIDDEN_ON);
 	acpigen_write_name("_CRS");

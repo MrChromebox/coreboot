@@ -30,6 +30,9 @@ Name (IREM, 0x0f)	/* Interrupt Routing Mask */
 Device (LNKA)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 
 	Name (_PRS, ResourceTemplate ()
@@ -79,6 +82,9 @@ Device (LNKA)
 Device (LNKB)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 2)
 
 	Name (_PRS, ResourceTemplate ()
@@ -128,6 +134,9 @@ Device (LNKB)
 Device (LNKC)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 3)
 
 	Name (_PRS, ResourceTemplate ()
@@ -177,6 +186,9 @@ Device (LNKC)
 Device (LNKD)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 4)
 
 	Name (_PRS, ResourceTemplate ()
@@ -226,6 +238,9 @@ Device (LNKD)
 Device (LNKE)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 5)
 
 	Name (_PRS, ResourceTemplate ()
@@ -275,6 +290,9 @@ Device (LNKE)
 Device (LNKF)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 6)
 
 	Name (_PRS, ResourceTemplate ()
@@ -324,6 +342,9 @@ Device (LNKF)
 Device (LNKG)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 7)
 
 	Name (_PRS, ResourceTemplate ()
@@ -373,6 +394,9 @@ Device (LNKG)
 Device (LNKH)
 {
 	Name (_HID, EISAID ("PNP0C0F"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 8)
 
 	Name (_PRS, ResourceTemplate ()
