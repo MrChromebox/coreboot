@@ -3,6 +3,9 @@
 Device (TCHG)
 {
 	Name (_HID, "INT3403")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 0)
 	Name (PTYP, 0x0B)
 	Name (_STR, Unicode("Battery Charger"))
