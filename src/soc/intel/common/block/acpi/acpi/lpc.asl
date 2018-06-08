@@ -13,6 +13,9 @@ Device (LPCB)
 	Device (DMAC)
 	{
 		Name (_HID, EISAID("PNP0200"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_CRS, ResourceTemplate()
 		{
 			IO (Decode16, 0x00, 0x00, 0x01, 0x20)
@@ -27,6 +30,9 @@ Device (LPCB)
 	Device (FWH)
 	{
 		Name (_HID, EISAID ("INT0800"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "Firmware Hub")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -39,6 +45,9 @@ Device (LPCB)
 	{
 		Name (_HID, EISAID ("PNP0103"))
 		Name (_CID, 0x010CD041)
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "High Precision Event Timer")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -54,6 +63,9 @@ Device (LPCB)
 	Device(MATH)
 	{
 		Name (_HID, EISAID("PNP0C04"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_CRS, ResourceTemplate()
 		{
 			IO (Decode16, 0xf0, 0xf0, 0x01, 0x01)
@@ -65,6 +77,9 @@ Device (LPCB)
 	Device (PIC)
 	{
 		Name (_HID, EISAID ("PNP0000"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "8259 Interrupt Controller")
 		Name (_CRS, ResourceTemplate()
 		{
@@ -93,6 +108,9 @@ Device (LPCB)
 	Device (LDRC)
 	{
 		Name (_HID, EISAID ("PNP0C02"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_UID, 2)
 		Name (_DDN, "Legacy Device Resources")
 		Name (_CRS, ResourceTemplate ()
@@ -115,6 +133,9 @@ Device (LPCB)
 	Device (RTC)
 	{
 		Name (_HID, EISAID ("PNP0B00"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "Real Time Clock")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -126,6 +147,9 @@ Device (LPCB)
 	Device (TIMR)
 	{
 		Name (_HID, EISAID ("PNP0100"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "8254 Timer")
 		Name (_CRS, ResourceTemplate ()
 		{
