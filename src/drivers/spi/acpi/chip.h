@@ -8,6 +8,7 @@
 struct drivers_spi_acpi_config {
 	const char *hid;		/* ACPI _HID (required) */
 	const char *cid;		/* ACPI _CID */
+	const char *sub;		/* ACPI _SUB */
 	const char *name;		/* ACPI Device Name */
 	const char *desc;		/* Device Description */
 	unsigned int uid;			/* ACPI _UID */

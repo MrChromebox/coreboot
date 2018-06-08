@@ -97,6 +97,12 @@ static void spi_acpi_fill_ssdt_generator(const struct device *dev)
 	acpigen_write_name_string("_HID", config->hid);
 	if (config->cid)
 		acpigen_write_name_string("_CID", config->cid);
+	if (config->sub)
+		acpigen_write_name_string("_SUB", config->sub);
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	else
+		acpigen_write_name_string("_SUB", CONFIG_ACPI_SUBSYSTEM_ID);
+#endif
 	acpigen_write_name_integer("_UID", config->uid);
 	if (config->desc)
 		acpigen_write_name_string("_DDN", config->desc);
