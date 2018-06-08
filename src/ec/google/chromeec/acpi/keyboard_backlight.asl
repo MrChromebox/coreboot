@@ -8,6 +8,9 @@ Scope (\_SB)
 	Device (KBLT)
 	{
 		Name (_HID, "GOOG0002")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_UID, 1)
 
 		Method (_STA, 0, NotSerialized)

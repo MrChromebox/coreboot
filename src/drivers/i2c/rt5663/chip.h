@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 struct drivers_i2c_rt5663_config {
+	const char *sub;
 	/* I2C Bus Frequency in Hertz (default 400kHz) */
 	unsigned int bus_speed;
 	/* Identifier for multiple chips */

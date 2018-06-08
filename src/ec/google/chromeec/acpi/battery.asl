@@ -229,6 +229,9 @@ Method (BBST, 4, Serialized)
 Device (BAT0)
 {
 	Name (_HID, EISAID ("PNP0C0A"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 	Name (_PCL, Package () { \_SB })
 
