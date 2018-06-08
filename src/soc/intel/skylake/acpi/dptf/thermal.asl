@@ -105,6 +105,9 @@ Method (DTRP, 2, Serialized)
 Device (TSR0)
 {
 	Name (_HID, EISAID ("INT3403"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 	Name (PTYP, 0x03)
 	Name (TMPI, DPTF_TSR0_SENSOR_ID)
@@ -214,6 +217,9 @@ Device (TSR0)
 Device (TSR1)
 {
 	Name (_HID, EISAID ("INT3403"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 2)
 	Name (PTYP, 0x03)
 	Name (TMPI, DPTF_TSR1_SENSOR_ID)
@@ -311,6 +317,9 @@ Device (TSR1)
 Device (TSR2)
 {
 	Name (_HID, EISAID ("INT3403"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 3)
 	Name (PTYP, 0x03)
 	Name (TMPI, DPTF_TSR2_SENSOR_ID)
@@ -375,6 +384,9 @@ Device (TSR2)
 Device (TSR3)
 {
 	Name (_HID, EISAID ("INT3403"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 4)
 	Name (PTYP, 0x03)
 	Name (TMPI, DPTF_TSR3_SENSOR_ID)
