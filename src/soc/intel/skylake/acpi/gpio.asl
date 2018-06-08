@@ -5,6 +5,9 @@
 Device (GPIO)
 {
 	Name (_HID, "INT344B")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 	Name (_DDN, "GPIO Controller")
 

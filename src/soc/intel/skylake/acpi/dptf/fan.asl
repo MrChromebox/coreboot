@@ -3,6 +3,9 @@
 Device (TFN1)
 {
 	Name (_HID, "INT3404")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 0)
 	Name (_STR, Unicode("Fan Control"))
 

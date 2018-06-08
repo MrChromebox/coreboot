@@ -7,6 +7,9 @@ Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
 Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
 Name (_SEG, Zero)  // _SEG: PCI Segment
 Name (_UID, Zero)  // _UID: Unique ID
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 
 Device (MCHC)
 {
@@ -263,6 +266,9 @@ Method (GDMB, 0, Serialized)
 Device (PDRC)
 {
 	Name (_HID, EISAID ("PNP0C02"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 	Name (_UID, 1)
 
 	Method (_CRS, 0, Serialized)
