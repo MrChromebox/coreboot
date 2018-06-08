@@ -23,6 +23,9 @@ External (OIPG)
 Device (CRHW)
 {
 	Name(_HID, EISAID("GGL0001"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+	Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 
 	Method(_STA, 0, Serialized)
 	{
