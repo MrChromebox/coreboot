@@ -23,6 +23,9 @@ Device (LPCB)
 	Device (FWH)
 	{
 		Name (_HID, EISAID ("INT0800"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "Firmware Hub")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -33,6 +36,9 @@ Device (LPCB)
 	Device (HPET)
 	{
 		Name (_HID, EISAID ("PNP0103"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "High Precision Event Timer")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -47,6 +53,9 @@ Device (LPCB)
 	Device (PIC)
 	{
 		Name (_HID, EISAID ("PNP0000"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "8259 Interrupt Controller")
 		Name (_CRS, ResourceTemplate()
 		{
@@ -74,6 +83,9 @@ Device (LPCB)
 	Device (LDRC)
 	{
 		Name (_HID, EISAID ("PNP0C02"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_UID, 2)
 		Name (_DDN, "Legacy Device Resources")
 		Name (_CRS, ResourceTemplate ()
@@ -95,6 +107,9 @@ Device (LPCB)
 	Device (RTC)
 	{
 		Name (_HID, EISAID ("PNP0B00"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "Real Time Clock")
 		Name (_CRS, ResourceTemplate ()
 		{
@@ -105,6 +120,9 @@ Device (LPCB)
 	Device (TIMR)
 	{
 		Name (_HID, EISAID ("PNP0100"))
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
 		Name (_DDN, "8254 Timer")
 		Name (_CRS, ResourceTemplate ()
 		{
