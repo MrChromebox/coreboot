@@ -186,6 +186,24 @@ const char *smbios_mainboard_sku(void)
 	return sku_str;
 }
 
+const char *smbios_mainboard_product_name(void)
+{
+	static char product[12];
+
+	switch (board_oem_id())
+	{
+		case 0: snprintf(product, sizeof(product), "Kench"); break;
+		case 1: snprintf(product, sizeof(product), "Teemo"); break;
+		case 2: snprintf(product, sizeof(product), "Sion"); break;
+		case 3:
+		case 4:
+		case 5: snprintf(product, sizeof(product), "Wukong"); break;
+		case 6: snprintf(product, sizeof(product), "Bleemo"); break;
+		default: snprintf(product, sizeof(product), "UNK Fizz"); break;
+	}
+	return product;
+}
+
 static void mainboard_init(struct device *dev)
 {
 	mainboard_ec_init();
