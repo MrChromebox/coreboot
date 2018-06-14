@@ -44,6 +44,8 @@ DefinitionBlock(
 		{
 			#include <soc/intel/broadwell/acpi/systemagent.asl>
 			#include <soc/intel/broadwell/acpi/pch.asl>
+
+			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 		}
 	}
 
