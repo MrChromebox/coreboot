@@ -53,23 +53,23 @@ void graphics_soc_init(struct device *dev)
 	 * In case of non-FSP solution, SoC need to select another
 	 * Kconfig to perform GFX initialization.
 	 */
-	if (IS_ENABLED(CONFIG_RUN_FSP_GOP))
-		return;
+	if (!IS_ENABLED(CONFIG_RUN_FSP_GOP)) {
 
-	/* IGD needs to Bus Master */
-	u32 reg32 = pci_read_config32(dev, PCI_COMMAND);
-	reg32 |= PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY | PCI_COMMAND_IO;
-	pci_write_config32(dev, PCI_COMMAND, reg32);
+		/* IGD needs to Bus Master */
+		u32 reg32 = pci_read_config32(dev, PCI_COMMAND);
+		reg32 |= PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY | PCI_COMMAND_IO;
+		pci_write_config32(dev, PCI_COMMAND, reg32);
 
-	if (IS_ENABLED(CONFIG_MAINBOARD_USE_LIBGFXINIT)) {
-		if (!acpi_is_wakeup_s3() && display_init_required()) {
-			int lightup_ok;
-			gma_gfxinit(&lightup_ok);
-			gfx_set_init_done(lightup_ok);
+		if (IS_ENABLED(CONFIG_MAINBOARD_USE_LIBGFXINIT)) {
+			if (!acpi_is_wakeup_s3() && display_init_required()) {
+				int lightup_ok;
+				gma_gfxinit(&lightup_ok);
+				gfx_set_init_done(lightup_ok);
+			}
+		} else {
+			/* Initialize PCI device, load/execute BIOS Option ROM */
+			pci_dev_init(dev);
 		}
-	} else {
-		/* Initialize PCI device, load/execute BIOS Option ROM */
-		pci_dev_init(dev);
 	}
 
 	intel_gma_restore_opregion();
