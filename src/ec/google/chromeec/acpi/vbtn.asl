@@ -14,7 +14,7 @@
  */
 
 /* VGBS reports 0x40 when NOT in tablet mode. */
-/* Sent event 0xCB/0xCC for tablet mode, 0xCA/0xCD for laptop */
+/* Sent event 0xCC for tablet mode, 0xCD for laptop */
 /* Linux driver expects SMBIOS_ENCLOSURE_TYPE=SMBIOS_ENCLOSURE_CONVERTIBLE */
 Device (VBTN)
 {
