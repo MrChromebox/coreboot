@@ -1,5 +1,11 @@
 chip soc/intel/skylake
 
+	# IGD Displays
+	register "gfx.ndid" = "1"
+	# primary LCD panel
+	register "gfx.did" = "{ 0x00000110 }"
+	register "gfx.names" = {"LCD"}
+
 	# Enable deep Sx states
 	register "deep_s3_enable_ac" = "0"
 	register "deep_s3_enable_dc" = "0"
