@@ -63,7 +63,8 @@ typedef struct global_nvs_t {
 	u8	e4gm; /* 0x54 - Enable above 4GB MMIO Resource */
 	u64	a4gb; /* 0x55 - 0x5C Base of above 4GB MMIO Resource */
 	u64	a4gs; /* 0x5D - 0x64 Length of above 4GB MMIO Resource */
-	u8	rsvd[79];
+	u32	brtl; /* 0x65 - BRTL Brightness Level */
+	u8	rsvd[75];
 
 	/* IGD OpRegion */
 	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */

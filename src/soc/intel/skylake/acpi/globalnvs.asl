@@ -18,6 +18,7 @@
 /* Global Variables */
 
 Name (\PICM, 0)		// IOAPIC/8259
+Name (\DSEN,0)		// Display Output Switching Enable
 
 /*
  * Global ACPI memory region. This region is used for passing information
@@ -73,6 +74,7 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	E4GM,	8,	// 0x54 - Enable above 4GB MMIO Resource
 	A4GB,	64,	// 0x55 - 0x5C Base of above 4GB MMIO Resource
 	A4GS,	64,	// 0x5D - 0x64 Length of above 4GB MMIO Resource
+	BRTL,	8,	// 0x65 - Brightness Level
 
 	/* IGD OpRegion */
 	Offset (0xb4),

@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <soc/gpe.h>
 #include <soc/gpio.h>
+#include <soc/i915.h>
 #include <soc/irq.h>
 #include <soc/pci_devs.h>
 #include <soc/pmc.h>
@@ -582,6 +583,8 @@ struct soc_intel_skylake_config {
 
 	/* Enable/Disable Sata test mode */
 	u8 SataTestMode;
+
+	struct i915_gpu_controller_info gfx;
 };
 
 typedef struct soc_intel_skylake_config config_t;

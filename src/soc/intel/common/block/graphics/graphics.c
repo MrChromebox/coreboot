@@ -20,6 +20,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <intelblocks/graphics.h>
+#include <soc/i915.h>
 #include <soc/pci_devs.h>
 
 /* SoC Overrides */
@@ -31,6 +32,10 @@ __weak void graphics_soc_init(struct device *dev)
 	 * along with pci_dev_init(dev)
 	 */
 	pci_dev_init(dev);
+}
+
+__weak void gma_ssdt(struct device *dev)
+{
 }
 
 static int is_graphics_disabled(struct device *dev)
@@ -121,6 +126,7 @@ static const struct device_operations graphics_ops = {
 	.write_acpi_tables	= graphics_soc_write_acpi_opregion,
 #endif
 	.scan_bus		= scan_generic_bus,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 };
 
 static const unsigned short pci_device_ids[] = {
