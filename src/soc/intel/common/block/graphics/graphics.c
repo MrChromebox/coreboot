@@ -19,6 +19,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <intelblocks/graphics.h>
+#include <soc/i915.h>
 #include <soc/pci_devs.h>
 
 /* SoC Overrides */
@@ -30,6 +31,10 @@ __weak void graphics_soc_init(struct device *dev)
 	 * along with pci_dev_init(dev)
 	 */
 	pci_dev_init(dev);
+}
+
+__weak void gma_ssdt(struct device *dev)
+{
 }
 
 static uintptr_t graphics_get_bar(unsigned long index)
@@ -102,6 +107,7 @@ static const struct device_operations graphics_ops = {
 	.init			= graphics_soc_init,
 	.ops_pci		= &pci_dev_ops_pci,
 	.write_acpi_tables	= graphics_soc_write_acpi_opregion,
+	.acpi_fill_ssdt_generator = gma_ssdt,
 };
 
 static const unsigned short pci_device_ids[] = {
