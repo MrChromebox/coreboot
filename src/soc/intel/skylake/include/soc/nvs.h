@@ -60,7 +60,8 @@ typedef struct global_nvs_t {
 	u8	ecps; /* 0x43 - SGX Enabled status */
 	u64	emna; /* 0x44 - 0x4B EPC base address */
 	u64	elng; /* 0x4C - 0x53 EPC Length */
-	u8	rsvd[96];
+	u32	brtl; /* 0x54 - BRTL Brightness Level */
+	u8	rsvd[92];
 
 	/* IGD OpRegion */
 	u32	aslb; /* 0xb4 - IGD OpRegion Base Address */
