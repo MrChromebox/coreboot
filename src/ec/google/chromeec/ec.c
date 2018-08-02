@@ -1104,6 +1104,17 @@ void google_chromeec_init(void)
 	}
 
 	google_chromeec_log_uptimeinfo();
+
+	/* This causes Link to freak out, so manually re-set auto fan control */
+	if (IS_ENABLED(CONFIG_BOARD_GOOGLE_LINK)) {
+		cec_cmd.cmd_code = EC_CMD_THERMAL_AUTO_FAN_CTRL;
+		cec_cmd.cmd_version = 0;
+		cec_cmd.cmd_data_out = NULL;
+		cec_cmd.cmd_size_in = 0;
+		cec_cmd.cmd_size_out = 0;
+		cec_cmd.cmd_dev_index = 0;
+		google_chromeec_command(&cec_cmd);
+	}
 }
 
 int google_ec_running_ro(void)
