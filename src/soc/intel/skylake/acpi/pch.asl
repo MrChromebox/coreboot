@@ -77,3 +77,6 @@ Method (_OSC, 4)
 #if IS_ENABLED(CONFIG_SOC_INTEL_COMMON_BLOCK_SGX)
 #include <soc/intel/common/acpi/sgx.asl>
 #endif
+
+/* IGD */
+#include "gfx.asl"
