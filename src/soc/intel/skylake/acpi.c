@@ -871,3 +871,71 @@ int acpigen_soc_clear_tx_gpio(unsigned int gpio_num)
 {
 	return acpigen_soc_gpio_op("\\_SB.PCI0.CTXS", gpio_num);
 }
+
+void
+intel_igd_displays_ssdt_generate(struct i915_gpu_controller_info *conf)
+{
+	size_t i;
+	const char **names = conf->names;
+	int counters[I915_MAX_DISPLAYS];
+
+	memset(counters, 0, sizeof(counters));
+
+	acpigen_write_scope("\\_SB.PCI0.GFX0");
+
+	/* Method (_DOD, 0) */
+	acpigen_write_method("_DOD", 0);
+	acpigen_emit_byte(0xa4); /* ReturnOp.  */
+	acpigen_write_package(conf->ndid);
+
+	for (i = 0; i < conf->ndid; i++)
+		acpigen_write_dword(conf->did[i]);
+	acpigen_pop_len(); /* End Package. */
+	acpigen_pop_len(); /* End Method. */
+
+	for (i = 0; i < conf->ndid; i++) {
+		acpigen_write_device(names[i]);
+		/* Name (_ADR, 0x<>) */
+		acpigen_write_name_dword("_ADR", conf->did[i] & 0xffff);
+
+		/* ACPI brightness for LCD.  */
+		if (!strcmp(names[i], "LCD")) {
+			printk(BIOS_ERR, "generate ACPI methods for LCD\n");
+			/*
+			  Method (_BCL, 0, NotSerialized)
+			  {
+				Return (^^XBCL())
+			  }
+			*/
+			acpigen_write_method("_BCL", 0);
+			acpigen_emit_byte(0xa4); /* ReturnOp.  */
+			acpigen_emit_namestring("^^XBCL");
+			acpigen_pop_len();
+
+			/*
+			  Method (_BCM, 1, NotSerialized)
+			  {
+				^^XBCM(Arg0)
+			  }
+			*/
+			acpigen_write_method("_BCM", 1);
+			acpigen_emit_namestring("^^XBCM");
+			acpigen_emit_byte(0x68); /* Arg0Op.  */
+			acpigen_pop_len();
+
+			/*
+			  Method (_BQC, 0, NotSerialized)
+			  {
+				Return (^^XBQC())
+			  }
+			*/
+			acpigen_write_method("_BQC", 0);
+			acpigen_emit_byte(0xa4); /* ReturnOp.  */
+			acpigen_emit_namestring("^^XBQC");
+			acpigen_pop_len();
+		}
+		acpigen_pop_len();
+	}
+
+	acpigen_pop_len();
+}

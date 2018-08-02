@@ -18,6 +18,7 @@
 /* Global Variables */
 
 Name (\PICM, 0)		// IOAPIC/8259
+Name (\DSEN,0)		// Display Output Switching Enable
 
 /*
  * Global ACPI memory region. This region is used for passing information
@@ -70,6 +71,7 @@ Field (GNVS, ByteAcc, NoLock, Preserve)
 	EPCS,	8,	// 0x43 - SGX Enabled status
 	EMNA,	64,	// 0x44 - 0x4B EPC base address
 	ELNG,	64,	// 0x4C - 0x53 EPC Length
+	BRTL,	8,	// 0x54 - Brightness Level
 
 	/* IGD OpRegion */
 	Offset (0xb4),
