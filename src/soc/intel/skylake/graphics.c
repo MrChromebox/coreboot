@@ -122,3 +122,24 @@ uintptr_t graphics_soc_write_acpi_opregion(struct device *device,
 	printk(BIOS_DEBUG, "current = %lx\n", current);
 	return current;
 }
+
+struct i915_gpu_controller_info *
+intel_igd_get_controller_info(void)
+{
+	struct device *dev = dev_find_slot(0, PCI_DEVFN(0x2, 0));
+	if (!dev)
+		return NULL;
+
+	struct soc_intel_skylake_config *chip = dev->chip_info;
+	return &chip->gfx;
+}
+
+void gma_ssdt(struct device *dev)
+{
+	struct i915_gpu_controller_info *gfx = intel_igd_get_controller_info();
+
+	if (!gfx)
+		return;
+
+	intel_igd_displays_ssdt_generate(gfx);
+}
