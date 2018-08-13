@@ -35,6 +35,12 @@ endif
 checkout: fetch
 	echo "    Checking out SeaBIOS revision $(TAG-y)"
 	cd seabios; git checkout master; git branch -D coreboot 2>/dev/null; git checkout -b coreboot $(TAG-y)
+	for patch in $(CURDIR)/patches/*.patch; do \
+		echo "Applying $$patch"; \
+		cd $(project_dir); \
+		git am --keep-cr $$patch || \
+			( echo " Error when applying patches.\n"; git am --abort; exit 1; ); \
+	done;
 
 config: checkout
 	echo "    CONFIG     SeaBIOS $(TAG-y)"
