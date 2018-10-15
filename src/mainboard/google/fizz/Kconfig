@@ -98,7 +98,7 @@ config UART_FOR_CONSOLE
 	default 2
 
 config USE_PM_ACPI_TIMER
-	default n
+	default y
 
 config EDK2_BOOT_TIMEOUT
 	int
