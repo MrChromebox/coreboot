@@ -210,9 +210,6 @@ chip soc/intel/skylake
 	# Send an extra VR mailbox command for the PS4 exit issue
 	register "SendVrMbxCmd" = "2"
 
-	# Enable/Disable VMX feature
-	register "VmxEnable" = "0"
-
 	# Lock Down
 	register "common_soc_config" = "{
 		.chipset_lockdown = CHIPSET_LOCKDOWN_COREBOOT,
