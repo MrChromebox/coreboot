@@ -10,6 +10,7 @@ config BOARD_PURISM_BASEBOARD_LIBREM_SKL
 	select SPD_READ_BY_WORD
 	select MAINBOARD_HAS_LPC_TPM
 	select NO_POST # This platform does not have any way to see POST codes
+	select MAINBOARD_HAS_LIBGFXINIT
 
 if BOARD_PURISM_BASEBOARD_LIBREM_SKL
 
