@@ -36,6 +36,7 @@
 #include <soc/smm.h>
 #include <soc/xhci.h>
 #include <drivers/intel/gma/i915_reg.h>
+#include <smmstore.h>
 
 static u8 smm_initialized = 0;
 
@@ -312,6 +313,26 @@ static void southbridge_smi_gsmi(void)
 	*ret = gsmi_exec(sub_command, param);
 }
 
+static void southbridge_smi_store(void)
+{
+	u8 sub_command, ret;
+	em64t101_smm_state_save_area_t *io_smi =
+		smi_apmc_find_state_save(APM_CNT_SMMSTORE);
+	uint32_t reg_ebx;
+
+	if (!io_smi)
+		return;
+	/* Command and return value in EAX */
+	sub_command = (io_smi->rax >> 8) & 0xff;
+
+	/* Parameter buffer in EBX */
+	reg_ebx = io_smi->rbx;
+
+	/* drivers/smmstore/smi.c */
+	ret = smmstore_exec(sub_command, (void *)reg_ebx);
+	io_smi->rax = ret;
+}
+
 static void southbridge_smi_apmc(void)
 {
 	u8 reg8;
@@ -352,6 +373,10 @@ static void southbridge_smi_apmc(void)
 	case APM_CNT_ELOG_GSMI:
 		if (CONFIG(ELOG_GSMI))
 			southbridge_smi_gsmi();
+		break;
+	case APM_CNT_SMMSTORE:
+		if (CONFIG(SMMSTORE))
+			southbridge_smi_store();
 		break;
 	}
 
