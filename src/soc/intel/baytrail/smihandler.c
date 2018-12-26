@@ -24,6 +24,7 @@
 #include <elog.h>
 #include <halt.h>
 #include <spi-generic.h>
+#include <smmstore.h>
 
 #include <soc/iosf.h>
 #include <soc/pci_devs.h>
@@ -294,6 +295,26 @@ static void soc_end_of_dxe(void)
 	SCC_ACPI_MODE_ENABLE(SDIO);
 }
 
+static void southbridge_smi_store(void)
+{
+	u8 sub_command, ret;
+	em64t100_smm_state_save_area_t *io_smi =
+		smi_apmc_find_state_save(APM_CNT_SMMSTORE);
+	uint32_t reg_ebx;
+
+	if (!io_smi)
+		return;
+	/* Command and return value in EAX */
+	sub_command = (io_smi->rax >> 8) & 0xff;
+
+	/* Parameter buffer in EBX */
+	reg_ebx = io_smi->rbx;
+
+	/* drivers/smmstore/smi.c */
+	ret = smmstore_exec(sub_command, (void *)reg_ebx);
+	io_smi->rax = ret;
+}
+
 static void southbridge_smi_apmc(void)
 {
 	uint8_t reg8;
@@ -356,6 +377,10 @@ static void southbridge_smi_apmc(void)
 		soc_end_of_dxe();
 		break;
 
+	case APM_CNT_SMMSTORE:
+		if (CONFIG(SMMSTORE))
+			southbridge_smi_store();
+		break;
 	}
 
 	mainboard_smi_apmc(reg8);
