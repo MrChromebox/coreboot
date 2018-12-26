@@ -62,8 +62,8 @@ static int lookup_store(struct region_device *rstore)
 		if (cbfs_locate_file_in_region(&file,
 			       CONFIG_SMMSTORE_REGION,
 			       CONFIG_SMMSTORE_FILENAME, NULL) < 0) {
-			printk(BIOS_WARNING, "smm store: "
-			       "Unable to find SMM store file in region '%s'\n",
+			printk(BIOS_WARNING,
+			       "smm store: Unable to find SMM store file in region '%s'\n",
 			       CONFIG_SMMSTORE_REGION);
 			return -1;
 		}
@@ -87,14 +87,13 @@ static int lookup_store(struct region_device *rstore)
  * returns 0 on success, -1 on failure
  * writes up to `*bufsize` bytes into `buf` and updates `*bufsize`
  */
-int smmstore_read_region(void *buf, ssize_t *bufsize)
+int smmstore_read_region(void *buf, uint32_t *bufsize)
 {
 	struct region_device store;
 
 	if (bufsize == NULL)
 		return -1;
 
-	*bufsize = 0;
 	if (lookup_store(&store) < 0) {
 		printk(BIOS_WARNING, "reading region failed\n");
 		return -1;
@@ -109,6 +108,66 @@ int smmstore_read_region(void *buf, ssize_t *bufsize)
 	return 0;
 }
 
+static enum cb_err scan_end(ssize_t *end)
+{
+	struct region_device store;
+
+	if (lookup_store(&store) < 0) {
+		printk(BIOS_WARNING, "reading region failed\n");
+		return CB_ERR;
+	}
+	ssize_t data_sz = region_device_sz(&store);
+
+	/* scan for end */
+	*end = 0;
+	uint32_t k_sz, v_sz;
+	while (*end < data_sz) {
+		/* make odd corner cases identifiable, eg. invalid v_sz */
+		k_sz = 0;
+
+		if (rdev_readat(&store, &k_sz, *end, sizeof(k_sz)) < 0) {
+			printk(BIOS_WARNING, "failed reading key size\n");
+			return CB_ERR;
+		}
+
+		/* found the end */
+		if (k_sz == 0xffffffff)
+			break;
+
+		/* something is fishy here:
+		 * Avoid wrapping (since data_size < MAX_UINT32_T / 2) while
+		 * other problems are covered by the loop condition
+		 */
+		if (k_sz > data_sz) {
+			printk(BIOS_WARNING, "key size out of bounds\n");
+			return CB_ERR;
+		}
+
+		if (rdev_readat(&store, &v_sz, *end + 4, sizeof(v_sz)) < 0) {
+			printk(BIOS_WARNING, "failed reading value size\n");
+			return CB_ERR;
+		}
+
+		if (v_sz > data_sz) {
+			printk(BIOS_WARNING, "value size out of bounds\n");
+			return CB_ERR;
+		}
+
+		*end += sizeof(k_sz) + sizeof(v_sz) + k_sz + v_sz + 1;
+		*end = ALIGN_UP(*end, sizeof(uint32_t));
+	}
+
+	printk(BIOS_DEBUG, "used smm store size might be 0x%zx bytes\n", *end);
+
+	if (k_sz != 0xffffffff) {
+		printk(BIOS_WARNING,
+			"eof of data marker looks invalid: 0x%x\n", k_sz);
+		return CB_ERR;
+	}
+
+	return CB_SUCCESS;
+
+}
 /*
  * Append data to region
  *
@@ -124,78 +183,37 @@ int smmstore_append_data(void *key, uint32_t key_sz,
 		return -1;
 	}
 
-	ssize_t data_sz = region_device_sz(&store);
-
-	/* scan for end */
-	ssize_t end = 0;
-	uint32_t k_sz, v_sz;
-	while (end < data_sz) {
-		/* make odd corner cases identifiable, eg. invalid v_sz */
-		k_sz = 0;
-
-		if (rdev_readat(&store, &k_sz, end, sizeof(k_sz)) < 0) {
-			printk(BIOS_WARNING, "failed reading key size\n");
-			return -1;
-		}
-
-		/* found the end */
-		if (k_sz == 0xffffffff)
-			break;
-
-		/* something is fishy here:
-		 * Avoid wrapping (since data_size < MAX_UINT32_T / 2) while
-		 * other problems are covered by the loop condition
-		 */
-		if (k_sz > data_sz) {
-			printk(BIOS_WARNING, "key size out of bounds\n");
-			return -1;
-		}
-
-		if (rdev_readat(&store, &v_sz, end + 4, sizeof(v_sz)) < 0) {
-			printk(BIOS_WARNING, "failed reading value size\n");
-			return -1;
-		}
-
-		if (v_sz > data_sz) {
-			printk(BIOS_WARNING, "value size out of bounds\n");
-			return -1;
-		}
-
-		end += 8 + k_sz + v_sz + 1;
-		end = ALIGN_UP(end, sizeof(uint32_t));
-	}
-
-	printk(BIOS_WARNING, "used smm store size might be 0x%zx bytes\n", end);
-
-	if (k_sz != 0xffffffff) {
-		printk(BIOS_WARNING,
-			"eof of data marker looks invalid: 0x%x\n", k_sz);
+	ssize_t end;
+	if (scan_end(&end) == CB_ERR)
 		return -1;
-	}
 
-	printk(BIOS_WARNING, "used size looks legit\n");
+	printk(BIOS_DEBUG, "used size looks legit\n");
 
-	printk(BIOS_WARNING, "open (%zx, %zx) for writing\n",
+	printk(BIOS_DEBUG, "open (%zx, %zx) for writing\n",
 		region_device_offset(&store), region_device_sz(&store));
-	if (boot_device_rw_subregion(&store.region, &store) < 0) {
+	if (boot_device_rw_subregion(region_device_region(&store), &store) < 0) {
 		printk(BIOS_WARNING, "couldn't open store for writing\n");
 		return -1;
 	}
 
-	uint32_t record_sz = 8 + key_sz + value_sz + 1;
-	if (end + record_sz >= data_sz) {
+	struct region subregion = {
+		.offset = end,
+		.size = sizeof(key_sz) + sizeof(value_sz) + key_sz + value_sz + 1,
+	};
+
+	if (region_is_subregion(region_device_region(&store), &subregion)) {
 		printk(BIOS_WARNING, "not enough space for new data\n");
 		return -1;
 	}
 
-	if (rdev_writeat(&store, &key_sz, end, 4) != 4) {
+	if (rdev_writeat(&store, &key_sz, end, sizeof(key_sz)) != sizeof(key_sz)) {
 		printk(BIOS_WARNING, "failed writing key size\n");
 	}
-	end += 4;
-	if (rdev_writeat(&store, &value_sz, end, 4) != 4) {
+	end += sizeof(key_sz);
+	if (rdev_writeat(&store, &value_sz, end, sizeof(value_sz)) != sizeof(key_sz)) {
 		printk(BIOS_WARNING, "failed writing value size\n");
 	}
-	end += 4;
+	end += sizeof(value_sz);
 	if (rdev_writeat(&store, key, end, key_sz) != key_sz) {
 		printk(BIOS_WARNING, "failed writing key data\n");
 	}
@@ -205,7 +223,7 @@ int smmstore_append_data(void *key, uint32_t key_sz,
 	}
 	end += value_sz;
 	uint8_t nul = 0;
-	if (rdev_writeat(&store, &nul, end, 1) != 1) {
+	if (rdev_writeat(&store, &nul, end, sizeof(nul)) != sizeof(nul)) {
 		printk(BIOS_WARNING, "failed writing termination\n");
 	}
 

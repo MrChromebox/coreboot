@@ -29,21 +29,21 @@
 
 struct smmstore_params_read {
 	void *buf;
-	ssize_t bufsize;
+	uint32_t bufsize;
 };
 
 struct smmstore_params_append {
 	void *key;
-	size_t keysize;
+	uint32_t keysize;
 	void *val;
-	size_t valsize;
+	uint32_t valsize;
 };
 
 /* SMM responder */
 uint32_t smmstore_exec(uint8_t command, void *param);
 
 /* implementation */
-int smmstore_read_region(void *buf, ssize_t *bufsize);
+int smmstore_read_region(void *buf, uint32_t *bufsize);
 int smmstore_append_data(void *key, uint32_t key_sz,
 	void *value, uint32_t value_sz);
 int smmstore_clear_region(void);
