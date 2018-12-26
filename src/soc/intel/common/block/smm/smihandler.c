@@ -310,7 +310,7 @@ static void southbridge_smi_store(
 	reg_ebx = save_state_ops->get_reg(io_smi, RBX);
 
 	/* drivers/smmstore/smi.c */
-	ret = smmstore_exec(sub_command, (void *)reg_ebx);
+	ret = smmstore_exec(sub_command, (uintptr_t *)reg_ebx);
 	save_state_ops->set_reg(io_smi, RAX, ret);
 }
 
