@@ -10,7 +10,8 @@ chip northbridge/intel/sandybridge
 	register "gpu_panel_power_down_delay" = "500"		# 50ms
 	register "gpu_panel_power_backlight_on_delay" = "1"	# 0.1ms
 	register "gpu_panel_power_backlight_off_delay" = "1"	# 0.1ms
-	register "gpu_cpu_backlight" = "0x03d2"
+	register "duty_cycle_percent" = "63"
+
 
 	device domain 0 on
 		device pci 00.0 on
