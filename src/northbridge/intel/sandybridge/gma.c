@@ -530,6 +530,14 @@ static void gma_pm_init_pre_vbios(struct device *dev)
 	gtt_write(0xe4f24, 0x0ff803cf);
 }
 
+/* Don't touch PCH_PP_DIVISOR */
+#define DEFAULT_RAW_CLOCK 125000000
+
+static uint32_t pwm_freq_to_reg(uint32_t pwm_freq)
+{
+	return DEFAULT_RAW_CLOCK / (pwm_freq * 128);
+}
+
 static void gma_pm_init_post_vbios(struct device *dev)
 {
 	struct northbridge_intel_sandybridge_config *conf = dev->chip_info;
@@ -584,14 +592,25 @@ static void gma_pm_init_post_vbios(struct device *dev)
 		gtt_write(0xc7210, reg32);
 	}
 
-	/* Enable Backlight if needed */
-	if (conf->gpu_cpu_backlight) {
-		gtt_write(0x48250, (1 << 31));
-		gtt_write(0x48254, conf->gpu_cpu_backlight);
-	}
-	if (conf->gpu_pch_backlight) {
+	if (conf->pwm_freq_hz) {
+		uint32_t pwm_reg =  pwm_freq_to_reg(conf->pwm_freq_hz);
+		/* Set the pwm frequency */
 		gtt_write(0xc8250, (1 << 31));
-		gtt_write(0xc8254, conf->gpu_pch_backlight);
+		reg32 = pwm_reg << 16;
+		/* PCH PWM freq override */
+		uint8_t duty_cycle = conf->duty_cycle_percent;
+		if (duty_cycle == 0 || duty_cycle > 100) {
+			printk(BIOS_WARNING,
+			       "GMA: Invalid duty cycle, using 100%%\n");
+			duty_cycle = 100;
+		}
+		if (gtt_read(0xc8250) & (1 << 30))
+			reg32 |= pwm_reg * duty_cycle / 100;
+		/* PCH PWM backlight freq + duty cycle*/
+		gtt_write(0xc8254, reg32);
+		/* CPU PWM backlight duty cycle */
+		gtt_write(0x48250, (1 << 31));
+		gtt_write(0x48254, pwm_reg * duty_cycle / 100);
 	}
 }
 
