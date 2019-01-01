@@ -19,7 +19,6 @@ chip northbridge/intel/sandybridge
 	register "gfx.link_frequency_270_mhz" = "1"
 	register "gfx.ndid" = "3"
 	register "gfx.use_spread_spectrum_clock" = "1"
-	register "gpu_cpu_backlight" = "0x00000129"
 	register "gpu_dp_b_hotplug" = "4"
 	register "gpu_dp_c_hotplug" = "4"
 	register "gpu_dp_d_hotplug" = "4"
@@ -29,7 +28,8 @@ chip northbridge/intel/sandybridge
 	register "gpu_panel_power_cycle_delay" = "5"
 	register "gpu_panel_power_down_delay" = "230"
 	register "gpu_panel_power_up_delay" = "300"
-	register "gpu_pch_backlight" = "0x02880288"
+	register "pwm_freq_hz" = "1507"
+	register "duty_cycle_percent" = "45"
 	device cpu_cluster 0x0 on
 		chip cpu/intel/model_206ax
 			register "c1_acpower" = "1"
