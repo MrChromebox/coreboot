@@ -408,8 +408,8 @@ Device (BAT0)
 	})
 	Name (BSTP, 0)
 
-	// Workaround for full battery status, disabled by default
-	Name (BFWK, 0)
+	// Workaround for full battery status, enabled by default
+	Name (BFWK, 1)
 
 	// Method to enable full battery workaround
 	Method (BFWE)
@@ -498,8 +498,8 @@ Device (BAT1)
 	})
 	Name (BSTP, 0)
 
-	// Workaround for full battery status, disabled by default
-	Name (BFWK, 0)
+	// Workaround for full battery status, enabled by default
+	Name (BFWK, 1)
 
 	// Method to enable full battery workaround
 	Method (BFWE)
