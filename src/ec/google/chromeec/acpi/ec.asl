@@ -260,11 +260,6 @@ Device (EC0)
 	{
 		Store ("EC: BATTERY INFO", Debug)
 		Notify (BAT0, 0x81)
-#ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
-		If (CondRefOf (BAT1)) {
-			Notify (BAT1, 0x81)
-		}
-#endif
 	}
 
 	// Thermal Overload Event
@@ -340,11 +335,6 @@ Device (EC0)
 	{
 		Store ("EC: BATTERY STATUS", Debug)
 		Notify (BAT0, 0x80)
-#ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
-		If (CondRefOf (BAT1)) {
-			Notify (BAT1, 0x80)
-		}
-#endif
 	}
 
 	// MKBP interrupt.
