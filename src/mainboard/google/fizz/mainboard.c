@@ -136,6 +136,13 @@ static void mainboard_set_power_limits(struct soc_power_limits_config *conf)
 			conf->tdp_pl4 = SET_PSYSPL2(psyspl2);
 	}
 
+
+	/* Override PL1/PL2 for i7 KBL-R SKU */
+	if (sku == FIZZ_SKU_ID_I7_U42) {
+		conf->tdp_pl1_override = 20;
+		pl2 = 40;
+	}
+
 	conf->tdp_pl2_override = pl2;
 	/* set psyspl2 to 90% of max adapter power */
 	conf->tdp_psyspl2 = SET_PSYSPL2(psyspl2);
