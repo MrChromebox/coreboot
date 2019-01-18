@@ -85,6 +85,23 @@ Scope (\_SB.PCI0.XHCI.HUB7.PRT5)
 		Return (GPLD (1))
 	}
 }
+Scope (\_SB.PCI0.XHCI.HUB7.PRT6)
+{
+	// SIM USB 2.0 Slot
+	Name (_UPC, Package (0x04)
+	{
+		0xFF,	// Connectable
+		0xFF,	// OEM Connector
+		Zero,	// Reserved
+		Zero	// Reserved
+	})
+
+	// Visible
+	Method (_PLD, 0, NotSerialized)
+	{
+		Return (GPLD (One))
+	}
+}
 Scope (\_SB.PCI0.XHCI.HUB7.PRT7)
 {
 	// SD Card
