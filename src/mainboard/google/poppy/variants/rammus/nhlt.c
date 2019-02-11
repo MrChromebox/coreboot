@@ -29,8 +29,8 @@ void variant_nhlt_init(struct nhlt *nhlt)
 		printk(BIOS_ERR, "Couldn't add Dialog DA7219.\n");
 
 	/* Maxim MAX98927 Smart Amps for left and right channel */
-	if (nhlt_soc_add_max98927(nhlt, AUDIO_LINK_SSP0))
-		printk(BIOS_ERR, "Couldn't add Maxim MAX98927\n");
+	if (nhlt_soc_add_max98927(nhlt, AUDIO_LINK_SSP0, 0, 2))
+		printk(BIOS_ERR, "Couldn't add max98927\n");
 
 }
 
