@@ -319,6 +319,7 @@ static void r8168_net_fill_ssdt(struct device *dev)
 	acpigen_write_name_integer("_UID", 0);
 	if (dev->chip_ops)
 		acpigen_write_name_string("_DDN", dev->chip_ops->name);
+	acpigen_write_STA(ACPI_STATUS_DEVICE_HIDDEN_ON);
 
 	/* Address */
 	address = PCI_SLOT(dev->path.pci.devfn) & 0xffff;
