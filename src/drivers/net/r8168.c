@@ -330,6 +330,7 @@ static void r8168_net_fill_ssdt(const struct device *dev)
 
 	if (dev->chip_ops)
 		acpigen_write_name_string("_DDN", dev->chip_ops->name);
+	acpigen_write_STA(ACPI_STATUS_DEVICE_HIDDEN_ON);
 
 	/* Power Resource */
 	if (config->has_power_resource) {
