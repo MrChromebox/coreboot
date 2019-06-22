@@ -23,10 +23,12 @@
 #include <soc/pm.h>
 
 void gfx_init(void);
+void tco_disable(void);
 void punit_init(void);
 void set_max_freq(void);
 
-/* romstage.c functions */
+/* romstage_common.c functions */
+void program_base_addresses(void);
 int chipset_prev_sleep_state(struct chipset_power_state *ps);
 
 /* Values for FSP's PcdMemoryTypeEnable */
