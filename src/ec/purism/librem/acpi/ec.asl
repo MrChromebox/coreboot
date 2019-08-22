@@ -26,6 +26,10 @@ Device (TPSD)
 	}
 	Name (_UID, 0)
 
+	Method (_STA, 0, NotSerialized) {
+		Return (0x0B)
+	}
+
 	Method (FNCX, 1, NotSerialized)
 	{
 		If (LEqual (Arg0, 0x86)) {
