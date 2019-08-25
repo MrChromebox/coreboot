@@ -156,7 +156,11 @@ void mainboard_fill_pei_data(struct pei_data *pei_data)
 		},
 	};
 	*pei_data = pei_data_template;
+	/* LINK has 2 channels of memory down, so spd_data[0] and [2]
+	   both need to be populated */
 	memcpy(pei_data->spd_data[0], locate_spd(),
+	       sizeof(pei_data->spd_data[0]));
+	memcpy(pei_data->spd_data[2], pei_data->spd_data[0],
 	       sizeof(pei_data->spd_data[0]));
 }
 
