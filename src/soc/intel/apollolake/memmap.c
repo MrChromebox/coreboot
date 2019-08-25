@@ -34,7 +34,13 @@ void *cbmem_top(void)
 	if (!CONFIG(SOC_INTEL_GLK))
 		return tolum;
 
-	config = config_of_path(PCH_DEVFN_LPC);
+	dev = dev_find_slot(0, PCH_DEVFN_LPC);
+	assert(dev != NULL);
+	config = dev->chip_info;
+
+	if (!config)
+		die_with_post_code(POST_HW_INIT_FAILURE,
+			"Failed to get chip_info\n");
 
 	/* FSP allocates 2x PRMRR Size Memory for alignment */
 	if (config->sgx_enable)

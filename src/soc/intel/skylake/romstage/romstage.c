@@ -54,11 +54,12 @@ void soc_pre_ram_init(struct romstage_params *params)
 void soc_memory_init_params(struct romstage_params *params,
 			    MEMORY_INIT_UPD *upd)
 {
+	const struct device *dev;
 	const struct soc_intel_skylake_config *config;
 
 	/* Set the parameters for MemoryInit */
-
-	config = config_of_path(PCH_DEVFN_LPC);
+	dev = dev_find_slot(0, PCI_DEVFN(PCH_DEV_SLOT_LPC, 0));
+	config = dev->chip_info;
 
 	/*
 	 * Set IGD stolen size to 64MB.  The FBC hardware for skylake does not

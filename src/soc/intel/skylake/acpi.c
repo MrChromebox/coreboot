@@ -174,7 +174,8 @@ static int get_cores_per_package(void)
 
 static void acpi_create_gnvs(global_nvs_t *gnvs)
 {
-	const struct soc_intel_skylake_config *config = config_of_path(PCH_DEVFN_LPC);
+	const struct device *dev = dev_find_slot(0, PCH_DEVFN_LPC);
+	const struct soc_intel_skylake_config *config = dev->chip_info;
 
 	/* Set unknown wake source */
 	gnvs->pm1i = -1;
@@ -558,7 +559,7 @@ void generate_cpu_entries(struct device *device)
 
 static unsigned long acpi_fill_dmar(unsigned long current)
 {
-	struct device *const igfx_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	struct device *const igfx_dev = dev_find_slot(0, SA_DEVFN_IGD);
 	const u32 gfx_vtbar = MCHBAR32(GFXVTBAR) & ~0xfff;
 	const bool gfxvten = MCHBAR32(GFXVTBAR) & 1;
 
@@ -581,7 +582,7 @@ static unsigned long acpi_fill_dmar(unsigned long current)
 		acpi_dmar_rmrr_fixup(tmp, current);
 	}
 
-	struct device *const p2sb_dev = pcidev_path_on_root(PCH_DEVFN_P2SB);
+	struct device *const p2sb_dev = dev_find_slot(0, PCH_DEVFN_P2SB);
 	const u32 vtvc0bar = MCHBAR32(VTVC0BAR) & ~0xfff;
 	const bool vtvc0en = MCHBAR32(VTVC0BAR) & 1;
 
@@ -692,7 +693,8 @@ void southbridge_inject_dsdt(struct device *device)
 /* Save wake source information for calculating ACPI _SWS values */
 int soc_fill_acpi_wake(uint32_t *pm1, uint32_t **gpe0)
 {
-	const struct soc_intel_skylake_config *config = config_of_path(PCH_DEVFN_LPC);
+	const struct device *dev = dev_find_slot(0, PCH_DEVFN_LPC);
+	const struct soc_intel_skylake_config *config = dev->chip_info;
 	struct chipset_power_state *ps;
 	static uint32_t gpe0_sts[GPE0_REG_MAX];
 	uint32_t pm1_en;

@@ -78,7 +78,10 @@ static void pch_enable_lpc(void)
 	/* Lookup device tree in romstage */
 	const config_t *config;
 
-	config = config_of_path(PCH_DEVFN_LPC);
+	dev = dev_find_slot(0, PCI_DEVFN(PCH_DEV_SLOT_LPC, 0));
+	if (!dev || !dev->chip_info)
+		return;
+	config = dev->chip_info;
 
 	pci_write_config32(PCH_DEV_LPC, LPC_GEN1_DEC, config->gen1_dec);
 	pci_write_config32(PCH_DEV_LPC, LPC_GEN2_DEC, config->gen2_dec);
