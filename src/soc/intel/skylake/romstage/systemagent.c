@@ -26,7 +26,7 @@
 
 static void systemagent_vtd_init(void)
 {
-	const struct device *const igd_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	const struct device *const igd_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	const struct soc_intel_skylake_config *config = NULL;
 
 	config = config_of_path(SA_DEVFN_ROOT);

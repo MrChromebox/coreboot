@@ -256,7 +256,7 @@ void smm_relocate(void)
 
 void smm_lock(void)
 {
-	struct device *sa_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *sa_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	/*
 	 * LOCK the SMM memory window and enable normal SMM.
 	 * After running this function, only a full reset can

@@ -58,11 +58,11 @@ DEVTREE_CONST struct device *soc_uart_console_to_device(int uart_console)
 	 */
 	switch (uart_console) {
 	case 0:
-		return pcidev_path_on_root(PCH_DEVFN_UART0);
+		return pcidev_path_on_root_debug(PCH_DEVFN_UART0, __func__);
 	case 1:
-		return pcidev_path_on_root(PCH_DEVFN_UART1);
+		return pcidev_path_on_root_debug(PCH_DEVFN_UART1, __func__);
 	case 2:
-		return pcidev_path_on_root(PCH_DEVFN_UART2);
+		return pcidev_path_on_root_debug(PCH_DEVFN_UART2, __func__);
 	default:
 		printk(BIOS_ERR, "Invalid UART console index\n");
 		return NULL;

@@ -256,7 +256,7 @@ static void pcie_update_device_tree(unsigned int devfn0, int num_funcs)
 	int i;
 	unsigned int inc = PCI_DEVFN(0, 1);
 
-	func0 = pcidev_path_on_root(devfn0);
+	func0 = pcidev_path_on_root_debug(devfn0, __func__);
 	if (func0 == NULL)
 		return;
 
@@ -272,7 +272,7 @@ static void pcie_update_device_tree(unsigned int devfn0, int num_funcs)
 	 * as that port was move to func0.
 	 */
 	for (i = 1; i < num_funcs; i++, devfn += inc) {
-		struct device *dev = pcidev_path_on_root(devfn);
+		struct device *dev = pcidev_path_on_root_debug(devfn, __func__);
 		if (dev == NULL)
 			continue;
 
@@ -538,7 +538,7 @@ static void disable_dev(struct device *dev, FSP_S_CONFIG *silconfig)
 
 static void parse_devicetree(FSP_S_CONFIG *silconfig)
 {
-	struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 
 	if (!dev) {
 		printk(BIOS_ERR, "Could not find root device\n");
@@ -672,7 +672,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *silupd)
 	/* Load VBT before devicetree-specific config. */
 	silconfig->GraphicsConfigPtr = (uintptr_t)vbt_get();
 
-	dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	cfg = config_of(dev);
 
 	mainboard_devtree_update(dev);
@@ -743,7 +743,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *silupd)
 		apl_fsp_silicon_init_params_cb(cfg, silconfig);
 
 	/* Enable xDCI controller if enabled in devicetree and allowed */
-	dev = pcidev_path_on_root(PCH_DEVFN_XDCI);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_XDCI, __func__);
 	if (!xdci_can_enable())
 		dev->enabled = 0;
 	silconfig->UsbOtg = dev->enabled;

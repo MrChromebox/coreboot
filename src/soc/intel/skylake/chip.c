@@ -92,7 +92,7 @@ struct chip_operations soc_intel_skylake_ops = {
 /* UPD parameters to be initialized before SiliconInit */
 void soc_silicon_init_params(SILICON_INIT_UPD *params)
 {
-	struct device *dev = pcidev_path_on_root(PCH_DEVFN_LPC);
+	struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_LPC, __func__);
 	const struct soc_intel_skylake_config *config = config_of(dev);
 	int i;
 
@@ -152,7 +152,7 @@ void soc_silicon_init_params(SILICON_INIT_UPD *params)
 	params->ScsSdCardEnabled = config->ScsSdCardEnabled;
 
 	/* Enable ISH if device is on */
-	dev = pcidev_path_on_root(PCH_DEVFN_ISH);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_ISH);
 	params->IshEnable = dev ? dev->enabled : 0;
 
 	params->EnableAzalia = config->EnableAzalia;
@@ -213,11 +213,11 @@ void soc_silicon_init_params(SILICON_INIT_UPD *params)
 		fill_vr_domain_config(params, i, &config->domain_vr_config[i]);
 
 	/* Show SPI controller if enabled in devicetree.cb */
-	dev = pcidev_path_on_root(PCH_DEVFN_SPI);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_SPI);
 	params->ShowSpiController = dev ? dev->enabled : 0;
 
 	/* Enable xDCI controller if enabled in devicetree and allowed */
-	dev = pcidev_path_on_root(PCH_DEVFN_USBOTG);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_USBOTG);
 	if (dev) {
 		if (!xdci_can_enable())
 			dev->enabled = 0;

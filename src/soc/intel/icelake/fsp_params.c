@@ -93,7 +93,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 
 	mainboard_silicon_init_params(params);
 
-	dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 
 	if (!dev || !dev->enabled) {
 		/*

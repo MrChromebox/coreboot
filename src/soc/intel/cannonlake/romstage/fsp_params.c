@@ -30,7 +30,7 @@ static void soc_memory_init_params(FSP_M_CONFIG *m_cfg, const config_t *config)
 {
 	unsigned int i;
 	uint32_t mask = 0;
-	const struct device *dev = pcidev_path_on_root(PCH_DEVFN_ISH);
+	const struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_ISH, __func__);
 
 	/* Set IGD stolen size to 64MB. */
 	m_cfg->IgdDvmt50PreAlloc = 2;
@@ -85,7 +85,7 @@ static void soc_memory_init_params(FSP_M_CONFIG *m_cfg, const config_t *config)
 		m_cfg->PchIshEnable = dev->enabled;
 
 	/* If HDA is enabled, enable HDA elements */
-	dev = pcidev_path_on_root(PCH_DEVFN_HDA);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_HDA, __func__);
 	if (!dev)
 		m_cfg->PchHdaEnable = 0;
 	else
@@ -93,15 +93,15 @@ static void soc_memory_init_params(FSP_M_CONFIG *m_cfg, const config_t *config)
 
 	/* Enable IPU only if the device is enabled */
 	m_cfg->SaIpuEnable = 0;
-	dev = pcidev_path_on_root(SA_DEVFN_IPU);
+	dev = pcidev_path_on_root_debug(SA_DEVFN_IPU, __func__);
 	if (dev)
 		m_cfg->SaIpuEnable = dev->enabled;
 }
 
 void platform_fsp_memory_init_params_cb(FSPM_UPD *mupd, uint32_t version)
 {
-	const struct device *dev = pcidev_path_on_root(PCH_DEVFN_LPC);
-	const struct device *smbus = pcidev_path_on_root(PCH_DEVFN_SMBUS);
+	const struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_LPC, __func__);
+	const struct device *smbus = pcidev_path_on_root_debug(PCH_DEVFN_SMBUS, __func__);
 	assert(dev != NULL);
 	const config_t *config = config_of(dev);
 	FSP_M_CONFIG *m_cfg = &mupd->FspmConfig;

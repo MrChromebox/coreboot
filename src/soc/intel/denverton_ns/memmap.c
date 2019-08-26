@@ -32,7 +32,7 @@ static inline uintptr_t system_agent_region_base(size_t reg)
 #if defined(__SIMPLE_DEVICE__)
 	pci_devfn_t dev = SA_DEV_ROOT;
 #else
-	struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 #endif
 	/* All regions concerned for have 1 MiB alignment. */
 	return ALIGN_DOWN(pci_read_config32(dev, reg), 1 * MiB);

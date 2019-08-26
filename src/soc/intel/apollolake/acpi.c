@@ -175,7 +175,7 @@ void soc_fill_fadt(acpi_fadt_t *fadt)
 
 static unsigned long soc_fill_dmar(unsigned long current)
 {
-	struct device *const igfx_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	struct device *const igfx_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	uint64_t gfxvtbar = MCHBAR64(GFXVTBAR) & VTBAR_MASK;
 	uint64_t defvtbar = MCHBAR64(DEFVTBAR) & VTBAR_MASK;
 	bool gfxvten = MCHBAR32(GFXVTBAR) & VTBAR_ENABLED;
@@ -208,7 +208,7 @@ static unsigned long soc_fill_dmar(unsigned long current)
 		 * get the info and hide it again when done.
 		 */
 		p2sb_unhide();
-		struct device *p2sb_dev = pcidev_path_on_root(PCH_DEVFN_P2SB);
+		struct device *p2sb_dev = pcidev_path_on_root_debug(PCH_DEVFN_P2SB, __func__);
 		uint16_t ibdf = pci_read_config16(p2sb_dev, PCH_P2SB_IBDF);
 		uint16_t hbdf = pci_read_config16(p2sb_dev, PCH_P2SB_HBDF);
 		p2sb_hide();

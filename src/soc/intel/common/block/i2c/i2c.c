@@ -65,7 +65,7 @@ static int lpss_i2c_early_init_bus(unsigned int bus)
 
 	/* Look up the controller device in the devicetree */
 	dev = PCI_DEV(0, PCI_SLOT(devfn), PCI_FUNC(devfn));
-	tree_dev = pcidev_path_on_root(devfn);
+	tree_dev = pcidev_path_on_root_debug(devfn, __func__);
 	if (!tree_dev || !tree_dev->enabled) {
 		printk(BIOS_ERR, "I2C%u device not enabled\n", bus);
 		return -1;
@@ -137,7 +137,7 @@ uintptr_t dw_i2c_base_address(unsigned int bus)
 		return (uintptr_t)NULL;
 
 	/* devfn -> dev */
-	dev = pcidev_path_on_root(devfn);
+	dev = pcidev_path_on_root_debug(devfn, __func__);
 	if (!dev || !dev->enabled)
 		return (uintptr_t)NULL;
 

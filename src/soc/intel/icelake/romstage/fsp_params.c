@@ -25,7 +25,7 @@ static void soc_memory_init_params(FSP_M_CONFIG *m_cfg,
 		const struct soc_intel_icelake_config *config)
 {
 	unsigned int i;
-	const struct device *dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	const struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	uint32_t mask = 0;
 
 	if (!dev || !dev->enabled) {
@@ -49,7 +49,7 @@ static void soc_memory_init_params(FSP_M_CONFIG *m_cfg,
 	m_cfg->SkipMbpHob = 1;
 
 	/* If Audio Codec is enabled, enable FSP UPD */
-	dev = pcidev_path_on_root(PCH_DEVFN_HDA);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_HDA, __func__);
 	if (!dev)
 		m_cfg->PchHdaEnable = 0;
 	else

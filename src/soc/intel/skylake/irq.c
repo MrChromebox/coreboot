@@ -223,7 +223,7 @@ void soc_irq_settings(FSP_SIL_UPD *params)
 
 	uint32_t i, intdeventry;
 	u8 irq_config[PCH_MAX_IRQ_CONFIG];
-	const struct device *dev = pcidev_path_on_root(PCH_DEVFN_LPC);
+	const struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_LPC, __func__);
 	const struct soc_intel_skylake_config *config = config_of(dev);
 
 	/* Get Device Int Count */

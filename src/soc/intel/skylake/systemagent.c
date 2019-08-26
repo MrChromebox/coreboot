@@ -29,7 +29,7 @@
 
 bool soc_is_vtd_capable(void)
 {
-	struct device *const root_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *const root_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	return root_dev &&
 		!(pci_read_config32(root_dev, CAPID0_A) & VTD_DISABLE);
 }
@@ -42,7 +42,7 @@ bool soc_is_vtd_capable(void)
  */
 void soc_add_fixed_mmio_resources(struct device *dev, int *index)
 {
-	struct device *const igd_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	struct device *const igd_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 
 	static const struct sa_mmio_descriptor soc_fixed_resources[] = {
 		{ PCIEXBAR, CONFIG_MMCONF_BASE_ADDRESS, CONFIG_SA_PCIEX_LENGTH,

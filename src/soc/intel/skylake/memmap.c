@@ -115,7 +115,7 @@ static size_t get_prmrr_size(uintptr_t dram_base,
 /* Calculate Intel Traditional Memory size based on GSM, DSM, TSEG and DPR. */
 static size_t calculate_traditional_mem_size(uintptr_t dram_base)
 {
-	const struct device *igd_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	const struct device *igd_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	uintptr_t traditional_mem_base = dram_base;
 	size_t traditional_mem_size;
 
@@ -145,7 +145,7 @@ static size_t calculate_traditional_mem_size(uintptr_t dram_base)
  */
 static size_t calculate_reserved_mem_size(uintptr_t dram_base)
 {
-	const struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	const struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	uintptr_t reserve_mem_base = dram_base;
 	size_t reserve_mem_size;
 	const struct soc_intel_skylake_config *config;

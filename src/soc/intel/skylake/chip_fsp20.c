@@ -102,7 +102,7 @@ static void pcie_update_device_tree(const struct pcie_entry *pcie_rp_group,
 
 	for (group = 0; group < pci_groups; group++) {
 		devfn0 = pcie_rp_group[group].devfn;
-		func0 = pcidev_path_on_root(devfn0);
+		func0 = pcidev_path_on_root_debug(devfn0, __func__);
 		if (func0 == NULL)
 			continue;
 
@@ -119,7 +119,7 @@ static void pcie_update_device_tree(const struct pcie_entry *pcie_rp_group,
 		 */
 		for (i = 1; i < pcie_rp_group[group].func_count;
 				i++, devfn += inc) {
-			struct device *dev = pcidev_path_on_root(devfn);
+			struct device *dev = pcidev_path_on_root_debug(devfn, __func__);
 			if (dev == NULL || !dev->enabled)
 				continue;
 
@@ -353,7 +353,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	}
 
 	/* If ISH is enabled, enable ISH elements */
-	dev = pcidev_path_on_root(PCH_DEVFN_ISH);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_ISH, __func__);
 	params->PchIshEnable = dev ? dev->enabled : 0;
 
 	params->PchHdaEnable = config->EnableAzalia;
@@ -429,11 +429,10 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 		fill_vr_domain_config(params, i, &config->domain_vr_config[i]);
 
 	/* Show SPI controller if enabled in devicetree.cb */
-	dev = pcidev_path_on_root(PCH_DEVFN_SPI);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_SPI, __func__);
 	params->ShowSpiController = dev ? dev->enabled : 0;
 
 	/* Enable xDCI controller if enabled in devicetree and allowed */
-	dev = pcidev_path_on_root(PCH_DEVFN_USBOTG);
 	if (dev) {
 		if (!xdci_can_enable())
 			dev->enabled = 0;
@@ -443,7 +442,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	}
 
 	/* Enable or disable Gaussian Mixture Model in devicetree */
-	dev = pcidev_path_on_root(SA_DEVFN_GMM);
+	dev = pcidev_path_on_root_debug(SA_DEVFN_GMM, __func__);
 	params->GmmEnable = dev ? dev->enabled : 0;
 
 	/*

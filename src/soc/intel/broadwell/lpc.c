@@ -365,7 +365,7 @@ static void pch_cg_init(struct device *dev)
 {
 	u32 reg32;
 	u16 reg16;
-	struct device *igd_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	struct device *igd_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 
 	/* DMI */
 	RCBA32_OR(0x2234, 0xf);

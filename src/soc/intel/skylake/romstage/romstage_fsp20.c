@@ -259,7 +259,7 @@ static void soc_primary_gfx_config_params(FSP_M_CONFIG *m_cfg,
 {
 	const struct device *dev;
 
-	dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	if (!dev || !dev->enabled) {
 		/*
 		 * If iGPU is disabled or not defined in the devicetree.cb,

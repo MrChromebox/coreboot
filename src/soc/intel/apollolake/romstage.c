@@ -293,7 +293,7 @@ static void soc_memory_init_params(FSPM_UPD *mupd)
 static void parse_devicetree_setting(FSPM_UPD *m_upd)
 {
 #if CONFIG(SOC_INTEL_GLK)
-	DEVTREE_CONST struct device *dev = pcidev_path_on_root(PCH_DEVFN_NPK);
+	DEVTREE_CONST struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_NPK, __func__);
 	if (!dev)
 		return;
 

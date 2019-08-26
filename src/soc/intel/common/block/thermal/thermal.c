@@ -62,7 +62,7 @@ void pch_thermal_configuration(void)
 	struct device *dev;
 	struct resource *res;
 
-	dev = pcidev_path_on_root(PCH_DEVFN_THERMAL);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_THERMAL, __func__);
 	if (!dev) {
 		printk(BIOS_ERR, "ERROR: PCH_DEVFN_THERMAL device not found!\n");
 		return;

@@ -75,7 +75,7 @@ void usb_xhci_disable_unused(bool (*ext_usb_xhci_en_cb)(unsigned int port_type,
 	struct drivers_usb_acpi_config *config;
 	bool enable;
 
-	xhci = pcidev_path_on_root(PCH_DEVFN_XHCI);
+	xhci = pcidev_path_on_root_debug(PCH_DEVFN_XHCI, __func__);
 	if (!xhci) {
 		printk(BIOS_ERR, "%s: Could not locate XHCI device in DT\n", __func__);
 		return;

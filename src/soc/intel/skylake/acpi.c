@@ -550,7 +550,7 @@ void generate_cpu_entries(struct device *device)
 
 static unsigned long acpi_fill_dmar(unsigned long current)
 {
-	struct device *const igfx_dev = pcidev_path_on_root(SA_DEVFN_IGD);
+	struct device *const igfx_dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 	const u32 gfx_vtbar = MCHBAR32(GFXVTBAR) & ~0xfff;
 	const bool gfxvten = MCHBAR32(GFXVTBAR) & 1;
 

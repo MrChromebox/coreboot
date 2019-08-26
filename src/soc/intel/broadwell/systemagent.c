@@ -32,20 +32,20 @@
 
 u8 systemagent_revision(void)
 {
-	struct device *sa_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *sa_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	return pci_read_config8(sa_dev, PCI_REVISION_ID);
 }
 
 uintptr_t sa_get_tolud_base(void)
 {
-	struct device *sa_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *sa_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	/* Bit 0 is lock bit, not part of address */
 	return pci_read_config32(sa_dev, TOLUD) & ~1;
 }
 
 uintptr_t sa_get_gsm_base(void)
 {
-	struct device *sa_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *sa_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 	/* Bit 0 is lock bit, not part of address */
 	return pci_read_config32(sa_dev, BGSM) & ~1;
 }
@@ -294,7 +294,7 @@ static void mc_add_dram_resources(struct device *dev, int *resource_cnt)
 	uint64_t mc_values[NUM_MAP_ENTRIES];
 	unsigned long dpr_size = 0;
 	u32 dpr_reg;
-	struct device *sa_dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	struct device *sa_dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 
 	/* Read in the MAP registers and report their values. */
 	mc_read_map_entries(dev, &mc_values[0]);

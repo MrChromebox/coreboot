@@ -94,18 +94,18 @@ static uint16_t get_sku_icc_max(int domain)
 
 	static uint16_t mch_id = 0, igd_id = 0, lpc_id = 0;
 	if (!mch_id) {
-		struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+		struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 		mch_id = pci_read_config16(dev, PCI_DEVICE_ID);
 	}
 	if (!igd_id) {
-		struct device *dev = pcidev_path_on_root(SA_DEVFN_IGD);
+		struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 		if (dev)
 			igd_id = pci_read_config16(dev, PCI_DEVICE_ID);
 		else
 			igd_id = 0xffff;
 	}
 	if (!lpc_id) {
-		struct device *dev = pcidev_path_on_root(PCH_DEVFN_LPC);
+		struct device *dev = pcidev_path_on_root_debug(PCH_DEVFN_LPC, __func__);
 		lpc_id = pci_read_config16(dev, PCI_DEVICE_ID);
 	}
 
@@ -225,11 +225,11 @@ static uint16_t get_sku_ac_dc_loadline(const int domain)
 {
 	static uint16_t mch_id = 0, igd_id = 0;
 	if (!mch_id) {
-		struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+		struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_ROOT, __func__);
 		mch_id = pci_read_config16(dev, PCI_DEVICE_ID);
 	}
 	if (!igd_id) {
-		struct device *dev = pcidev_path_on_root(SA_DEVFN_IGD);
+		struct device *dev = pcidev_path_on_root_debug(SA_DEVFN_IGD, __func__);
 		if (dev)
 			igd_id = pci_read_config16(dev, PCI_DEVICE_ID);
 		else

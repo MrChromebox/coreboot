@@ -236,7 +236,7 @@ static uintptr_t gspi_calc_base_addr(unsigned int gspi_bus)
 	if (devfn < 0)
 		return 0;
 
-	dev = pcidev_path_on_root(devfn);
+	dev = pcidev_path_on_root_debug(devfn, __func__);
 	if (!dev || !dev->enabled)
 		return 0;
 
@@ -474,7 +474,7 @@ static int gspi_ctrlr_setup(const struct spi_slave *dev)
 	 * devfn is already validated as part of gspi_ctrlr_params_init.
 	 * No need to revalidate it again.
 	 */
-	device = pcidev_path_on_root(devfn);
+	device = pcidev_path_on_root_debug(devfn, __func__);
 
 	/* Ensure controller is in D0 state */
 	lpss_set_power_state(device, STATE_D0);

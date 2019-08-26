@@ -53,7 +53,7 @@ static uint8_t get_param_value(const config_t *config, uint32_t dev_offset)
 {
 	struct device *dev;
 
-	dev = pcidev_path_on_root(serial_io_dev[dev_offset]);
+	dev = pcidev_path_on_root_debug(serial_io_dev[dev_offset], __func__);
 	if (!dev || !dev->enabled)
 		return PCH_SERIAL_IO_INDEX(PchSerialIoDisabled);
 
@@ -175,7 +175,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	params->PchLockDownRtcMemoryLock = 0;
 
 	/* SATA */
-	dev = pcidev_path_on_root(PCH_DEVFN_SATA);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_SATA, __func__);
 	if (!dev)
 		params->SataEnable = 0;
 	else {
@@ -189,7 +189,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	}
 
 	/* Lan */
-	dev = pcidev_path_on_root(PCH_DEVFN_GBE);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_GBE, __func__);
 	if (!dev)
 		params->PchLanEnable = 0;
 	else {
@@ -273,7 +273,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	}
 
 	/* Enable xDCI controller if enabled in devicetree and allowed */
-	dev = pcidev_path_on_root(PCH_DEVFN_USBOTG);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_USBOTG, __func__);
 	if (dev) {
 		if (!xdci_can_enable())
 			dev->enabled = 0;
@@ -288,7 +288,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 #endif
 
 	/* Enable CNVi Wifi if enabled in device tree */
-	dev = pcidev_path_on_root(PCH_DEVFN_CNViWIFI);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_CNViWIFI, __func__);
 #if CONFIG(SOC_INTEL_COMETLAKE)
 	if (dev)
 		params->CnviMode = dev->enabled;
@@ -315,7 +315,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	       sizeof(config->PcieRpHotPlug));
 
 	/* eMMC and SD */
-	dev = pcidev_path_on_root(PCH_DEVFN_EMMC);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_EMMC, __func__);
 	if (!dev)
 		params->ScsEmmcEnabled = 0;
 	else {
@@ -330,7 +330,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 		}
 	}
 
-	dev = pcidev_path_on_root(PCH_DEVFN_SDCARD);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_SDCARD, __func__);
 	if (!dev) {
 		params->ScsSdCardEnabled = 0;
 	} else {
@@ -342,7 +342,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 #endif
 	}
 
-	dev = pcidev_path_on_root(PCH_DEVFN_UFS);
+	dev = pcidev_path_on_root_debug(PCH_DEVFN_UFS, __func__);
 	if (!dev)
 		params->ScsUfsEnabled = 0;
 	else
