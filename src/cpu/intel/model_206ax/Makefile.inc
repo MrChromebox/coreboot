@@ -24,6 +24,9 @@ smm-y += tsc_freq.c
 
 smm-y += finalize.c
 
+cpu_microcode_bins += $(wildcard 3rdparty/intel-microcode/intel-ucode/06-2a-*)
+cpu_microcode_bins += $(wildcard 3rdparty/intel-microcode/intel-ucode/06-3a-*)
+
 cpu_incs-y += $(src)/cpu/intel/car/non-evict/cache_as_ram.S
 postcar-y += ../car/non-evict/exit_car.S
 
