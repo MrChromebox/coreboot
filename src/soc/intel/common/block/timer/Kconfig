@@ -5,8 +5,7 @@ config SOC_INTEL_COMMON_BLOCK_TIMER
 
 config USE_LEGACY_8254_TIMER
 	bool "Use Legacy 8254 Timer"
-	default y if PAYLOAD_SEABIOS || VGA_ROM_RUN
-	default n
+	default y
 	help
 	  Setting this makes the Legacy 8254 Timer available by disabling
 	  clock gating. This needs to be enabled in order to boot a legacy
