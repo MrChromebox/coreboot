@@ -76,6 +76,7 @@ const struct reg_script pch_interrupt_init_script[] = {
 static void pch_enable_lpc(void)
 {
 	/* Lookup device tree in romstage */
+	const struct device *dev;
 	const config_t *config;
 
 	dev = dev_find_slot(0, PCI_DEVFN(PCH_DEV_SLOT_LPC, 0));
