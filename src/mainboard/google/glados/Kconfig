@@ -63,9 +63,6 @@ config DEVICETREE
 	string
 	default "variants/$(CONFIG_VARIANT_DIR)/devicetree.cb"
 
-config INTEL_GMA_VBT_FILE
-	default "3rdparty/fsp/KabylakeFspBinPkg/SampleCode/Vbt/Vbt.bin"
-
 config MAX_CPUS
 	int
 	default 8
