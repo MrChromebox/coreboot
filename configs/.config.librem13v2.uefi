@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="MrChromebox-4.11"
+CONFIG_LOCALVERSION="MrChromebox-4.11.1"
 CONFIG_USE_BLOBS=y
 CONFIG_VENDOR_PURISM=y
 CONFIG_IFD_BIN_PATH="blobs/mainboard/purism/librem_skl/descriptor.bin"

@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="MrChromebox-4.11"
+CONFIG_LOCALVERSION="MrChromebox-4.11.1"
 CONFIG_USE_BLOBS=y
 CONFIG_VENDOR_GOOGLE=y
 CONFIG_FSP_FILE="blobs/mainboard/google/celes/fsp.bin"
