@@ -213,4 +213,17 @@ config VBOOT
 config UART_FOR_CONSOLE
 	int
 	default 2
+
+config SUBSYSTEM_VENDOR_ID
+	hex
+	default 0x1AE0
+
+config SUBSYSTEM_DEVICE_ID
+	hex
+	default 0x006C
+
+config ACPI_SUBSYSTEM_ID
+	string
+	default "1AE0006C"
+
 endif # BOARD_GOOGLE_BASEBOARD_POPPY
