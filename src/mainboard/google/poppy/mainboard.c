@@ -9,6 +9,8 @@
 
 #include <variant/gpio.h>
 
+#define SUBSYSTEM_ID 0x1AE0006C
+
 static void mainboard_init(struct device *dev)
 {
 	mainboard_ec_init();
@@ -30,6 +32,8 @@ static unsigned long mainboard_write_acpi_tables(const struct device *device,
 
 	if (nhlt == NULL)
 		return start_addr;
+
+	nhlt->subsystem_id = SUBSYSTEM_ID;
 
 	variant_nhlt_init(nhlt);
 	variant_nhlt_oem_overrides(&oem_id, &oem_table_id, &oem_revision);
