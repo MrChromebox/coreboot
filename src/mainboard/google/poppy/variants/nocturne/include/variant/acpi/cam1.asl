@@ -58,7 +58,10 @@ Scope (\_SB.PCI0.I2C5)
 
 		Method (_STA, 0, NotSerialized)  /* _STA: Status */
 		{
-			Return (0x0F)
+			If (LEqual(_OSI("Linux"), 1)) {
+				Return (0xF)
+			}
+			Return (0x0)
 		}
 
 		Name (_CRS, ResourceTemplate ()
