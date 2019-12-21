@@ -21,4 +21,8 @@ Device (CIO2)
 	Name (_ADR, 0x00140003)
 	Name (_DDN, "Camera and Imaging Subsystem")
 	Name (CAMD, 0x00)
+	Method (_STA, 0, NotSerialized)  /* _STA: Status */
+	{
+		Return (0x0B)
+	}
 }
