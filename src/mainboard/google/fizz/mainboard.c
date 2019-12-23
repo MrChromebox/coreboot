@@ -20,6 +20,8 @@
 
 #include <variant/gpio.h>
 
+#define SUBSYSTEM_ID 0x1AE0006C
+
 #define FIZZ_SKU_ID_I7_U42  0x4
 #define FIZZ_SKU_ID_I5_U42  0x5
 #define FIZZ_SKU_ID_I3_U42  0x6
@@ -225,6 +227,8 @@ static unsigned long mainboard_write_acpi_tables(
 	nhlt = nhlt_init();
 	if (!nhlt)
 		return start_addr;
+
+	nhlt->subsystem_id = SUBSYSTEM_ID;
 
 	variant_nhlt_init(nhlt);
 	variant_nhlt_oem_overrides(&oem_id, &oem_table_id, &oem_revision);
