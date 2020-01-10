@@ -76,7 +76,14 @@ void acpi_create_fadt(acpi_fadt_t *fadt, acpi_facs_t *facs, void *dsdt)
 	fadt->firmware_ctrl = (u32) facs;
 	fadt->dsdt = (u32) dsdt;
 	fadt->reserved = 0;		/* reserved, should be 0 ACPI 3.0 */
-	fadt->preferred_pm_profile = FADT_PM_PROFILE;
+	if (CONFIG(SYSTEM_TYPE_CONVERTIBLE) ||
+	    CONFIG(SYSTEM_TYPE_LAPTOP))
+		fadt->preferred_pm_profile = PM_MOBILE;
+	else if (CONFIG(SYSTEM_TYPE_DETACHABLE) ||
+		 CONFIG(SYSTEM_TYPE_TABLET))
+		fadt->preferred_pm_profile = PM_TABLET;
+	else
+		fadt->preferred_pm_profile = FADT_PM_PROFILE;
 	fadt->sci_int = 9;		/* IRQ 09 - ACPI SCI */
 
 	if (CONFIG(HAVE_SMI_HANDLER)) {
