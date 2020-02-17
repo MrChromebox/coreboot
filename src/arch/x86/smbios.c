@@ -383,6 +383,16 @@ const char *__weak smbios_mainboard_bios_version(void)
 		return coreboot_version;
 }
 
+u8 __weak smbios_mainboard_ec_major_version(void)
+{
+	return 0xff;
+}
+
+u8 __weak smbios_mainboard_ec_minor_version(void)
+{
+	return 0xff;
+}
+
 static int smbios_write_type0(unsigned long *current, int handle)
 {
 	struct smbios_type0 *t = (struct smbios_type0 *)*current;
@@ -428,6 +438,9 @@ static int smbios_write_type0(unsigned long *current, int handle)
 
 	t->system_bios_major_release = coreboot_major_revision;
 	t->system_bios_minor_release = coreboot_minor_revision;
+
+	t->ec_major_release = smbios_mainboard_ec_major_version();
+	t->ec_minor_release = smbios_mainboard_ec_minor_version();
 
 	t->bios_characteristics =
 		BIOS_CHARACTERISTICS_PCI_SUPPORTED |

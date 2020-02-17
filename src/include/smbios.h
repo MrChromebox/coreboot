@@ -45,6 +45,8 @@ const char *smbios_mainboard_manufacturer(void);
 const char *smbios_mainboard_product_name(void);
 const char *smbios_mainboard_serial_number(void);
 const char *smbios_mainboard_version(void);
+u8 smbios_mainboard_ec_major_version(void);
+u8 smbios_mainboard_ec_minor_version(void);
 
 const char *smbios_mainboard_bios_version(void);
 const char *smbios_mainboard_asset_tag(void);
