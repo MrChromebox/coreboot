@@ -1405,6 +1405,17 @@ void google_chromeec_init(void)
 		/* re-run version command & print */
 		google_chromeec_get_version();
 	}
+
+	/* Enable auto fan control if applicable */
+	struct chromeec_command cec_cmd;
+	cec_cmd.cmd_code = EC_CMD_THERMAL_AUTO_FAN_CTRL;
+	cec_cmd.cmd_version = 0;
+	cec_cmd.cmd_data_in = NULL;
+	cec_cmd.cmd_data_out = NULL;
+	cec_cmd.cmd_size_in = 0;
+	cec_cmd.cmd_size_out = 0;
+	cec_cmd.cmd_dev_index = 0;
+	google_chromeec_command(&cec_cmd);
 }
 
 int google_chromeec_get_num_pd_ports(unsigned int *num_ports)
