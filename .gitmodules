@@ -65,3 +65,6 @@
 	path = util/goswid
 	url = https://review.coreboot.org/goswid
 	branch = trunk
+[submodule "3rdparty/purism-blobs"]
+	path = 3rdparty/purism-blobs
+	url = https://source.puri.sm/coreboot/purism-blobs.git
