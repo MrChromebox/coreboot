@@ -12,7 +12,7 @@ Device (SIO)
 	{
 		Name (_UID, 0)
 		Name (_HID, EISAID("PNP0303"))
-		Name (_CID, EISAID("PNP030B"))
+		Name (_CID, Package() { EISAID("PNP030B"), "GGL0303" } )
 
 		Method (_STA, 0, NotSerialized)
 		{
