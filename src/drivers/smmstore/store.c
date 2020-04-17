@@ -262,3 +262,109 @@ int smmstore_clear_region(void)
 
 	return 0;
 }
+
+
+/* implementation of Version 2 */
+
+#define BLOCK_SIZE (64 * KiB)
+
+int smmstore_update_info(struct smmstore_params_info *out)
+{
+	struct region_device store;
+
+	if (lookup_store(&store) < 0) {
+		printk(BIOS_WARNING, "smm store: reading region failed\n");
+		return -1;
+	}
+
+	out->block_size = BLOCK_SIZE;
+	out->num_blocks = region_device_sz(&store) / BLOCK_SIZE;
+	/* FIXME: Broken EDK2 always assumes memory mapped Firmware Block Volumes */
+	out->mmap_addr = (uintptr_t)rdev_mmap_full(&store);
+
+	printk(BIOS_DEBUG, "smm store: %d # blocks with size 0x%x\n",
+	       out->num_blocks, out->block_size);
+
+	return 0;
+}
+
+int smmstore_rawread_region(void *buf, uint32_t offset, uint32_t block_id, uint32_t *bufsize)
+{
+	struct region_device store;
+	ssize_t ret;
+
+	if (lookup_store(&store) < 0) {
+		printk(BIOS_WARNING, "reading region failed\n");
+		return -1;
+	}
+
+	if (offset >= BLOCK_SIZE || (block_id * BLOCK_SIZE) >= region_device_sz(&store)) {
+		printk(BIOS_WARNING, "access out of region requested\n");
+		return -1;
+	}
+
+	ssize_t tx = MIN(*bufsize, (block_id + 1) * BLOCK_SIZE - offset);
+	printk(BIOS_DEBUG, "smm store: reading %p block %d, offset=0x%x, size=%zx\n",
+	       buf, block_id, offset, tx);
+	ret = rdev_readat(&store, buf, block_id * BLOCK_SIZE + offset, tx);
+	if (ret < 0)
+		return -1;
+
+	*bufsize = ret;
+
+	return 0;
+}
+
+int smmstore_rawwrite_region(void *buf, uint32_t offset, uint32_t block_id, uint32_t *bufsize)
+{
+	struct region_device store;
+	ssize_t ret;
+
+	if (lookup_store(&store) < 0) {
+		printk(BIOS_WARNING, "writing region failed\n");
+		return -1;
+	}
+	printk(BIOS_DEBUG, "smm store: writing %p block %d, offset=0x%x, size=%x\n",
+	       buf, block_id, offset, *bufsize);
+
+	if (offset >= BLOCK_SIZE || (block_id * BLOCK_SIZE) >= region_device_sz(&store)) {
+		printk(BIOS_WARNING, "access out of region requested\n");
+		return -1;
+	}
+
+	if (rdev_chain(&store, &store, block_id * BLOCK_SIZE + offset, *bufsize)) {
+		printk(BIOS_WARNING, "not enough space for new data\n");
+		return -1;
+	}
+
+	ret = rdev_writeat(&store, buf, 0, *bufsize);
+	if (ret < 0)
+		return -1;
+
+	*bufsize = ret;
+
+	return 0;
+}
+
+int smmstore_rawclear_region(uint32_t block_id)
+{
+	struct region_device store;
+
+	if (lookup_store(&store) < 0) {
+		printk(BIOS_WARNING, "smm store: reading region failed\n");
+		return -1;
+	}
+
+	if ((block_id * BLOCK_SIZE) >= region_device_sz(&store)) {
+		printk(BIOS_WARNING, "access out of region requested\n");
+		return -1;
+	}
+
+	ssize_t res = rdev_eraseat(&store, block_id * BLOCK_SIZE, BLOCK_SIZE);
+	if (res != BLOCK_SIZE) {
+		printk(BIOS_WARNING, "smm store: erasing block failed\n");
+		return -1;
+	}
+
+	return 0;
+}

@@ -59,6 +59,47 @@ uint32_t smmstore_exec(uint8_t command, void *param)
 		break;
 	}
 
+	case SMMSTORE_CMD_INFO: {
+		printk(BIOS_DEBUG, "Returning SMM store info\n");
+		struct smmstore_params_info *params = param;
+			if (smmstore_update_info(params) == 0)
+				ret = SMMSTORE_RET_SUCCESS;
+		break;
+	}
+	case SMMSTORE_CMD_RAW_READ: {
+		printk(BIOS_DEBUG, "Raw read from SMM store, param = %p\n", param);
+		struct smmstore_params_raw_read *params = param;
+		void *buf = (void *)(uintptr_t)params->buf;
+
+		if (range_check(buf, params->bufsize) != 0)
+			break;
+
+		if (smmstore_rawread_region(buf, params->bufoffset,
+					    params->block_id, &params->bufsize) == 0)
+			ret = SMMSTORE_RET_SUCCESS;
+		break;
+	}
+	case SMMSTORE_CMD_RAW_WRITE: {
+		printk(BIOS_DEBUG, "Raw write to SMM store, param = %p\n", param);
+		struct smmstore_params_raw_write *params = param;
+		void *buf = (void *)(uintptr_t)params->buf;
+
+		if (range_check(buf, params->bufsize) != 0)
+			break;
+
+		if (smmstore_rawwrite_region(buf, params->bufoffset,
+					     params->block_id, &params->bufsize) == 0)
+			ret = SMMSTORE_RET_SUCCESS;
+		break;
+	}
+	case SMMSTORE_CMD_RAW_CLEAR: {
+		printk(BIOS_DEBUG, "Raw clear SMM store, param = %p\n", param);
+		struct smmstore_params_raw_clear *params = param;
+
+		if (smmstore_rawclear_region(params->block_id) == 0)
+			ret = SMMSTORE_RET_SUCCESS;
+		break;
+	}
 	default:
 		printk(BIOS_DEBUG,
 			"Unknown SMM store command: 0x%02x\n", command);
