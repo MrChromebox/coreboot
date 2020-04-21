@@ -150,9 +150,9 @@ endif
 
 # DSP firmware settings files.
 ifeq ($(CONFIG_SOC_INTEL_GEMINILAKE),y)
-NHLT_BLOB_PATH = 3rdparty/blobs/soc/intel/glk/nhlt-blobs
+NHLT_BLOB_PATH = blobs/soc/intel/glk/nhlt-blobs
 else
-NHLT_BLOB_PATH = 3rdparty/blobs/soc/intel/apollolake/nhlt-blobs
+NHLT_BLOB_PATH = blobs/soc/intel/apl/nhlt-blobs
 endif
 DMIC_1CH_48KHZ_16B = dmic-1ch-48khz-16b.bin
 DMIC_2CH_48KHZ_16B = dmic-2ch-48khz-16b.bin
