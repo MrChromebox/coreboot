@@ -135,6 +135,7 @@ static void fill_ssdt_typec_device(const struct device *dev)
 	acpigen_write_name_string("_HID", GOOGLE_CHROMEEC_USBC_DEVICE_HID);
 	acpigen_write_name_string("_DDN", "ChromeOS EC Embedded Controller "
 				"USB Type-C Control");
+	acpigen_write_STA(ACPI_STATUS_DEVICE_HIDDEN_ON);
 
 	for (i = 0; i < num_ports; ++i) {
 		rv = google_chromeec_get_pd_port_caps(i, &port_caps);
