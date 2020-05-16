@@ -8,7 +8,7 @@ config PAYLOAD_FILE
 
 choice
 	prompt "Tianocore payload"
-	default TIANOCORE_COREBOOTPAYLOAD
+	default TIANOCORE_UEFIPAYLOAD
 	help
 	  Select which type of payload Tianocore will build (default is CorebootPayload)
 	  CorebootPayload: MrChromebox's customized version of Tianocore which works on most

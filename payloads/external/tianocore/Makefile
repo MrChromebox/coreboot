@@ -17,7 +17,7 @@ ifeq ($(CONFIG_TIANOCORE_UEFIPAYLOAD),y)
 bootloader=UefiPayloadPkg
 logo_pkg=MdeModulePkg
 build_flavor=-D BOOTLOADER=COREBOOT -D PCIE_BASE=$(CONFIG_MMCONF_BASE_ADDRESS) -DPS2_KEYBOARD_ENABLE
-TAG=upstream/master
+TAG=origin/uefipayloadpkg
 else
 bootloader=CorebootPayloadPkg
 logo_pkg=CorebootPayloadPkg
