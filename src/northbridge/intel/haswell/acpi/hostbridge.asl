@@ -201,3 +201,9 @@ Device (PDRC)
 
 /* Integrated graphics 0:2.0 */
 #include <drivers/intel/gma/acpi/gfx.asl>
+
+/* Intel Mini-HD 0:03.0 */
+Device (HDAU)
+{
+	Name (_ADR, 0x00030000)
+}
