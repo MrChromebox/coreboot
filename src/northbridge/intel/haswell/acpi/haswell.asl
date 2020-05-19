@@ -33,3 +33,9 @@ Device (PDRC)
 		Return(PDRS)
 	}
 }
+
+// Intel Mini-HD 0:03.0
+Device (HDAU)
+{
+	Name (_ADR, 0x00030000)
+}
