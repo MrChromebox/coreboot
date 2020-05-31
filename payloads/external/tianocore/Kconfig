@@ -113,6 +113,7 @@ config TIANOCORE_GOP_FILE
 	default "blobs/soc/intel/kbl/IntelGopDriver.efi" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
 	default "blobs/soc/intel/glk/IntelGopDriver.efi" if SOC_INTEL_GLK
 	default "blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
+	default "blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE
 	default "IntelGopDriver.efi"
 
 endif
