@@ -42,7 +42,3 @@
 	url = https://review.coreboot.org/amd_blobs
 	update = none
 	ignore = dirty
-[submodule "private/blobs"]
-    	path = blobs
-	url =
-    	ignore = all
