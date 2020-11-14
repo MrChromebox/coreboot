@@ -176,7 +176,7 @@ config VBOOT
 	select VBOOT_EARLY_EC_SYNC
 
 config USE_PM_ACPI_TIMER
-	default n
+	default y
 
 config EDK2_BOOT_TIMEOUT
 	int
