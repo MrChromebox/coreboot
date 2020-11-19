@@ -20,6 +20,9 @@ chip soc/intel/cannonlake
 		[PchSerialIoIndexUART2] = PchSerialIoDisabled,
 	}"
 
+	# Enable System Agent fixed frequency
+	register "SaGv" = "SaGv_FixedHigh"
+
 	# USB configuration
 	register "usb2_ports[0]" = "{
 		.enable = 1,
