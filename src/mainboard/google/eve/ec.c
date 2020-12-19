@@ -15,4 +15,10 @@ void mainboard_ec_init(void)
 	};
 
 	google_chromeec_events_init(&info, acpi_is_wakeup_s3());
+
+#ifdef EC_ENABLE_KEYBOARD_BACKLIGHT
+	/* Turn off keyboard backlight after turning on in romstage */
+	if (!acpi_is_wakeup_s3())
+		google_chromeec_kbbacklight(0);
+#endif
 }
