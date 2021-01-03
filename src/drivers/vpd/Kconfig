@@ -2,7 +2,7 @@
 
 config VPD
 	bool "Support for Vital Product Data tables"
-	default n
+	default y
 	help
 	  Enable support for flash based vital product data.
 
@@ -23,4 +23,4 @@ config VPD_FMAP_SIZE
 config SMBIOS_SERIAL_FROM_VPD
 	bool "Load device serial from VPD"
 	depends on VPD && GENERATE_SMBIOS_TABLES
-	default n
+	default y if !DRIVERS_GENERIC_CBFS_SERIAL && !VENDOR_EMULATION
