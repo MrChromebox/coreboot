@@ -14,7 +14,7 @@ bsw=('banon' 'celes' 'cyan' 'edgar' 'kefka' 'reks' 'relm' \
 	'setzer' 'terra' 'ultima' 'wizpig');
 skl=('asuka' 'caroline' 'cave' 'chell' 'lars'  'sentry')
 kbl=('atlas' 'eve' 'fizz' 'nami' 'nautilus' 'nocturne' 'rammus' 'soraka')
-str=('aleena' 'barla' 'careena' 'kasumi' 'liara')
+str=('aleena' 'barla' 'careena' 'kasumi' 'liara' 'treeya')
 cml=('akemi' 'dragonair' 'dratini' 'duffy' 'faffy' 'helios' 'jinlon' 'kaisa' \
      'kindred' 'kled' 'kohaku' 'nightfury' 'noibat' 'wyvern')
 purism=('librem13v1' 'librem15v2' 'librem13v2' 'librem15v3' 'librem13v4' \
