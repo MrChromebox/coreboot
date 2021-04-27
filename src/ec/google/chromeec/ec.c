@@ -1586,7 +1586,7 @@ int google_chromeec_swsync(void)
 
 	/* If in RW and need to update, return/reboot to RO */
 	if (need_update && google_chromeec_get_current_image() == EC_IMAGE_RW
-			&& !CONFIG(BOARD_GOOGLE_BASEBOARD_PUFF)) {
+			&& !CONFIG(BOARD_GOOGLE_BASEBOARD_PUFF) && !CONFIG(BOARD_GOOGLE_BASEBOARD_TREMBYLE)) {
 		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW needs update but in RW; rebooting to RO\n");
 		google_chromeec_reboot_ro();
 		return -1;
@@ -1609,7 +1609,7 @@ int google_chromeec_swsync(void)
 		}
 
 		/* PUFF-based boards need a full reset here */
-		if (CONFIG(BOARD_GOOGLE_BASEBOARD_PUFF)) {
+		if (CONFIG(BOARD_GOOGLE_BASEBOARD_PUFF) || CONFIG(BOARD_GOOGLE_BASEBOARD_TREMBYLE)) {
 			google_chromeec_reboot_ro();
 		}
 
