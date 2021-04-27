@@ -8,7 +8,7 @@ romstage-y += romstage.c
 
 ramstage-y += chromeos.c
 ramstage-y += ec.c
-ramstage-y += sku_id.c
+ramstage-$(CONFIG_EC_GOOGLE_CHROMEEC_SKUID) += sku_id.c
 
 verstage-y += verstage.c
 
