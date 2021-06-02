@@ -62,8 +62,6 @@ config TIANOCORE_CBMEM_LOGGING
 	  You may want to increase the default cbmem buffer size when selecting
 	  this option, especially if using a debug (vs release) build.
 
-endif
-
 config TIANOCORE_BOOTSPLASH_IMAGE
 	bool "Use a custom bootsplash image"
 	help
@@ -82,6 +80,8 @@ config TIANOCORE_BOOTSPLASH_FILE
 
 	  If an absolute path is not given, the path will assumed to be
 	  relative to the coreboot root directory.
+
+endif
 
 config TIANOCORE_BOOT_TIMEOUT
 	int
