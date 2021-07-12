@@ -38,9 +38,15 @@ ifeq ($(CONFIG_TIANOCORE_GOP_DRIVER), y)
 GOP=-DUSE_PLATFORM_GOP
 endif
 
+ifeq ($(CONFIG_TIANOCORE_ABOVE_4G_DECODE),y)
+4G=-D ENABLE_ABOVE_4G_DECODE=TRUE
+else
+4G=-D ENABLE_ABOVE_4G_DECODE=FALSE
+endif
+
 TIMEOUT=-D PLATFORM_BOOT_TIMEOUT=$(CONFIG_TIANOCORE_BOOT_TIMEOUT)
 
-BUILD_STR=-q -a IA32 -a X64 -p UefiPayloadPkg/UefiPayloadPkg.dsc -t COREBOOT -b $(BUILD_TYPE) $(TIMEOUT) $(build_flavor) $(CBMEM) $(GOP)
+BUILD_STR=-q -a IA32 -a X64 -p UefiPayloadPkg/UefiPayloadPkg.dsc -t COREBOOT -b $(BUILD_TYPE) $(TIMEOUT) $(build_flavor) $(CBMEM) $(GOP) $(4G)
 
 all: clean build
 

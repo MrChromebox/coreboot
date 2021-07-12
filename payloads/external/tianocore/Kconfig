@@ -97,6 +97,14 @@ config TIANOCORE_GOP_FILE
 	default "blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE
 	default "IntelGopDriver.efi"
 
+config TIANOCORE_ABOVE_4G_DECODE
+	bool "Enable Above 4G Decode"
+	default n
+	help
+	  Enable above 4G Decode. If the operating system being booted by tiancore
+	  e.g. Qubes (Xen) requires the DXE core and drivers below 4GB disable this
+	  option. If you are unsure, leave it enabled.
+
 endif
 
 config TIANOCORE_BOOT_TIMEOUT
