@@ -6,7 +6,7 @@ export SHELL := env bash
 project_name=Tianocore
 project_dir=$(CURDIR)/tianocore
 project_git_repo=https://github.com/mrchromebox/edk2
-project_git_branch=uefipayloadpkg
+project_git_branch=uefipayload_202107
 upstream_git_repo=https://github.com/tianocore/edk2
 
 build_flavor=-D BOOTLOADER=COREBOOT -D PCIE_BASE=$(CONFIG_MMCONF_BASE_ADDRESS) -DPS2_KEYBOARD_ENABLE
