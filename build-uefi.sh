@@ -43,10 +43,14 @@ do
 	make olddefconfig
 	make -j$(nproc)
 	cp ./build/coreboot.rom ./${filename}
-	if [ "${device}" == "nightfury" ]; then
+	if [[ "${device}" == "nightfury" ]]; then
 		cbfstool ${filename} add -t raw -n vbt-nightfury-qled.bin -f blobs/mainboard/google/nightfury/vbt-nightfury-qled.bin
-	elif [ "${device}" == "drawman" ]; then
+	elif [[ "${device}" == "drawman" ]]; then
 		cbfstool ${filename} add -t raw -n vbt_drawman.bin -f blobs/mainboard/google/drawcia/vbt_drawman.bin
+	elif [[ "${device}" == *"bloog"* ]]; then
+		cbfstool ${filename} add -t raw -n vbt_blooguard.bin -f blobs/mainboard/google/bloog/vbt_blooguard.bin
+		cbfstool ${filename} add -t raw -n vbt_dorp_hdmi.bin -f blobs/mainboard/google/bloog/vbt_dorp_hdmi.bin
+		cbfstool ${filename} add -t raw -n vbt_vortininja.bin -f blobs/mainboard/google/bloog/vbt_vortininja.bin
 	fi
 	cbfstool ${filename} print
 	sha1sum ${filename} > ${filename}.sha1
