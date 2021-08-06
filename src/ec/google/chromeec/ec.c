@@ -607,7 +607,8 @@ int google_chromeec_flash_erase(uint32_t offset, uint32_t size)
 		.cmd_dev_index = 0,
 	};
 
-	if (google_chromeec_command(&cmd) != 0)
+	if (google_chromeec_command(&cmd) != 0 &&
+			!CONFIG(BOARD_GOOGLE_EVE))
 		return -1;
 
 	return 0;
@@ -1729,8 +1730,11 @@ int google_chromeec_flash_update_rw(const uint8_t *image, int image_size)
 	 *
 	 */
 	ret = google_chromeec_flash_erase(rw_offset, rw_size);
-	if (ret)
+	if (ret) {
+		printk(BIOS_DEBUG, "ChromeEC: flash erase failed, %d\n", ret);
 		return ret;
+	}
+
 	/* Write the image */
 	return(google_chromeec_flash_write(image, rw_offset, image_size));
 }
