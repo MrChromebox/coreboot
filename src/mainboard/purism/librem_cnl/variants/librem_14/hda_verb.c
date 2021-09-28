@@ -5,7 +5,7 @@
 const u32 cim_verb_data[] = {
 	0x10ec0256,	/* Codec Vendor/Device ID: Realtek ALC256 */
 	0x10ec0256,	/* Subsystem ID */
-	16,		/* Number of entries */
+	18,		/* Number of entries */
 
 	AZALIA_RESET(0x1),
 
@@ -14,12 +14,12 @@ const u32 cim_verb_data[] = {
 	AZALIA_PIN_CFG(0, 0x13, 0x411111f0), /* NC */
 	AZALIA_PIN_CFG(0, 0x14, 0x90170110), /* Internal speakers */
 	AZALIA_PIN_CFG(0, 0x18, 0x411111f0), /* NC */
-	AZALIA_PIN_CFG(0, 0x19, 0x04a11130), /* Jack analog mic */
+	AZALIA_PIN_CFG(0, 0x19, 0x04a11120), /* Jack analog mic */
 	AZALIA_PIN_CFG(0, 0x1a, 0x411111f0), /* NC */
 	AZALIA_PIN_CFG(0, 0x1b, 0x411111f0), /* NC */
 	AZALIA_PIN_CFG(0, 0x1d, 0x411111f0), /* NC */
 	AZALIA_PIN_CFG(0, 0x1e, 0x411111f0), /* NC */
-	AZALIA_PIN_CFG(0, 0x21, 0x04211120), /* Jack analog out */
+	AZALIA_PIN_CFG(0, 0x21, 0x04211020), /* Jack analog out */
 
 	/* Hidden SW reset */
 	0x0205001a,
@@ -44,6 +44,18 @@ const u32 cim_verb_data[] = {
 	0x02046901,
 	0x02050007,
 	0x02040200,
+
+	/* CTIA jack type */
+	0x02050045,
+	0x0204d489,
+	0x0205001b,
+	0x02040e6b,
+
+	/* Jack reset, autodetect */
+	0x0205004a,
+	0x02048000,
+	0x0205004a,
+	0x0204000e,
 
 	0x8086280b,	/* Codec Vendor/Device ID: Intel CometPoint HDMI */
 	0x80860101,	/* Subsystem ID */
