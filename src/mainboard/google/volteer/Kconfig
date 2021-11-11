@@ -217,4 +217,8 @@ config VARIANT_HAS_MIPI_CAMERA
 	bool
 	default n
 
+config ACPI_SUBSYSTEM_ID
+	string
+	default "1AE0006C"
+
 endif # BOARD_GOOGLE_BASEBOARD_VOLTEER

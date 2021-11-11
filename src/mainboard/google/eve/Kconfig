@@ -75,6 +75,6 @@ config USE_PM_ACPI_TIMER
 
 config ACPI_SUBSYSTEM_ID
 	string
-	default "1AE0006B"
+	default "1AE0006C"
 
 endif
