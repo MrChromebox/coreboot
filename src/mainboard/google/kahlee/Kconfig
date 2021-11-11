@@ -148,4 +148,8 @@ endif
 config USE_PSPSECUREOS
 	def_bool n
 
+config ACPI_SUBSYSTEM_ID
+	string
+	default "1AE0006C"
+
 endif # BOARD_GOOGLE_BASEBOARD_KAHLEE
