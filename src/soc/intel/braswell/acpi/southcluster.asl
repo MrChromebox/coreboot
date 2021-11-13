@@ -249,6 +249,15 @@ Device (IOSF)
 		Store (Add (CONFIG_ECAM_MMCONF_BASE_ADDRESS, 0xD0), RBAS)
 		Return (^RBUF)
 	}
+
+	Method (_STA)
+	{
+#if CONFIG(CHROMEOS)
+		Return (0xF)
+#else
+		Return (0x0)
+#endif
+	}
 }
 
 /* LPC Bridge 0:1f.0 */
