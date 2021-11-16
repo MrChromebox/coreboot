@@ -1,6 +1,6 @@
 [submodule "3rdparty/blobs"]
 	path = 3rdparty/blobs
-	url = https://review.coreboot.org/blobs.git
+	url = https://github.com/MrChromebox/blobs.git
 	update = none
 	ignore = dirty
 [submodule "util/nvidia-cbootimage"]
