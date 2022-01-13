@@ -46,15 +46,17 @@ config TIANOCORE_REPOSITORY
 	string "URL to git repository for edk2"
 	default "https://github.com/tianocore/edk2" if TIANOCORE_UPSTREAM
 	default "https://github.com/mrchromebox/edk2" if TIANOCORE_UEFIPAYLOAD || TIANOCORE_COREBOOTPAYLOAD
+	default "" if TIANOCORE_CUSTOM
 	help
 	  coreboot supports an array of build options which can be found below. These options
 	  will only have an effect if the relevant options exist in the target repository.
 
 config TIANOCORE_TAG_OR_REV
 	string "Insert a commit's SHA-1 or a branch name"
-	default "origin/uefipayload_202107" if TIANOCORE_UEFIPAYLOAD
+	default "origin/upp_202111" if TIANOCORE_UEFIPAYLOAD
 	default "origin/master" if TIANOCORE_UPSTREAM
 	default "origin/coreboot_fb" if TIANOCORE_COREBOOTPAYLOAD
+	default "" if TIANOCORE_CUSTOM
 	help
 	  The commit's SHA-1 or branch name of the revision to use. This must exist in
 	  TIANOCORE_REPOSITORY, and in the case of a branch name, prefixed with origin i.e.
@@ -94,7 +96,7 @@ config TIANOCORE_ABOVE_4G_MEMORY
 
 config TIANOCORE_BOOTSPLASH_FILE
 	string "Tianocore Bootsplash path and filename"
-	default "bootsplash.bmp"
+	default ""
 	help
 	  Select this option if you have a bootsplash image that you would
 	  like to be used. If this option is not selected, the default
@@ -121,7 +123,7 @@ config TIANOCORE_BOOTSPLASH_FILE
 
 config TIANOCORE_BOOT_MANAGER_ESCAPE
 	bool "Use Escape key for Boot Manager"
-	default n
+	default y
 	help
 	  Use Escape as the hot-key to access the Boot Manager. This replaces
 	  the default key of F2.
@@ -144,7 +146,7 @@ config TIANOCORE_CBMEM_LOGGING
 
 config TIANOCORE_FOLLOW_BGRT_SPEC
 	bool "Center logo 38.2% from the top of screen"
-	default n
+	default y
 	help
 	  Follow the BGRT Specification implemented by Microsoft and
 	  the Boot Logo 38.2% will be vertically centered 38.2% from
