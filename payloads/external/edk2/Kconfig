@@ -141,7 +141,7 @@ config EDK2_BOOTSPLASH_FILE
 
 config EDK2_BOOT_MANAGER_ESCAPE
 	bool "Use Escape key for Boot Manager"
-	default n
+	default y
 	help
 	  Use Escape as the hot-key to access the Boot Manager. This replaces
 	  the default key of F2.
@@ -178,7 +178,7 @@ config EDK2_CPU_TIMER_LIB
 
 config EDK2_FOLLOW_BGRT_SPEC
 	bool "Center logo 38.2% from the top of screen"
-	default n
+	default y
 	help
 	  Follow the BGRT Specification implemented by Microsoft and
 	  the Boot Logo 38.2% will be vertically centered 38.2% from
@@ -186,11 +186,11 @@ config EDK2_FOLLOW_BGRT_SPEC
 
 config EDK2_FULL_SCREEN_SETUP
 	bool "Use the full screen for the edk2 frontpage"
-	default y
+	default n
 	help
 	  Allow edk2 to use the full screen to display the frontpage
-	  (aka "Boot Menu"). With this option disable, it will be
-	  limited to 640x480.
+	  (aka "Boot Menu"). With this option disabled, it will be
+	  limited to ~1024x768.
 
 config EDK2_HAVE_EFI_SHELL
 	bool "Include EFI Shell"
@@ -235,7 +235,7 @@ config EDK2_SECURE_BOOT_SUPPORT
 
 config EDK2_CUSTOM_BUILD_PARAMS
 	string "edk2 additional custom build parameters"
-	default "-D VARIABLE_SUPPORT=SMMSTORE" if EDK2_REPO_MRCHROMEBOX && SMMSTORE_V2
+	default "-D VARIABLE_SUPPORT=SMMSTORE" if EDK2_REPO_MRCHROMEBOX && SMMSTORE_V2 && !SOC_AMD_PICASSO
 	help
 	  edk2 has build options that are not modified by coreboot, and these can be
 	  found in `UefiPayloadPkg/UefiPayloadPkg.dsc`. Forks may also support
