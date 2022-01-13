@@ -16,7 +16,7 @@ config PAYLOAD_NONE
 if !PAYLOAD_NONE
 choice
 	prompt "Payload to add"
-	default PAYLOAD_SEABIOS if ARCH_X86
+	default PAYLOAD_EDK2 if ARCH_X86
 
 config PAYLOAD_ELF
 	bool "An ELF executable payload"
