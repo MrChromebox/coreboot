@@ -52,7 +52,7 @@ config TIANOCORE_REPOSITORY
 
 config TIANOCORE_TAG_OR_REV
 	string "Insert a commit's SHA-1 or a branch name"
-	default "origin/uefipayload_202107" if TIANOCORE_UEFIPAYLOAD
+	default "origin/upp_202111" if TIANOCORE_UEFIPAYLOAD
 	default "origin/master" if TIANOCORE_UPSTREAM
 	default "origin/coreboot_fb" if TIANOCORE_COREBOOTPAYLOAD
 	help
@@ -121,7 +121,7 @@ config TIANOCORE_BOOTSPLASH_FILE
 
 config TIANOCORE_BOOT_MANAGER_ESCAPE
 	bool "Use Escape key for Boot Manager"
-	default n
+	default y
 	help
 	  Use Escape as the hot-key to access the Boot Manager. This replaces
 	  the default key of F2.
@@ -144,7 +144,7 @@ config TIANOCORE_CBMEM_LOGGING
 
 config TIANOCORE_FOLLOW_BGRT_SPEC
 	bool "Center logo 38.2% from the top of screen"
-	default n
+	default y
 	help
 	  Follow the BGRT Specification implemented by Microsoft and
 	  the Boot Logo 38.2% will be vertically centered 38.2% from
