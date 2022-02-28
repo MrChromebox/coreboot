@@ -317,6 +317,7 @@ chip soc/intel/skylake
 				register "stop_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPP_C3)"
 				register "stop_delay_ms" = "20"
 				register "stop_off_delay_ms" = "2"
+				register "disable_gpio_export_in_crs" = "1"
 				device i2c 39 on end
 			end
 			chip drivers/i2c/hid
