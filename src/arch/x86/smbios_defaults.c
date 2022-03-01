@@ -115,7 +115,10 @@ __weak const char *smbios_system_version(void)
 
 __weak const char *smbios_system_manufacturer(void)
 {
-	return smbios_mainboard_manufacturer();
+	if (CONFIG(MAINBOARD_HAS_CHROMEOS))
+		return "Google";
+	else
+		return smbios_mainboard_manufacturer();
 }
 
 __weak const char *smbios_system_product_name(void)
