@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="MrChromebox-4.15"
+CONFIG_LOCALVERSION="MrChromebox-4.16"
 CONFIG_VENDOR_PURISM=y
 CONFIG_CBFS_SIZE=0x5C0000
 CONFIG_IFD_BIN_PATH="3rdparty/purism-blobs/mainboard/purism/librem_bdw/descriptor.bin"

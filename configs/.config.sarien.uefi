@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="MrChromebox-4.15"
+CONFIG_LOCALVERSION="MrChromebox-4.16"
 CONFIG_VENDOR_GOOGLE=y
 # CONFIG_CONSOLE_SERIAL is not set
 CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/sarien/vbt.bin"
