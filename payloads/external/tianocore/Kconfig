@@ -46,6 +46,7 @@ config TIANOCORE_REPOSITORY
 	string "URL to git repository for edk2"
 	default "https://github.com/tianocore/edk2" if TIANOCORE_UPSTREAM
 	default "https://github.com/mrchromebox/edk2" if TIANOCORE_UEFIPAYLOAD || TIANOCORE_COREBOOTPAYLOAD
+	default "" if TIANOCORE_CUSTOM
 	help
 	  coreboot supports an array of build options which can be found below. These options
 	  will only have an effect if the relevant options exist in the target repository.
@@ -55,6 +56,7 @@ config TIANOCORE_TAG_OR_REV
 	default "origin/upp_202111" if TIANOCORE_UEFIPAYLOAD
 	default "origin/master" if TIANOCORE_UPSTREAM
 	default "origin/coreboot_fb" if TIANOCORE_COREBOOTPAYLOAD
+	default "" if TIANOCORE_CUSTOM
 	help
 	  The commit's SHA-1 or branch name of the revision to use. This must exist in
 	  TIANOCORE_REPOSITORY, and in the case of a branch name, prefixed with origin i.e.
@@ -94,17 +96,13 @@ config TIANOCORE_ABOVE_4G_MEMORY
 
 config TIANOCORE_BOOTSPLASH_FILE
 	string "Tianocore Bootsplash path and filename"
-	default "bootsplash.bmp"
+	default "payloads/external/tianocore/coreboot_logo.bmp"
 	help
-	  Select this option if you have a bootsplash image that you would
-	  like to be used. If this option is not selected, the default
-	  coreboot logo (European Brown Hare) will used.
-
 	  The path and filename of the file to use as graphical bootsplash
 	  image. The file must be an uncompressed BMP, in BMP 3 format.
 
-	  Linux can create these with the below command:
-	      `convert splosh.bmp BMP3:splash.bmp`
+	  Override the default option if you have a custom bootsplash image that
+	  you would like to be used; otherwise, the coreboot logo will be used.
 
 	  This image will also be used as the BGRT boot image, which may
 	  persist through your OS boot process.
