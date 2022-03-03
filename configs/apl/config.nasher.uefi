@@ -2,11 +2,11 @@ CONFIG_LOCALVERSION="MrChromebox-4.16"
 CONFIG_VENDOR_GOOGLE=y
 CONFIG_NO_POST=y
 CONFIG_INCLUDE_NHLT_BLOBS=y
-CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/reef/coral/flashdescriptor.bin"
+CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/reef/flashdescriptor.bin"
 CONFIG_BOARD_GOOGLE_CORAL=y
+CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME="Nasher"
 # CONFIG_CONSOLE_SERIAL is not set
 CONFIG_NEED_IFWI=y
-CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME="Whitetip"
 CONFIG_IFWI_FILE_NAME="3rdparty/blobs/mainboard/google/reef/coral/ifwi.bin"
 CONFIG_HAVE_IFD_BIN=y
 CONFIG_CPU_MICROCODE_CBFS_EXTERNAL_BINS=y
