@@ -2,6 +2,7 @@ CONFIG_LOCALVERSION="MrChromebox-4.16"
 CONFIG_VENDOR_GOOGLE=y
 CONFIG_NO_POST=y
 CONFIG_CBFS_SIZE=0x450000
+# CONFIG_CONSOLE_SERIAL is not set
 CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/volteer/voxel/vbt.bin"
 CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/volteer/voxel/flashdescriptor.bin"
 CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/volteer/voxel/me.bin"
@@ -15,3 +16,4 @@ CONFIG_NO_GFX_INIT=y
 CONFIG_INTEL_GMA_ADD_VBT=y
 CONFIG_PAYLOAD_TIANOCORE=y
 CONFIG_TIANOCORE_GOP_DRIVER=y
+CONFIG_TIANOCORE_TAG_OR_REV="origin/upp_202111_test"
