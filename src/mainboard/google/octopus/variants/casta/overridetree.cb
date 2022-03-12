@@ -143,6 +143,7 @@ chip soc/intel/apollolake
 				register "generic.irq" = "ACPI_IRQ_WAKE_LEVEL_LOW(GPIO_135_IRQ)"
 				register "generic.wake" = "GPE0_DW3_27"
 				register "generic.probed" = "1"
+				register "generic.disable_gpio_export_in_crs" = "1"
 				register "hid_desc_reg_offset" = "0xE"
 				device i2c 40 on end
 			end
