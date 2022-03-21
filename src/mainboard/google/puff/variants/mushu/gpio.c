@@ -39,7 +39,7 @@ const struct pad_config *override_gpio_table(size_t *num)
 
 /*
  * GPIOs configured before ramstage
- * Note: the Hatch platform's romstage will configure
+ * Note: the Puff platform's romstage will configure
  * the MEM_STRAP_* (a.k.a GPIO_MEM_CONFIG_*) pins
  * as inputs before it reads them, so they are not
  * needed in this table.
