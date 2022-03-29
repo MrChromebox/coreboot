@@ -346,6 +346,9 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_161, 1, DEEP, UP_20K, Tx1RxDCRx0, DISPUPD), /* AVS_I2S1_MCLK -- LTE_OFF_ODL */
 
 	PAD_CFG_GPI(GPIO_189, NONE, DEEP), /* EC_IN_RW */
+
+	/* EN_PP3300_TOUCHSCREEN */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 1, DEEP, NONE, Tx0RxDCRx0, DISPUPD),
 };
 
 const struct pad_config *__weak

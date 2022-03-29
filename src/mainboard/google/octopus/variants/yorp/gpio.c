@@ -31,6 +31,11 @@ static const struct pad_config early_gpio_table[] = {
 	 */
 	PAD_CFG_NF_IOSSTATE_IOSTERM(GPIO_151, UP_20K, DEEP, NF2, HIZCRx1,
 				    ENPU), /* ESPI_IO1 */
+
+	/* GPIO_105 -- TOUCHSCREEN_RST */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_105, 0, DEEP, NONE, Tx1RxDCRx0, DISPUPD),
+	/* EN_PP3300_TOUCHSCREEN */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 1, DEEP, NONE, Tx0RxDCRx0, DISPUPD),
 };
 
 const struct pad_config *variant_early_gpio_table(size_t *num)
