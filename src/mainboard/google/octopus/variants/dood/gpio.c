@@ -16,8 +16,10 @@ enum {
 static const struct pad_config default_override_table[] = {
 	PAD_NC(GPIO_104, UP_20K),
 
+	/* GPIO_105 -- TOUCHSCREEN_RST */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_105, 0, DEEP, NONE, Tx1RxDCRx0, DISPUPD),
 	/* EN_PP3300_TOUCHSCREEN */
-	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 0, DEEP, NONE, Tx0RxDCRx0,
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 1, DEEP, NONE, Tx0RxDCRx0,
 				     DISPUPD),
 
 	PAD_NC(GPIO_213, DN_20K),
@@ -27,8 +29,10 @@ static const struct pad_config lte_override_table[] = {
 	/* Default override table. */
 	PAD_NC(GPIO_104, UP_20K),
 
+	/* GPIO_105 -- TOUCHSCREEN_RST */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_105, 0, DEEP, NONE, Tx1RxDCRx0, DISPUPD),
 	/* EN_PP3300_TOUCHSCREEN */
-	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 0, DEEP, NONE, Tx0RxDCRx0,
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 1, DEEP, NONE, Tx0RxDCRx0,
 				     DISPUPD),
 
 	PAD_NC(GPIO_213, DN_20K),
@@ -69,6 +73,10 @@ static const struct pad_config lte_early_override_table[] = {
 
 	/* AVS_I2S1_MCLK -- PLT_RST_LTE_L */
 	PAD_CFG_GPO(GPIO_161, 0, DEEP),
+
+	/* EN_PP3300_TOUCHSCREEN */
+	PAD_CFG_GPO_IOSSTATE_IOSTERM(GPIO_146, 1, DEEP, NONE, Tx0RxDCRx0,
+				     DISPUPD),
 };
 
 const struct pad_config *variant_early_override_gpio_table(size_t *num)
