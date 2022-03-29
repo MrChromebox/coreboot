@@ -105,7 +105,7 @@ chip soc/intel/apollolake
 				register "name" = ""RT58""
 				register "desc" = ""Realtek RT5682""
 				register "irq" = "ACPI_IRQ_LEVEL_LOW(GPIO_137_IRQ)"
-				register "probed" = "1"
+				register "detect" = "1"
 				register "property_count" = "1"
 				# Set the jd_src to RT5668_JD1 for jack detection
 				register "property_list[0].type" = "ACPI_DP_TYPE_INTEGER"
@@ -120,7 +120,7 @@ chip soc/intel/apollolake
 				register "desc" = ""ELAN Touchpad""
 				register "irq" = "ACPI_IRQ_WAKE_EDGE_LOW(GPIO_135_IRQ)"
 				register "wake" = "GPE0_DW3_27"
-				register "probed" = "1"
+				register "detect" = "1"
 				device i2c 15 on end
 			end
 		end	# - I2C 6
@@ -129,7 +129,7 @@ chip soc/intel/apollolake
 				register "hid" = ""ELAN0001""
 				register "desc" = ""ELAN Touchscreen""
 				register "irq" = "ACPI_IRQ_LEVEL_LOW(GPIO_212_IRQ)"
-				register "probed" = "1"
+				register "detect" = "1"
 				register "reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_105)"
 				register "reset_delay_ms" = "20"
 				register "enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_146)"
@@ -141,7 +141,7 @@ chip soc/intel/apollolake
 				register "generic.hid" = ""GDIX0000""
 				register "generic.desc" = ""Goodix Touchscreen""
 				register "generic.irq" = "ACPI_IRQ_LEVEL_LOW(GPIO_212_IRQ)"
-				register "generic.probed" = "1"
+				register "generic.detect" = "1"
 				register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_105)"
 				register "generic.reset_delay_ms" = "120"
 				register "generic.reset_off_delay_ms" = "3"
@@ -155,7 +155,7 @@ chip soc/intel/apollolake
 				register "generic.hid" = ""GTCH7503""
 				register "generic.desc" = ""G2TOUCH Touchscreen""
 				register "generic.irq" = "ACPI_IRQ_LEVEL_LOW(GPIO_212_IRQ)"
-				register "generic.probed" = "1"
+				register "generic.detect" = "1"
 				register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_105)"
 				register "generic.reset_delay_ms" = "50"
 				register "generic.enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_146)"
