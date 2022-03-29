@@ -276,7 +276,7 @@ chip soc/intel/skylake
 				register "generic.hid" = ""WCOMCOHO""
 				register "generic.desc" = ""WCOM Touchscreen""
 				register "generic.irq" = "ACPI_IRQ_LEVEL_LOW(GPP_E7_IRQ)"
-				register "generic.probed" = "1"
+				register "generic.detect" = "1"
 				register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPP_E3)"
 				register "generic.reset_delay_ms" = "10"
 				register "generic.enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPP_C22)"
@@ -328,7 +328,7 @@ chip soc/intel/skylake
 				register "name" = ""RT53""
 				register "desc" = ""Realtek RT5663""
 				register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_BOTH(GPP_D9)"
-				register "probed" = "1"
+				register "detect" = "1"
 				device i2c 13 on end
 			end
 		end # I2C #5
