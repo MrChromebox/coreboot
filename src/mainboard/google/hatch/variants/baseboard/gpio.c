@@ -166,7 +166,7 @@ static const struct pad_config gpio_table[] = {
 	/* D8  : WWAN_CONFIG_3 */
 	PAD_NC(GPP_D8, NONE),
 	/* D9  : GPP_D9 ==> EN_PP3300_DX_TOUCHSCREEN */
-	PAD_CFG_GPO(GPP_D9, 0, DEEP),
+	PAD_CFG_GPO(GPP_D9, 1, DEEP),
 	/* D10 : GPP_D10 ==> NC */
 	PAD_NC(GPP_D10, NONE),
 	/* D11 : GPP_D11 ==> NC */
@@ -178,7 +178,7 @@ static const struct pad_config gpio_table[] = {
 	/* D14 : ISH_UART_TX */
 	PAD_NC(GPP_D14, NONE),
 	/* D15 : TOUCHSCREEN_RST_L */
-	PAD_CFG_GPO(GPP_D15, 0, DEEP),
+	PAD_CFG_GPO(GPP_D15, 1, DEEP),
 	/* D16 : USI_INT */
 	PAD_CFG_GPI_APIC(GPP_D16, NONE, PLTRST, LEVEL, NONE),
 	/* D17 : PCH_HP_SDW_CLK */

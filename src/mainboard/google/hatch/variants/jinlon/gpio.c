@@ -94,6 +94,8 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_GPI(GPP_C22, NONE, DEEP),
 	/* C23 : WLAN_PE_RST# */
 	PAD_CFG_GPO(GPP_C23, 1, DEEP),
+	/* D9  : GPP_D9 ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_D9, 1, DEEP),
 	/* E1  : M2_SSD_PEDET */
 	PAD_CFG_NF(GPP_E1, NONE, DEEP, NF1),
 	/* E5  : SATA_DEVSLP1 */
