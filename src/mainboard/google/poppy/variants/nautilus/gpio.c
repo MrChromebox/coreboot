@@ -116,7 +116,7 @@ static const struct pad_config gpio_table[] = {
 	/* C8  : UART0_RXD ==> CHP3_P3.3V_DX_WFCAM_EN */
 	PAD_CFG_GPO(GPP_C8, 0, DEEP),
 	/* C9  : UART0_TXD ==> CHP3_P3.3V_DX_DIG_EN */
-	PAD_CFG_GPO(GPP_C9, 0, DEEP),
+	PAD_CFG_GPO(GPP_C9, 1, DEEP),
 	/* C10 : UART0_RTS# ==> CHP3_CAM_PMIC_RST_L */
 	PAD_CFG_GPO(GPP_C10, 1, DEEP),
 	/* C11 : UART0_CTS# ==> CHP3_P3.3V_DX_UFCAM_EN */
@@ -141,8 +141,8 @@ static const struct pad_config gpio_table[] = {
 	PAD_CFG_NF(GPP_C20, NONE, DEEP, NF1),
 	/* C21 : UART2_TXD ==> CHP3_TX_SERVO_RX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
-	/* C22 : UART2_RTS# ==> CHP3_P3.3V_DX_TSP_EN */
-	PAD_CFG_GPO(GPP_C22, 0, DEEP),
+	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
 	/* C23 : UART2_CTS# ==> CHP3_PCH_WP*/
 	PAD_CFG_GPI(GPP_C23, UP_20K, DEEP),
 
@@ -334,6 +334,9 @@ static const struct pad_config early_gpio_table[] = {
 	/* C6  : SM1CLK ==> EC_IN_RW_OD */
 	PAD_CFG_GPI_GPIO_DRIVER(GPP_C6, UP_20K, DEEP),
 
+	/* C9  : UART0_TXD ==> CHP3_P3.3V_DX_DIG_EN */
+	PAD_CFG_GPO(GPP_C9, 1, DEEP),
+
 	/* C18 : I2C1_SDA ==> PCH_I2C1_H1_3V3_SDA */
 	PAD_CFG_NF(GPP_C18, NONE, DEEP, NF1),
 	/* C19 : I2C1_SCL ==> PCH_I2C1_H1_3V3_SCL */
@@ -344,6 +347,9 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_NF(GPP_C20, NONE, DEEP, NF1),
 	/* C21 : UART2_TXD ==> PCHTX_SERVORX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
+
+	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
 
 	/* C23 : UART2_CTS# ==> PCH_WP */
 	PAD_CFG_GPI(GPP_C23, UP_20K, DEEP),

@@ -143,7 +143,7 @@ static const struct pad_config gpio_table[] = {
 	/* C21 : UART2_TXD ==> PCHTX_SERVORX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
 	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
-	PAD_CFG_GPO(GPP_C22, 0, DEEP),
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
 	/* C23 : UART2_CTS# ==> PCH_WP */
 	PAD_CFG_GPI_GPIO_DRIVER(GPP_C23, UP_20K, DEEP),
 
@@ -203,7 +203,7 @@ static const struct pad_config gpio_table[] = {
 	/* E2  : SATAXPCIE2 ==> NC */
 	PAD_NC(GPP_E2, NONE),
 	/* E3  : CPU_GP0 ==> TOUCHSCREEN_RST_L */
-	PAD_CFG_GPO(GPP_E3, 0, DEEP),
+	PAD_CFG_GPO(GPP_E3, 1, DEEP),
 	/* E4  : SATA_DEVSLP0 ==> NC */
 	PAD_NC(GPP_E4, NONE),
 	/* E5  : SATA_DEVSLP1 ==> NC */
@@ -219,7 +219,7 @@ static const struct pad_config gpio_table[] = {
 	/* E10 : USB2_OC1# ==> USB_C1_OC_ODL */
 	PAD_CFG_NF(GPP_E10, NONE, DEEP, NF1),
 	/* E11 : USB2_OC2# ==> TOUCHSCREEN_STOP_L */
-	PAD_CFG_GPO(GPP_E11, 0, DEEP),
+	PAD_CFG_GPO(GPP_E11, 1, DEEP),
 	/* E12 : USB2_OC3# ==> USB2_OC3_L */
 	PAD_CFG_NF(GPP_E12, NONE, DEEP, NF1),
 	/* E13 : DDPB_HPD0 ==> USB_C0_DP_HPD */
@@ -357,6 +357,9 @@ static const struct pad_config early_gpio_table[] = {
 	/* C21 : UART2_TXD ==> PCHTX_SERVORX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
 
+	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
+
 	/* C23 : UART2_CTS# ==> PCH_WP */
 	PAD_CFG_GPI_GPIO_DRIVER(GPP_C23, UP_20K, DEEP),
 
@@ -374,4 +377,15 @@ const struct pad_config *variant_early_gpio_table(size_t *num)
 {
 	*num = ARRAY_SIZE(early_gpio_table);
 	return early_gpio_table;
+}
+
+static const struct pad_config romstage_gpio_table[] = {
+	/* E3  : CPU_GP0 ==> TOUCHSCREEN_RST_L */
+	PAD_CFG_GPO(GPP_E3, 1, DEEP),
+};
+
+const struct pad_config *variant_romstage_gpio_table(size_t *num)
+{
+	*num = ARRAY_SIZE(romstage_gpio_table);
+	return romstage_gpio_table;
 }
