@@ -11,6 +11,7 @@
 /* I2C bus operation for ramstage drivers */
 struct i2c_bus_operations {
 	int (*transfer)(struct device *, const struct i2c_msg *, size_t count);
+	bool (*detect)(struct device *dev, unsigned int addr);
 };
 
 /*
