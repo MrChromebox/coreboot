@@ -144,7 +144,7 @@ static const struct pad_config gpio_table[] = {
 	/* C21 : UART2_TXD ==> PCHTX_SERVORX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
 	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
-	PAD_CFG_GPO(GPP_C22, 0, DEEP),
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
 	/* C23 : UART2_CTS# ==> PCH_WP */
 	PAD_CFG_GPI_GPIO_DRIVER(GPP_C23, UP_20K, DEEP),
 
@@ -204,7 +204,7 @@ static const struct pad_config gpio_table[] = {
 	/* E2  : SATAXPCIE2 ==> NC */
 	PAD_NC(GPP_E2, NONE),
 	/* E3  : CPU_GP0 ==> TOUCHSCREEN_RST_L */
-	PAD_CFG_GPO(GPP_E3, 0, DEEP),
+	PAD_CFG_GPO(GPP_E3, 1, DEEP),
 	/* E4  : SATA_DEVSLP0 ==> NC */
 	PAD_NC(GPP_E4, NONE),
 	/* E5  : SATA_DEVSLP1 ==> NC */
@@ -354,6 +354,9 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_NF(GPP_C20, NONE, DEEP, NF1),
 	/* C21 : UART2_TXD ==> PCHTX_SERVORX_UART */
 	PAD_CFG_NF(GPP_C21, NONE, DEEP, NF1),
+
+	/* C22 : UART2_RTS# ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_C22, 1, DEEP),
 
 	/* C23 : UART2_CTS# ==> PCH_WP */
 	PAD_CFG_GPI_GPIO_DRIVER(GPP_C23, UP_20K, DEEP),
