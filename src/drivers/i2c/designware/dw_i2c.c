@@ -90,6 +90,9 @@ enum {
 	INTR_STAT_GEN_CALL		= (1 << 11),
 };
 
+/* Bit 0 is 7-bit NAK, bits 1 and 2 are 10-bit NAKs */
+#define INTR_STAT_TX_ABORT_SOURCE_NAK_MASK	0x7
+
 /* I2C Controller MMIO register space */
 struct dw_i2c_regs {
 	uint32_t control;		/* 0x0 */
@@ -478,6 +481,74 @@ static enum cb_err dw_i2c_transfer(unsigned int bus, const struct i2c_msg *msg, 
 	return _dw_i2c_transfer(bus, &orig_msg[start], count - start);
 }
 
+static bool dw_i2c_detect(struct device *dev, unsigned int addr)
+{
+	struct dw_i2c_regs *regs;
+	struct stopwatch sw;
+	bool found = false;
+
+	const int bus = dw_i2c_soc_dev_to_bus(dev);
+	if (bus == -1) {
+		printk(BIOS_ERR, "I2C bus from device %s not found\n",
+				dev_path(dev));
+		return CB_ERR;
+	}
+	regs = (struct dw_i2c_regs *)dw_i2c_base_address(bus);
+	if (!regs) {
+		printk(BIOS_ERR, "I2C bus %u base address not found\n", bus);
+		return CB_ERR;
+	}
+
+	/* Setup transaction */
+	write32(&regs->target_addr, addr);
+	dw_i2c_enable(regs);
+
+	stopwatch_init_usecs_expire(&sw, DW_I2C_TIMEOUT_US);
+
+	while (!(read32(&regs->status) & STATUS_TX_FIFO_NOT_FULL)) {
+		if (stopwatch_expired(&sw)) {
+			printk(BIOS_ERR, "I2C transmit timeout\n");
+			return CB_ERR;
+		}
+	}
+
+	/* stop immediately */
+	write32(&regs->cmd_data, CMD_DATA_STOP);
+	bool expired = false;
+
+	do {
+		const uint32_t stat = read32(&regs->raw_intr_stat);
+		const uint32_t src = read32(&regs->tx_abort_source);
+		if (stat & INTR_STAT_TX_ABORT) {
+			if (src & INTR_STAT_TX_ABORT_SOURCE_NAK_MASK)
+				found = false;
+
+			/* clear INTR_STAT_TX_ABORT */
+			read32(&regs->clear_tx_abrt_intr);
+			break;
+		} else if (stat & INTR_STAT_STOP_DET) {
+			found = true;
+			/* clear INTR_STST_STOP_DET */
+			read32(&regs->clear_stop_det_intr);
+			break;
+		}
+
+		expired = stopwatch_expired(&sw);
+	} while (!expired);
+
+	if (expired)
+		printk(BIOS_ERR, "Failed to detect stop bit or tx abort\n");
+
+	/* Wait for the bus to go idle */
+	if (dw_i2c_wait_for_bus_idle(regs) != CB_SUCCESS)
+		printk(BIOS_ERR, "I2C timeout waiting for bus %u idle\n", bus);
+
+	read32(&regs->clear_intr);
+	dw_i2c_disable(regs);
+
+	return found;
+}
+
 /* Global I2C bus handler, defined in include/device/i2c_simple.h */
 int platform_i2c_transfer(unsigned int bus, struct i2c_msg *msg, int count)
 {
@@ -848,4 +919,5 @@ static int dw_i2c_dev_transfer(struct device *dev,
 
 const struct i2c_bus_operations dw_i2c_bus_ops = {
 	.transfer = dw_i2c_dev_transfer,
+	.detect = dw_i2c_detect,
 };
