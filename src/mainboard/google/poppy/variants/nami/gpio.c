@@ -57,9 +57,9 @@ static const struct pad_config gpio_table[] = {
 	/* B2  : VRALERT# ==> NC */
 	PAD_NC(GPP_B2, NONE),
 	/* B3  : CPU_GP2 ==> TOUCHSCREEN_RST# */
-	PAD_CFG_GPO(GPP_B3, 0, DEEP),
+	PAD_CFG_GPO(GPP_B3, 1, DEEP),
 	/* B4  : CPU_GP3 ==> EN_PP3300_DX_TOUCHSCREEN */
-	PAD_CFG_GPO(GPP_B4, 0, DEEP),
+	PAD_CFG_GPO(GPP_B4, 1, DEEP),
 	/* B5  : SRCCLKREQ0# ==> NC */
 	PAD_NC(GPP_B5, NONE),
 	/* B6  : SRCCLKREQ1# ==> CLKREQ_PCIE#1 */
@@ -337,6 +337,8 @@ static const struct pad_config gpio_table[] = {
 
 /* Early pad configuration in bootblock */
 static const struct pad_config early_gpio_table[] = {
+	/* B4  : CPU_GP3 ==> EN_PP3300_DX_TOUCHSCREEN */
+	PAD_CFG_GPO(GPP_B4, 1, DEEP),
 	/* B15 : GSPI0_CS# ==> PCH_SPI_H1_3V3_CS# */
 	PAD_CFG_NF(GPP_B15, NONE, DEEP, NF1),
 	/* B16 : GSPI0_CLK ==> PCH_SPI_H1_3V3_CLK */
@@ -381,14 +383,14 @@ static const struct pad_config nami_default_sku_gpio_table[] = {
 	/* D17 : DMIC_CLK1 ==> SOC_DMIC_CLK1 */
 	PAD_CFG_NF(GPP_D17, NONE, DEEP, NF1),
 	/* C3  : SML0CLK ==> TOUCHSCREEN_DIS# */
-	PAD_CFG_GPO(GPP_C3, 0, DEEP),
+	PAD_CFG_GPO(GPP_C3, 1, DEEP),
 };
 
 static const struct pad_config no_dmic1_sku_gpio_table[] = {
 	/* D17 : DMIC_CLK1 ==> NC */
 	PAD_NC(GPP_D17, NONE),
 	/* C3  : SML0CLK ==> TOUCHSCREEN_DIS# */
-	PAD_CFG_GPO(GPP_C3, 0, DEEP),
+	PAD_CFG_GPO(GPP_C3, 1, DEEP),
 };
 
 static const struct pad_config pantheon_gpio_table[] = {
@@ -414,7 +416,7 @@ static const struct pad_config fpmcu_gpio_table[] = {
 	/* B22 : GSPI1_MOSI ==> PCH_SPI_FP_MOSI */
 	PAD_CFG_NF(GPP_B22, NONE, DEEP, NF1),
 	/* C3  : SML0CLK ==> TOUCHSCREEN_DIS# */
-	PAD_CFG_GPO(GPP_C3, 0, DEEP),
+	PAD_CFG_GPO(GPP_C3, 1, DEEP),
 	/* C9  : UART0_TXD ==> FP_RST_ODL */
 	PAD_CFG_GPO(GPP_C9, 1, DEEP),
 	/* D5  : ISH_I2C0_SDA ==> FPMCU_BOOT0 */
@@ -477,4 +479,16 @@ const struct pad_config *variant_sku_gpio_table(size_t *num)
 		break;
 	}
 	return board_gpio_tables;
+}
+
+
+static const struct pad_config romstage_gpio_table[] = {
+	/* B3  : CPU_GP2 ==> TOUCHSCREEN_RST# */
+	PAD_CFG_GPO(GPP_B3, 1, DEEP),
+};
+
+const struct pad_config *variant_romstage_gpio_table(size_t *num)
+{
+	*num = ARRAY_SIZE(romstage_gpio_table);
+	return romstage_gpio_table;
 }
