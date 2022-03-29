@@ -31,13 +31,15 @@ static const struct pad_config gpio_table[] = {
 	/* C7  : PEN_IRQ_OD_L */
 	PAD_CFG_GPI_APIC(GPP_C7, NONE, PLTRST, LEVEL, INVERT),
 	/* C12 : EN_PP3300_TSP_DX */
-	PAD_CFG_GPO(GPP_C12, 0, DEEP),
+	PAD_CFG_GPO(GPP_C12, 1, DEEP),
 	/* C13 : EC_PCH_INT_L - needs to wake the system */
 	PAD_CFG_GPI_IRQ_WAKE(GPP_C13, NONE, PLTRST, LEVEL, INVERT),
 	/* C15 : EN_PP3300_DIG_DX */
 	PAD_CFG_GPO(GPP_C15, 0, DEEP),
 	/* C23 : UART2_CTS# ==> NC */
 	PAD_NC(GPP_C23, NONE),
+	/* D15 : EN_PP3300_TSP_RST */
+	PAD_CFG_GPO(GPP_C12, 1, DEEP),
 	/* D16 : TOUCHSCREEN_INT_L */
 	PAD_CFG_GPI_APIC(GPP_D16, NONE, PLTRST, LEVEL, INVERT),
 	/* E23 : GPP_E23 ==> NC */
@@ -100,6 +102,8 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_NF(GPP_C8, NONE, DEEP, NF1),
 	/* C9  : UART_PCH_TX_DEBUG_RX */
 	PAD_CFG_NF(GPP_C9, NONE, DEEP, NF1),
+	/* C12 : EN_PP3300_TSP_DX */
+	PAD_CFG_GPO(GPP_C12, 1, DEEP),
 	/* C14 : BT_DISABLE_L */
 	PAD_CFG_GPO(GPP_C14, 0, DEEP),
 	/* PCH_WP_OD */
