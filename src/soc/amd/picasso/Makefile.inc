@@ -194,7 +194,7 @@ OPT_EFS_SPI_MICRON_FLAG=$(call add_opt_prefix, $(CONFIG_EFS_SPI_MICRON_FLAG), --
 
 OPT_PSP_SOFTFUSE=$(call add_opt_prefix, $(PSP_SOFTFUSE), --soft-fuse)
 
-ifeq ($(CONFIG_VBOOT),)
+ifneq ($(CONFIG_VBOOT_SLOTS_RW_A),y)
 OPT_APOB0_NV_SIZE=$(OPT_APOB_NV_SIZE)
 OPT_APOB0_NV_BASE=$(OPT_APOB_NV_BASE)
 endif
