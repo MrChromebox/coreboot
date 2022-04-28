@@ -1586,7 +1586,7 @@ int google_chromeec_swsync(void)
 
 	/* If in RW and need to update, return/reboot to RO */
 	if (need_update && google_chromeec_get_current_image() == EC_IMAGE_RW
-			&& !CONFIG(SOC_INTEL_CSE_LITE_SKU)) {
+			&& !CONFIG(SOC_INTEL_CSE_LITE_SKU) && !CONFIG(BOARD_GOOGLE_BASEBOARD_FIZZ)) {
 		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW needs update but in RW; rebooting to RO\n");
 		google_chromeec_reboot_ro();
 		return -1;
