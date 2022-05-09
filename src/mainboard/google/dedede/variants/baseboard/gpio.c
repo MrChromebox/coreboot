@@ -165,9 +165,9 @@ static const struct pad_config gpio_table[] = {
 	/* D4  : TOUCH_INT_ODL */
 	PAD_CFG_GPI_APIC(GPP_D4, NONE, PLTRST, LEVEL, INVERT),
 	/* D5  : TOUCH_RESET_L */
-	PAD_CFG_GPO(GPP_D5, 0, DEEP),
+	PAD_CFG_GPO(GPP_D5, 1, DEEP),
 	/* D6  : EN_PP3300_TOUCH_S0 */
-	PAD_CFG_GPO(GPP_D6, 0, DEEP),
+	PAD_CFG_GPO(GPP_D6, 1, DEEP),
 	/* D7  : EMR_INT_ODL */
 	PAD_NC(GPP_D7, NONE),
 	/* D8  : GPP_D8/GSPI2_CS0B/UART0A_RXD */
@@ -433,6 +433,11 @@ static const struct pad_config early_gpio_table[] = {
 
 	/* D1  : WLAN_PERST_L */
 	PAD_CFG_GPO(GPP_D1, 1, DEEP),
+
+	/* D5  : TOUCH_RESET_L */
+	PAD_CFG_GPO(GPP_D5, 0, DEEP),
+	/* D6  : EN_PP3300_TOUCH_S0 */
+	PAD_CFG_GPO(GPP_D6, 1, DEEP),
 
 	/* H19 : BT_DISABLE_L */
 	PAD_CFG_GPO(GPP_H19, 0, DEEP),
