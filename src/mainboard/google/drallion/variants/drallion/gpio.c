@@ -65,7 +65,7 @@ static const struct pad_config gpio_table[] = {
 /* GSPI0_MOSI */	PAD_NC(GPP_B18, NONE),
 /* GSPI1_CS# */		PAD_NC(GPP_B19, NONE), /* HDD_FALL_INT (nostuff) */
 /* GSPI1_CLK */		PAD_NC(GPP_B20, NONE),
-/* GSPI1_MISO */	PAD_CFG_GPO(GPP_B21, 0, DEEP), /* PCH_3.3V_TS_EN */
+/* GSPI1_MISO */	PAD_CFG_GPO(GPP_B21, 1, DEEP), /* PCH_3.3V_TS_EN */
 /* GSPI1_MOSI */	PAD_NC(GPP_B22, NONE),
 /* SML1ALERT# */	PAD_NC(GPP_B23, DN_20K),
 
@@ -111,7 +111,7 @@ static const struct pad_config gpio_table[] = {
 /* ISH_UART0_RXD */	PAD_CFG_NF(GPP_D13, UP_20K, DEEP, NF1),
 			/* ISH_CPU_UART0_TX */
 /* ISH_UART0_TXD */	PAD_CFG_NF(GPP_D14, NONE, DEEP, NF1),
-/* ISH_UART0_RTS# */	PAD_CFG_GPO(GPP_D15, 0, DEEP), /* TS_RST */
+/* ISH_UART0_RTS# */	PAD_CFG_GPO(GPP_D15, 1, DEEP), /* TS_RST */
 /* ISH_UART0_CTS# */	PAD_CFG_GPI(GPP_D16, NONE, PLTRST),
 /* DMIC_CLK1 */		PAD_CFG_GPI(GPP_D17, NONE, PLTRST), /* KB_DET# */
 /* DMIC_DATA1 */	PAD_CFG_GPI_APIC(GPP_D18, NONE, PLTRST,
@@ -132,7 +132,7 @@ static const struct pad_config gpio_table[] = {
 /* SATA_DEVSLP0 */	PAD_NC(GPP_E4, NONE),
 /* SATA_DEVSLP1 */	PAD_CFG_NF(GPP_E5, NONE, DEEP, NF1), /* M3042_DEVSLP */
 /* SATA_DEVSLP2 */	PAD_CFG_NF(GPP_E6, NONE, DEEP, NF1), /* M2280_DEVSLP */
-/* CPU_GP1 */		PAD_CFG_GPO(GPP_E7, 0, PLTRST), /* TOUCH_SCREEN_PD# */
+/* CPU_GP1 */		PAD_CFG_GPO(GPP_E7, 1, PLTRST), /* TOUCH_SCREEN_PD# */
 /* SATALED# */		PAD_CFG_GPI(GPP_E8, NONE, DEEP),
 /* USB2_OCO# */		PAD_CFG_NF(GPP_E9, NONE, DEEP, NF1), /* USB_OC0# */
 /* USB2_OC1# */		PAD_CFG_NF(GPP_E10, NONE, DEEP, NF1), /* USB_OC1# */
@@ -215,6 +215,9 @@ static const struct pad_config gpio_table[] = {
 
 /* Early pad configuration in bootblock */
 static const struct pad_config early_gpio_table[] = {
+/* GSPI1_MISO */	PAD_CFG_GPO(GPP_B21, 1, DEEP), /* PCH_3.3V_TS_EN */
+/* ISH_UART0_RTS# */	PAD_CFG_GPO(GPP_D15, 0, DEEP), /* TS_RST */
+/* CPU_GP1 */		PAD_CFG_GPO(GPP_E7, 0, PLTRST), /* TOUCH_SCREEN_PD# */
 /* UART2_RXD */		PAD_CFG_NF(GPP_C8, NONE, DEEP, NF1), /* SERVOTX_UART */
 /* UART2_TXD */		PAD_CFG_NF(GPP_C9, NONE, DEEP, NF1), /* SERVORX_UART */
 /* I2C4_SDA */		PAD_CFG_NF(GPP_H8, NONE, DEEP, NF1), /* SDA_PCH_H1 */
