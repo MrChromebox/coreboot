@@ -253,7 +253,7 @@ chip soc/amd/picasso
 		device ref iommu on end
 		device ref gpp_bridge_1 on # Wifi
 			chip drivers/wifi/generic
-				register "wake" = "GEVENT_8"
+				#register "wake" = "GEVENT_8"
 				device pci 00.0 on  end
 			end
 		end
