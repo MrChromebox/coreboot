@@ -54,7 +54,6 @@
 
 /* Enable LID switch */
 #define EC_ENABLE_LID_SWITCH
-#define EC_ENABLE_WAKE_PIN EC_WAKE_GPI
 
 /* Enable EC backed ALS device in ACPI */
 #define EC_ENABLE_ALS_DEVICE
