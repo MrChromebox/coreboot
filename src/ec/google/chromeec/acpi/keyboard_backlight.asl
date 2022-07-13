@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
-Scope (\_SB)
+/* Scope modified for coolstar's Windows driver */
+Scope (\_SB.PCI0.LPCB.EC0.CREC)
 {
 	/*
 	 * Chrome EC Keyboard Backlight interface
@@ -13,17 +14,29 @@ Scope (\_SB)
 #endif
 		Name (_UID, 1)
 
-		/* Ask EC if we even have a backlight
-		 * Return 0xf (present, enabled, show in UI, functioning) or 0
-		 *
-		 * With older EC codebases that don't support the Device
-		 * Features bitfield, this reports the keyboard backlight as
-		 * enabled since reads to undefined addresses in EC address
-		 * space return 0xff and so KBLE will be 1.
-		 */
 		Method (_STA, 0, NotSerialized)
 		{
 			Return (0xf)
+		}
+	}
+}
+
+Scope (\_SB)
+{
+	/*
+	 * Stub for linux driver which hardcodes location
+	 */
+	Device (KBLT)
+	{
+		Name (_HID, "GOOG0002")
+#ifdef CONFIG_ACPI_SUBSYSTEM_ID
+		Name (_SUB, CONFIG_ACPI_SUBSYSTEM_ID)
+#endif
+		Name (_UID, 1)
+
+		Method (_STA, 0, NotSerialized)
+		{
+			Return (0x0)
 		}
 
 		/* Read current backlight value */
