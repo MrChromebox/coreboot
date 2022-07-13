@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
-Scope (\_SB.PCI0.LPCB.EC0.CREC)
+Scope (\_SB)
 {
 	/*
 	 * Chrome EC Keyboard Backlight interface
