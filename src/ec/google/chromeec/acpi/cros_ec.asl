@@ -9,27 +9,6 @@ Device (CREC)
 	Name (_PRW, Package () { EC_ENABLE_WAKE_PIN, 0x5 })
 #endif
 
-#ifdef EC_ENABLE_SYNC_IRQ
-	Name (_CRS, ResourceTemplate ()
-	{
-		Interrupt (ResourceConsumer, Level, ActiveLow, Exclusive)
-		{
-			EC_SYNC_IRQ
-		}
-	})
-#endif
-
-#ifdef EC_ENABLE_SYNC_IRQ_GPIO
-	Name (_CRS, ResourceTemplate ()
-	{
-		GpioInt (Level, ActiveLow, Exclusive, PullDefault, 0x0000,
-		         "\\_SB.GPIO", 0x00, ResourceConsumer, ,)
-		{
-			EC_SYNC_IRQ
-		}
-	})
-#endif
-
 #ifdef EC_ENABLE_MKBP_DEVICE
 	Device (CKSC)
 	{
