@@ -17,45 +17,6 @@ Device (CREC)
 #endif
 #endif
 
-#ifdef EC_SYNC_IRQ_WAKE_CAPABLE
-	#define EC_SYNC_SHARE_TYPE ExclusiveAndWake
-#else
-	#define EC_SYNC_SHARE_TYPE Exclusive
-#endif
-
-#if defined(EC_ENABLE_SYNC_IRQ) || defined(EC_ENABLE_SYNC_IRQ_GPIO) || \
-CONFIG(EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE)
-	Method (_CRS, 0x0, NotSerialized)
-	{
-		Name (RBUF, ResourceTemplate()
-		{
-#ifdef EC_ENABLE_SYNC_IRQ
-			Interrupt (ResourceConsumer, Level, ActiveLow, EC_SYNC_SHARE_TYPE) { EC_SYNC_IRQ }
-#endif
-
-#ifdef EC_ENABLE_SYNC_IRQ_GPIO
-			GpioInt (Level, ActiveLow, EC_SYNC_SHARE_TYPE, PullDefault,
-				 0x0000, "\\_SB.GPIO", 0x00, ResourceConsumer, ,)
-			{
-				EC_SYNC_IRQ
-			}
-#endif
-
-#if CONFIG(EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE)
-		Memory32Fixed (ReadWrite, 0, 0, MADR)
-#endif
-		})
-
-#if CONFIG(EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE)
-		CreateDWordField (RBUF, MADR._BAS, BAS0)
-		CreateDWordField (RBUF, MADR._LEN, LEN0)
-		BAS0 = \_SB.PCI0.LPCB.GLGM()
-		LEN0 = LPC_GMR_SIZE
-#endif
-		Return (RBUF)
-	}
-#endif
-
 #ifdef EC_ENABLE_MKBP_DEVICE
 	Device (CKSC)
 	{
