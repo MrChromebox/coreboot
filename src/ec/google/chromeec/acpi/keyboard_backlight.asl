@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
-Scope (\_SB)
+/* Windows drivers require proper scoping to access child devices */
+Scope (\_SB.PCI0.LPCB.EC0.CREC)
 {
 	/*
 	 * Chrome EC Keyboard Backlight interface
@@ -16,6 +17,21 @@ Scope (\_SB)
 			 * exists physically.
 			 */
 			Return (0xf)
+		}
+	}
+}
+
+/* Stub for linux driver which hardcodes KBLT directly under _SB */
+Scope (\_SB)
+{
+	Device (KBLT)
+	{
+		Name (_HID, "GOOG0002")
+		Name (_UID, 1)
+
+		Method (_STA, 0, NotSerialized)
+		{
+			Return (0x0)
 		}
 
 		/* Read current backlight value */
