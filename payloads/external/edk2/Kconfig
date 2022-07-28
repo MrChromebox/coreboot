@@ -149,11 +149,11 @@ config EDK2_FOLLOW_BGRT_SPEC
 
 config EDK2_FULL_SCREEN_SETUP
 	bool "Use the full screen for the edk2 frontpage"
-	default y
+	default n
 	help
 	  Allow edk2 to use the full screen to display the frontpage
-	  (aka "Boot Menu"). With this option disable, it will be
-	  limited to 640x480.
+	  (aka "Boot Menu"). With this option disabled, it will be
+	  limited to ~1024x768.
 
 config EDK2_HAVE_EFI_SHELL
 	bool "Include EFI Shell"
