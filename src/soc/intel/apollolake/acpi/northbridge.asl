@@ -69,6 +69,16 @@ Method (_CRS, 0, Serialized)
 				0x00000000, 0x000c0000, 0x000dffff, 0x00000000,
 				0x00020000,,, LGB2)
 
+		/*
+		 * Descriptor:	BIOS Area
+		 * Start:	0xe0000
+		 * End:		0xfffff
+		 */
+		DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
+				Cacheable, ReadWrite,
+				0x00000000, 0x000e0000, 0x000fffff, 0x00000000,
+				0x00020000,,, LGB3)
+
 		/* Data and GFX stolen memory */
 		DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
 				Cacheable, ReadWrite,
