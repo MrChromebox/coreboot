@@ -59,6 +59,16 @@ Method (_CRS, 0, Serialized)
 				0x00000000, 0x000a0000, 0x000bffff, 0x00000000,
 				0x00020000,,, LGB1)
 
+		/*
+		 * Descriptor:	Legacy option ROM
+		 * Start:	0xc0000
+		 * End:		0xdffff
+		 */
+		DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
+				Cacheable, ReadWrite,
+				0x00000000, 0x000c0000, 0x000dffff, 0x00000000,
+				0x00020000,,, LGB2)
+
 		/* Data and GFX stolen memory */
 		DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed,
 				Cacheable, ReadWrite,
