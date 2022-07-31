@@ -130,7 +130,6 @@ chip soc/amd/stoneyridge
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
 			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_5)"
-			register "wake" = "7"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
@@ -139,7 +138,6 @@ chip soc/amd/stoneyridge
 			register "generic.cid" = ""ACPI0000""
 			register "generic.desc" = ""Synaptics Touchpad""
 			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_5)"
-			register "generic.wake" = "7"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 0x2c on end
