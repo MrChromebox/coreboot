@@ -38,6 +38,12 @@ static const struct soc_amd_gpio gpio_set_stage_reset[] = {
 	/* GPIO_74 - LPC_CLK0_EC_R */
 	PAD_NF(GPIO_74, LPCCLK0, PULL_DOWN),
 
+	/* GPIO_76 - EN_PP3300_TOUCHSCREEN */
+	PAD_GPO(GPIO_76, HIGH),
+
+	/* GPIO_85 - TOUCHSCREEN_RST (Active High) */
+	PAD_GPO(GPIO_85, HIGH),
+
 	/* GPIO_92 - WLAN_PCIE_CLKREQ_3V3_ODL */
 	PAD_NF(GPIO_92, CLK_REQ0_L, PULL_UP),
 
@@ -148,9 +154,6 @@ static const struct soc_amd_gpio gpio_set_stage_ram[] = {
 
 	/* GPIO_75 - Unused (strap) (R139/R130) */
 	PAD_GPI(GPIO_75, PULL_UP),
-
-	/* GPIO_76 - EN_PP3300_TOUCHSCREEN */
-	PAD_GPO(GPIO_76, HIGH),
 
 	/* GPIO_84 - HUB_RST (Active High) */
 	PAD_GPO(GPIO_84, LOW),
