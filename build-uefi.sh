@@ -39,3 +39,5 @@ for device in "${build_targets[@]}"; do
 	mv ${filename}* ~/dev/firmware/
 done
 echo -e "}" >> $json_file
+# remove last comma
+sed -i 's/\(.*\),/\1/' $json_file
