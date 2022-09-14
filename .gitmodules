@@ -63,7 +63,7 @@
 	branch = stmpe
 [submodule "util/goswid"]
 	path = util/goswid
-	url = ../goswid
+	url = https://review.coreboot.org/goswid
 	branch = trunk
 [submodule "3rdparty/purism-blobs"]
 	path = 3rdparty/purism-blobs
