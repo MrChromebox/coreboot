@@ -197,7 +197,6 @@ void bootblock_mainboard_early_init(void)
 	setup_sio_gpios();
 
 	/* Early SuperIO setup */
-	it8772f_ac_resume_southbridge(SUPERIO_DEV);
 	ite_kill_watchdog(GPIO_DEV);
 	ite_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
 }
