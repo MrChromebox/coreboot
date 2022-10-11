@@ -12,8 +12,6 @@ CONFIG_HAVE_IFD_BIN=y
 # CONFIG_S3_VGA_ROM_RUN is not set
 CONFIG_HAVE_MRC=y
 CONFIG_MRC_FILE="3rdparty/blobs/soc/intel/byt/mrc.elf"
-CONFIG_HAVE_REFCODE_BLOB=y
-CONFIG_REFCODE_BLOB_FILE="3rdparty/blobs/soc/intel/byt/refcode.elf"
 CONFIG_CPU_MICROCODE_CBFS_EXTERNAL_BINS=y
 CONFIG_CPU_UCODE_BINARIES="3rdparty/blobs/soc/intel/byt/cpu_microcode_blob.bin"
 CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
