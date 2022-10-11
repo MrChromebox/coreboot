@@ -246,6 +246,8 @@ static void soc_end_of_dxe(void)
 	struct device_nvs *dev_nvs = acpi_get_device_nvs();
 	u32 reg32;
 
+	if(1) return;
+
 	/* SCC Devices */
 #define SCC_ACPI_MODE_ENABLE(name_) \
 	do { if (dev_nvs->scc_en[SCC_NVS_ ## name_]) { \

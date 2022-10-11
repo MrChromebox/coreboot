@@ -36,7 +36,7 @@ chip soc/intel/baytrail
 	# Enable devices in ACPI mode
 	register "lpe_acpi_mode" = "1"
 	register "lpss_acpi_mode" = "1"
-	register "scc_acpi_mode" = "1"
+	register "scc_acpi_mode" = "0"
 
 	# Enable PIPEA as DP_C
 	register "gpu_pipea_port_select" = "2"		# DP_C
@@ -59,7 +59,7 @@ chip soc/intel/baytrail
 	device domain 0 on
 		device pci 00.0 on  end # SoC router
 		device pci 02.0 on  end # GFX
-		device pci 10.0 off end # MMC
+		device pci 10.0 on end # MMC
 		device pci 11.0 off end # SDIO
 		device pci 12.0 on  end # SD
 		device pci 13.0 on  end # SATA
