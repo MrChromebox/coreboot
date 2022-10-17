@@ -34,13 +34,19 @@ enum {
 	KB_HW_MUTE_CONTROL = 0x60,
 	/* Inform the EC that the host is about to enter S3 */
 	KB_SLP_EN = 0x64,
+	/* Inform EC of OS boot */
+	KB_EC_OS_BOOT = 0x6b,
 	/* Inform the EC about BIOS boot progress */
 	KB_BIOS_PROGRESS = 0xc2,
 	/* Inform the EC that a fatal error occurred */
 	KB_ERR_CODE = 0x7b,
+	/* EC mode commands */
+	KB_EC_MODE = 0x88,
 	/* Set CPU ID */
 	KB_CPU_ID = 0xbf,
 };
+
+#define EC_MODE_EXIT_FIRMWARE	0x04
 
 enum ec_ram_addr {
 	/* Indicate if EC uses signed firmware */
