@@ -83,6 +83,21 @@ static const size_t ucsi_region_len = ARRAY_SIZE(ucsi_region_fields);
 static void wilco_ec_post_complete(void *unused)
 {
 	wilco_ec_send(KB_BIOS_PROGRESS, BIOS_PROGRESS_POST_COMPLETE);
+
+	if (!CONFIG(CHROMEOS)) {
+		int retval = wilco_ec_send_legacy_noargs(KB_EC_OS_BOOT);
+		if (retval) {
+			printk(BIOS_ERR, "Wilco EC: EC_OS_BOOT returned %d\n", retval);
+		} else {
+			printk(BIOS_INFO, "Wilco EC: EC_OS_BOOT returned %d\n", retval);
+		}
+		retval = wilco_ec_send_legacy(KB_EC_MODE, EC_MODE_EXIT_FIRMWARE);
+		if (retval) {
+			printk(BIOS_ERR, "Wilco EC: EC_MODE_EXIT_FIRMWARE returned %d\n", retval);
+		} else {
+			printk(BIOS_INFO, "Wilco EC: EC_MODE_EXIT_FIRMWARE returned %d\n", retval);
+		}
+	}
 }
 BOOT_STATE_INIT_ENTRY(BS_PAYLOAD_LOAD, BS_ON_EXIT,
 		      wilco_ec_post_complete, NULL);
