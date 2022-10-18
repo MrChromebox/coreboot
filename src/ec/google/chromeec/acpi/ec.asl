@@ -458,7 +458,7 @@ Device (EC0)
 #endif
 #ifdef EC_ENABLE_TBMC_DEVICE
 		If (LEqual(_OSI("Linux"), 1)) {
-			Notify (TBMC, 0x80)
+			Notify (\_SB.PCI0.LPCB.EC0.CREC.TBMC, 0x80)
 		} else {
 			If (LEqual ((^TBMD), One)) {
 				Notify (VBTN, 0xCC)
