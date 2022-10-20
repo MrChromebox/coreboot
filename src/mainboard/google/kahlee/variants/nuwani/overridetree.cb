@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+chip soc/amd/stoneyridge
+	register "stapm_percent" = "80"
+	register "stapm_time_ms" = "2000000"
+	register "stapm_power_mw" = "7800"
+	register "lvds_poseq_varybl_to_blon" = "0x5"
+	register "lvds_poseq_blon_to_varybl" = "0x5"
+
+	# Enable I2C0 for audio, USB3 hub at 400kHz
+	register "i2c[0]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 95,
+		.fall_time_ns = 3,
+	}"
+
+	# Enable I2C1 for H1 at 400kHz
+	register "i2c[1]" = "{
+		.early_init = 1,
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 3,
+		.fall_time_ns = 2,
+	}"
+
+	# Enable I2C2 for trackpad, pen at 400kHz
+	register "i2c[2]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 3,
+		.fall_time_ns = 2,
+		.data_hold_time_ns = 400,
+	}"
+
+	# Enable I2C3 for touchscreen at 400kHz
+	register "i2c[3]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 16,
+		.fall_time_ns = 8,
+	}"
+
+	device domain 0 on
+		device ref gpp_bridge_3 on
+			chip drivers/generic/bayhub
+				register "power_saving" = "1"
+				register "vih_tuning_value" = "0x35"
+				device pci 00.0 on end
+			end
+		end
+	end #domain
+
+	device ref i2c_2 on
+		chip drivers/i2c/hid
+			register "generic.hid" = ""SYNA0000""
+			register "generic.cid" = ""ACPI0000""
+			register "generic.desc" = ""Synaptics Touchpad""
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_5)"
+			register "generic.detect" = "1"
+			register "hid_desc_reg_offset" = "0x20"
+			device i2c 0x2c on end
+		end
+	end
+	device ref i2c_3 on
+		chip drivers/i2c/hid
+			register "generic.hid" = ""ELAN90FC""
+			register "generic.desc" = ""ELAN Touchscreen""
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_11)"
+			register "generic.detect" = "1"
+			register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_85)"
+			register "generic.enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_76)"
+			register "generic.reset_delay_ms" = "20"
+			register "generic.has_power_resource" = "1"
+			register "generic.disable_gpio_export_in_crs" = "1"
+			register "hid_desc_reg_offset" = "0x01"
+			device i2c 10 on end
+		end
+		chip drivers/i2c/hid
+			register "generic.hid" = ""SYTS7817""
+			register "generic.desc" = ""Synaptics Touchscreen""
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_11)"
+			register "generic.detect" = "1"
+			register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_85)"
+			register "generic.enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_76)"
+			register "generic.reset_delay_ms" = "45"
+			register "generic.has_power_resource" = "1"
+			register "generic.disable_gpio_export_in_crs" = "1"
+			register "hid_desc_reg_offset" = "0x20"
+			device i2c 20 on end
+		end
+	end
+end	#chip soc/amd/stoneyridge

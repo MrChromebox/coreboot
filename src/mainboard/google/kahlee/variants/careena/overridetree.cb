@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+chip soc/amd/stoneyridge
+	register "stapm_percent" = "68"
+	register "stapm_time_ms" = "2500000"
+	register "stapm_power_mw" = "7800"
+
+	# Enable I2C0 for audio, USB3 hub at 400kHz
+	register "i2c[0]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 58,
+		.fall_time_ns = 3,
+	}"
+
+	# Enable I2C1 for H1 at 400kHz
+	register "i2c[1]" = "{
+		.early_init = 1,
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 45,
+		.fall_time_ns = 4,
+	}"
+
+	# Enable I2C2 for trackpad, pen at 400kHz
+	register "i2c[2]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 25,
+		.fall_time_ns = 11,
+	}"
+
+	# Enable I2C3 for touchscreen at 400kHz
+	register "i2c[3]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 22,
+		.fall_time_ns = 19,
+	}"
+
+	device ref i2c_0 on
+		chip drivers/i2c/generic
+			register "hid" = ""10EC5682""
+			register "name" = ""RT58""
+			register "uid" = "1"
+			register "desc" = ""Realtek RT5682""
+			register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_BOTH(GPIO_14)"
+			register "property_count" = "2"
+			register "property_list[0].type" = "ACPI_DP_TYPE_INTEGER"
+			register "property_list[0].name" = ""realtek,jd-src""
+			register "property_list[0].integer" = "1"
+			register "property_list[1].type" = "ACPI_DP_TYPE_STRING"
+			register "property_list[1].name" = ""realtek,mclk-name""
+			register "property_list[1].string" = ""oscout1""
+			device i2c 1a on end
+		end
+	end
+	device ref i2c_3 on
+		chip drivers/i2c/hid
+			register "generic.hid" = ""GTCH7503""
+			register "generic.desc" = ""G2TOUCH Touchscreen""
+			register "generic.detect" = "1"
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_11)"
+			register "generic.reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_85)"
+			register "generic.reset_delay_ms" = "50"
+			register "generic.enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_76)"
+			register "generic.enable_delay_ms" = "1"
+			register "generic.has_power_resource" = "1"
+			register "generic.disable_gpio_export_in_crs" = "1"
+			register "hid_desc_reg_offset" = "0x01"
+			device i2c 40 on end
+		end
+	end
+end	#chip soc/amd/stoneyridge

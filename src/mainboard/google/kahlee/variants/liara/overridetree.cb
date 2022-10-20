@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+chip soc/amd/stoneyridge
+	register "lvds_poseq_varybl_to_blon" = "0x5" # in 4ms
+	register "lvds_poseq_blon_to_varybl" = "0x5" # in 4ms
+
+	# Enable I2C0 for audio, USB3 hub at 400kHz
+	register "i2c[0]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 85,
+		.fall_time_ns = 3,
+	}"
+
+	# Enable I2C1 for H1 at 400kHz
+	register "i2c[1]" = "{
+		.early_init = 1,
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 3,
+		.fall_time_ns = 2,
+	}"
+
+	# Enable I2C2 for trackpad, pen at 400kHz
+	register "i2c[2]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 3,
+		.fall_time_ns = 2,
+	}"
+
+	# Enable I2C3 for touchscreen at 400kHz
+	register "i2c[3]" = "{
+		.speed = I2C_SPEED_FAST,
+		.rise_time_ns = 16,
+		.fall_time_ns = 8,
+	}"
+
+	device ref i2c_2 on
+		chip drivers/i2c/hid
+			register "generic.hid" = ""SYNA0000""
+			register "generic.cid" = ""ACPI0000""
+			register "generic.desc" = ""Synaptics Touchpad""
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_5)"
+			register "generic.detect" = "1"
+			register "hid_desc_reg_offset" = "0x20"
+			device i2c 2c on end
+		end
+	end
+end	#chip soc/amd/stoneyridge
