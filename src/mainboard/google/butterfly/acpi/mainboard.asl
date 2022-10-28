@@ -17,7 +17,7 @@ Scope (\_SB) {
 	{
 		Name(_HID, "CYSM0000")
 		Name(_UID, 1)
-		Name(_REV, 2)
+		Name(_HRV, 2)
 
 		// Trackpad Wake is GPIO11, wake from S3
 		Name(_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x03 })
