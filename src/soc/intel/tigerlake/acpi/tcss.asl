@@ -327,7 +327,7 @@ Scope (_GPE)
 	}
 }
 
-Scope (\_SB.PCI0)
+Scope (\_SB)
 {
 	Device (IOM)
 	{
@@ -338,9 +338,11 @@ Scope (\_SB.PCI0)
 			Memory32Fixed (ReadWrite, IOM_BASE_ADDRESS, IOM_BASE_SIZE)
 		})
 		/* Hide the device so that Windows does not complain on missing driver */
-		Name (_STA, 0xB)
+		Name (_STA, 0xF)
 	}
-
+}
+Scope (\_SB.PCI0)
+{
 	/*
 	 * Operation region defined to access the TCSS_DEVEN. Get the MCHBAR in offset
 	 * 0x48 in B0:D0:F0. TCSS device enable base address is in offset 0x7090 of MCHBAR.
