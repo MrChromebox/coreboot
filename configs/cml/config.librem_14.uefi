@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="MrChromebox-4.18.1"
+CONFIG_LOCALVERSION="MrChromebox-4.18.2"
 CONFIG_VENDOR_PURISM=y
 CONFIG_CBFS_SIZE=0x900000
 CONFIG_IFD_BIN_PATH="3rdparty/purism-blobs/mainboard/purism/librem_cnl/librem_14/flashdescriptor.bin"
