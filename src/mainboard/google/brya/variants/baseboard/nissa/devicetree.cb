@@ -155,7 +155,9 @@ chip soc/intel/alderlake
 	}"
 
 	device domain 0 on
-		device ref igpu on end
+		device ref igpu on
+			register "gfx" = "GMA_DEFAULT_PANEL(0)"
+		end
 		device ref dtt on end
 		device ref tcss_xhci on end
 		device ref xhci on end
