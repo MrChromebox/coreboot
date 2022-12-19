@@ -45,7 +45,6 @@ chip soc/amd/stoneyridge
 			register "generic.cid" = ""ACPI0C50""
 			register "generic.desc" = ""Synaptics Touchpad""
 			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_5)"
-			register "generic.wake" = "7"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 2c on end
