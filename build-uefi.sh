@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
+
+# USAGE: ./build-uefi.sh {device}
 #
+# NOTE: In order to use this script, please make sure you have the neccessary binary blobs
+# 	in their correspondent location inside the 3rdparty/blobs/ directory.
 
 set -e
 
