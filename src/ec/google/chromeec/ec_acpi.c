@@ -252,6 +252,13 @@ static void fill_ssdt_ps2_keyboard(const struct device *dev)
 				 !!(keybd.capabilities & KEYBD_CAP_FUNCTION_KEYS),
 				 !!(keybd.capabilities & KEYBD_CAP_NUMERIC_KEYPAD),
 				 !!(keybd.capabilities & KEYBD_CAP_SCRNLOCK_KEY));
+
+	/* add a copy under CKSC as well for coolstar's Windows divers */
+	acpigen_ps2_keyboard_dsd("_SB.PCI0.LPCB.EC0.CREC.CKSC", keybd.num_top_row_keys,
+				 ps2_action_keys,
+				 !!(keybd.capabilities & KEYBD_CAP_FUNCTION_KEYS),
+				 !!(keybd.capabilities & KEYBD_CAP_NUMERIC_KEYPAD),
+				 !!(keybd.capabilities & KEYBD_CAP_SCRNLOCK_KEY));
 }
 
 static const char *ec_acpi_name(const struct device *dev)
