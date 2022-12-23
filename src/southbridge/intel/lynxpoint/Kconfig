@@ -87,7 +87,7 @@ config CONSOLE_UART_BASE_ADDRESS
 
 config DISABLE_ME_PCI
 	bool "Disable Intel ME PCI interface (MEI1)"
-	default y
+	default n
 	help
 	  Disable and hide the ME PCI interface during finalize stage of boot.
 	  This will prevent the OS (and userspace apps) from interacting with
