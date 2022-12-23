@@ -277,7 +277,8 @@ void acpigen_ps2_keyboard_dsd(const char *scope, uint8_t num_top_row_keys,
 			      enum ps2_action_key action_keys[],
 			      bool can_send_function_keys,
 			      bool has_numeric_keypad,
-			      bool has_scrnlock_key)
+			      bool has_scrnlock_key,
+			      bool generate_keymap)
 {
 	struct acpi_dp *dsd;
 
@@ -296,9 +297,10 @@ void acpigen_ps2_keyboard_dsd(const char *scope, uint8_t num_top_row_keys,
 
 	acpigen_write_scope(scope);
 	ssdt_generate_physmap(dsd, num_top_row_keys, action_keys);
-	ssdt_generate_keymap(dsd, num_top_row_keys, action_keys,
-			     can_send_function_keys, has_numeric_keypad,
-			     has_scrnlock_key);
+	if (generate_keymap)
+		ssdt_generate_keymap(dsd, num_top_row_keys, action_keys,
+				     can_send_function_keys, has_numeric_keypad,
+				     has_scrnlock_key);
 	acpi_dp_write(dsd);
 	acpigen_pop_len(); /* Scope */
 }
