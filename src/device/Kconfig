@@ -721,12 +721,12 @@ config PCIEXP_HOTPLUG_MEM
 
 config PCIEXP_HOTPLUG_PREFETCH_MEM
 	hex "PCI Express Hotplug Prefetch Memory"
-	default 0x10000000
+	default 0x100000000
 	help
 	  This is the amount of pre-fetchable memory space, in bytes, to
 	  allocate to hot-plug PCI express bridges, for use by hotplugged
 	  child devices. This size should be page-aligned. The default is
-	  256 MiB.
+	  4 GiB.
 
 config PCIEXP_HOTPLUG_PREFETCH_MEM_ABOVE_4G
 	bool
@@ -745,11 +745,11 @@ config PCIEXP_HOTPLUG_PREFETCH_MEM_BELOW_4G
 
 config PCIEXP_HOTPLUG_IO
 	hex "PCI Express Hotplug I/O Space"
-	default 0x2000
+	default 0x3000
 	help
 	  This is the amount of I/O space to allocate to hot-plug PCI
 	  express bridges, for use by hotplugged child devices. The default
-	  is 8 KiB.
+	  is 12 KiB.
 
 endif # PCIEXP_HOTPLUG
 
