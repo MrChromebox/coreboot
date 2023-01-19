@@ -151,7 +151,7 @@ chip soc/intel/jasperlake
 	register "SdCardPowerEnableActiveHigh" = "1"
 
 	# Enable S0ix support
-	register "s0ix_enable" = "1"
+	register "s0ix_enable" = "0"
 
 	# Display related UPDs
 	# Select eDP for port A

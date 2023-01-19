@@ -37,7 +37,7 @@ chip soc/intel/skylake
 	register "dptf_enable" = "1"
 
 	# Enable S0ix
-	register "s0ix_enable" = true
+	register "s0ix_enable" = false
 
 	# Disable Command TriState
 	register "CmdTriStateDis" = "1"
