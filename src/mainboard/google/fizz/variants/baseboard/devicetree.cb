@@ -55,8 +55,8 @@ chip soc/intel/skylake
 	# Enable DPTF
 	register "dptf_enable" = "true"
 
-	# Enable S0ix
-	register "s0ix_enable" = true
+	# Disable S0ix by default
+	register "s0ix_enable" = "false"
 
 	# FSP Configuration
 	register "DspEnable" = "true"
