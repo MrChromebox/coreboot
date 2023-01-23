@@ -427,6 +427,7 @@ chip soc/intel/jasperlake
 				device i2c 0C on
 					probe CAMERA_VCM CAMERA_VCM_UNPROVISIONED
 					probe CAMERA_VCM CAMERA_VCM0
+					probe CAMERA_WFC CAMERA_OVTI8856
 				end
 			end
 			chip drivers/intel/mipi_camera
@@ -444,7 +445,11 @@ chip soc/intel/jasperlake
 				register "nvm_width" = "0x10"
 				register "nvm_compat" = ""atmel,24c08""
 
-				device i2c 50 on end
+				device i2c 50 on
+					probe CAMERA_VCM CAMERA_VCM_UNPROVISIONED
+					probe CAMERA_VCM CAMERA_VCM0
+					probe CAMERA_WFC CAMERA_OVTI8856
+				end
 			end
 		end
 		device pci 19.0 on
