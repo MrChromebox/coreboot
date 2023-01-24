@@ -367,7 +367,6 @@ chip soc/intel/jasperlake
 				register "off_seq.ops[3]" = "SEQ_OPS_GPIO_DISABLE(0, 0)"
 
 				device i2c 36 on
-					probe CAMERA_WFC CAMERA_UNPROVISIONED
 					probe CAMERA_WFC CAMERA_OVTI5675
 				end
 			end
@@ -425,9 +424,7 @@ chip soc/intel/jasperlake
 				register "vcm_compat" = ""dongwoon,dw9714""
 
 				device i2c 0C on
-					probe CAMERA_VCM CAMERA_VCM_UNPROVISIONED
 					probe CAMERA_VCM CAMERA_VCM0
-					probe CAMERA_WFC CAMERA_OVTI8856
 				end
 			end
 			chip drivers/intel/mipi_camera
@@ -446,9 +443,7 @@ chip soc/intel/jasperlake
 				register "nvm_compat" = ""atmel,24c08""
 
 				device i2c 50 on
-					probe CAMERA_VCM CAMERA_VCM_UNPROVISIONED
 					probe CAMERA_VCM CAMERA_VCM0
-					probe CAMERA_WFC CAMERA_OVTI8856
 				end
 			end
 		end
