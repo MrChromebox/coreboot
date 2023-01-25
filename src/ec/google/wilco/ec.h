@@ -11,7 +11,6 @@ enum wilco_ec_msg_type {
 	WILCO_EC_MSG_RAW,		/* Raw message, do not skip any data */
 	WILCO_EC_MSG_DEFAULT,		/* Skip 1 byte of response data */
 	WILCO_EC_MSG_NO_RESPONSE,	/* EC does not respond to command */
-	WILCO_EC_MSG_LEGACY = 0x00f0,
 };
 
 /**
@@ -49,12 +48,6 @@ static inline int wilco_ec_send(uint8_t command, uint8_t param)
 				&param, sizeof(param), NULL, 0);
 }
 
-static inline int wilco_ec_send_legacy(uint8_t command, uint8_t param)
-{
-	return wilco_ec_mailbox(WILCO_EC_MSG_LEGACY, command,
-				&param, sizeof(param), NULL, 0);
-}
-
 /**
  * wilco_ec_send_noargs
  *
@@ -67,12 +60,6 @@ static inline int wilco_ec_send_legacy(uint8_t command, uint8_t param)
 static inline int wilco_ec_send_noargs(uint8_t command)
 {
 	return wilco_ec_mailbox(WILCO_EC_MSG_DEFAULT, command,
-				NULL, 0, NULL, 0);
-}
-
-static inline int wilco_ec_send_legacy_noargs(uint8_t command)
-{
-	return wilco_ec_mailbox(WILCO_EC_MSG_LEGACY, command,
 				NULL, 0, NULL, 0);
 }
 
