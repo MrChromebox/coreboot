@@ -124,6 +124,8 @@ Device (EC0)
 	 */
 	Method (R, 1, Serialized, 2)
 	{
+		/* Set read operation */
+		Arg0[2] = 0
 		Return (ECRW (Arg0, 0))
 	}
 
@@ -134,6 +136,8 @@ Device (EC0)
 	 */
 	Method (W, 2, Serialized, 2)
 	{
+		/* Set write operation */
+		Arg0[2] = 1
 		Return (ECRW (Arg0, Arg1))
 	}
 
