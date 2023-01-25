@@ -22,7 +22,6 @@ DefinitionBlock(
 		{
 			#include <soc/intel/common/block/acpi/acpi/northbridge.asl>
 			#include <soc/intel/cannonlake/acpi/southbridge.asl>
-			#include <drivers/intel/gma/acpi/default_brightness_levels.asl>
 		}
 		/* Per board variant mainboard hooks. */
 		#include <variant/acpi/mainboard.asl>

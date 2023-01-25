@@ -19,6 +19,6 @@
 #define EC_ENABLE_DPTF
 
 /* Enable privacy screen functionality */
-//#define EC_ENABLE_PRIVACY
+#define EC_ENABLE_PRIVACY
 
 #endif
