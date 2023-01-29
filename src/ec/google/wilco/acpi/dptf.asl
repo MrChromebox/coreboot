@@ -116,3 +116,16 @@ Method (PATX, 0, Serialized)
 	/* Clear sensor events */
 	W (DWTQ, Local0)
 }
+
+/*
+ * Read current Device DPTF Profile Number
+ */
+Method (RCDP, 0, NotSerialized)
+{
+	Local0 = R(DTRI)
+	If (Local0 == 0) {
+		Return (R(OTBL))
+	} else {
+		Return (Local0 - 1)
+	}
+}
