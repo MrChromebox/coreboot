@@ -21,12 +21,16 @@ else
 	build_targets=($@)
 fi
 
+# get git rev
+rev=$(git describe --tags --dirty)
+
 for device in "${build_targets[@]}"; do
 	filename="coreboot_tiano-${device}-mrchromebox_$(date +"%Y%m%d").rom"
 	rm -f ~/dev/firmware/${filename}*
 	rm -rf ./build
 	cfg_file=$(find ./configs -name "config.$device.uefi")
 	cp "$cfg_file" .config
+	echo "CONFIG_LOCALVERSION=\"${rev}\"" >> .config
 	make clean
 	make olddefconfig
 	make -j$(nproc)
