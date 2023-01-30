@@ -122,7 +122,7 @@ Method (PATX, 0, Serialized)
  */
 Method (RCDP, 0, NotSerialized)
 {
-	Local0 = R(DTRI)
+	Local0 = R(DRTI)
 	If (Local0 == 0) {
 		Return (R(OTBL))
 	} else {
