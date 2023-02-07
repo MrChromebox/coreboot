@@ -275,7 +275,8 @@ static void tcss_init_mux(int port, const struct tcss_port_map *port_map)
 		printk(BIOS_ERR, "Failed to setup port:%d to initial state\n", port);
 }
 
-static void tcss_configure_dp_mode(const struct tcss_port_map *port_map, size_t num_ports)
+static void tcss_configure_modes(const struct tcss_port_map *port_map, size_t num_ports,
+					int detect_display)
 {
 	int ret;
 	size_t i;
@@ -292,16 +293,21 @@ static void tcss_configure_dp_mode(const struct tcss_port_map *port_map, size_t 
 
 	for (i = 0; i < num_ports; i++) {
 		ret = ops->mux_ops.get_mux_info(i, &mux_info);
-		if ((ret < 0) || (!mux_info.dp))
+		if ((ret < 0) || (!mux_info.usb && !mux_info.dp))
 			continue;
 
 		port_info = &port_map[i];
 
-		ret = send_pmc_connect_request(i, &mux_info, port_info);
-		if (ret) {
-			printk(BIOS_ERR, "Port %zd connect request failed\n", i);
-			continue;
+		if (mux_info.usb || (detect_display && mux_info.dp)) {
+			ret = send_pmc_connect_request(i, &mux_info, port_info);
+			if (ret) {
+				printk(BIOS_ERR, "Port %zd connect request failed\n", i);
+				continue;
+			}
 		}
+		if (!detect_display)
+			continue;
+
 		ret = send_pmc_safe_mode_request(i, &mux_info, port_info);
 		if (ret) {
 			printk(BIOS_ERR, "Port %zd safe mode request failed\n", i);
@@ -405,8 +411,7 @@ void tcss_configure(const struct typec_aux_bias_pads aux_bias_pads[MAX_TYPE_C_PO
 		if (tcss_ops.configure_aux_bias_pads)
 			tcss_ops.configure_aux_bias_pads(aux_bias_pads);
 
-		if (CONFIG(ENABLE_TCSS_DISPLAY_DETECTION))
-			tcss_configure_dp_mode(port_map, num_ports);
+		tcss_configure_modes(port_map, num_ports, CONFIG(ENABLE_TCSS_DISPLAY_DETECTION));
 	}
 }
 
