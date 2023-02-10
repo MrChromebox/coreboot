@@ -199,7 +199,9 @@ const char *smbios_mainboard_product_name(void)
 		case 4:
 		case 5: snprintf(product, sizeof(product), "Wukong"); break;
 		case 6: snprintf(product, sizeof(product), "Teemo"); break;
-		default: snprintf(product, sizeof(product), "UNK Fizz"); break;
+		case 8: snprintf(product, sizeof(product), "Jax"); break;
+		case 10: snprintf(product, sizeof(product), "Excelsior"); break;
+		default: snprintf(product, sizeof(product), "Fizz"); break;
 	}
 	return product;
 }
