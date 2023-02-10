@@ -227,6 +227,14 @@ Device (EC0)
 		Return (Local0)
 	}
 
+	Method (S0IX, 1, Serialized)
+	{
+#ifdef EC_ENABLE_KEYBOARD_BACKLIGHT
+		/* Notify Windows Keyboard Backlight driver of S0ix state transition */
+		Notify (^CREC.KBLT, Arg0)
+#endif
+	}
+
 	// Lid Closed Event
 	Method (_Q01, 0, NotSerialized)
 	{
