@@ -35,6 +35,14 @@ endif
 checkout: fetch
 	echo "    Checking out SeaBIOS revision $(TAG-y)"
 	cd seabios; git checkout master; git branch -D coreboot 2>/dev/null; git checkout -b coreboot $(TAG-y)
+	cd $(project_dir); \
+	for patch in $(CURDIR)/patches/*.patch; do \
+		echo "Applying $$patch"; \
+		export GIT_COMMITTER_EMAIL="`grep 'From:' $$patch | grep -Po '<\K[^>]+@[^>]+(?=>)'`"; \
+		export GIT_COMMITTER_NAME="`grep 'From:' $$patch | cut -d '<' -f 1 | tail -c +7`"; \
+		git am --committer-date-is-author-date --keep-cr $$patch || \
+			( echo " Error when applying patches.\n"; git am --abort; exit 1; ); \
+	done;
 
 config: checkout
 	echo "    CONFIG     SeaBIOS $(TAG-y)"

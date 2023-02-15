@@ -1,0 +1,42 @@
+From 28f11be04379080f6eb48471edf1bd03f0d139ef Mon Sep 17 00:00:00 2001
+From: Christopher Lentocha <christopherericlentocha@gmail.com>
+Date: Wed, 15 Feb 2023 09:10:33 -0500
+Subject: [PATCH] Fix Byt CB Bootup on SeaBIOS when using coreboot
+
+This patch helps fix the internal eMMC card when booting from it with
+the MrChromebox custom coreboot distro. If this patch isn't applied,
+the OS cannot boot off of it, and if you boot from USB, then you will
+get spamming errors in dmesg. This also doesn't show on Windows PE if
+you do not apply this, and it will be very slow to boot, or to even
+use. Note that this SMM variable is currently only in the MrChromebox
+coreboot distro at the moment, and is used by his EDK2 distro as well.
+Also the line added in this patch should not be added to CBFS
+booting, so we can assume that the next payload woll do the same thing,
+like if we chainload SeaBIOS to EDK2. Also this is a dirty patch and
+should not be sent to mainline SeaBIOS and people hope for it to be
+removed with a coreboot fix anyways, when it isn't needed in EDK2
+as well to boot or use. Tested only on GOOGLE Enguarde at the moment.
+MrChromebox = Matt DeVillier
+Byt = Intel Bay Trail
+CB = ChromeBook (and other Chrome OS Devices like Chromebox)
+
+Signed-off-by: Christopher Lentocha <christopherericlentocha@gmail.com>
+---
+ src/boot.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/boot.c b/src/boot.c
+index 1effd80..eb79601 100644
+--- a/src/boot.c
++++ b/src/boot.c
+@@ -871,6 +871,7 @@ call_boot_entry(struct segoff_s bootsegip, u8 bootdrv)
+     // Set the magic number in ax and the boot drive in dl.
+     br.dl = bootdrv;
+     br.ax = 0xaa55;
++    outb(0xcd, 0xb2);
+     farcall16(&br);
+ }
+ 
+-- 
+2.35.1
+
