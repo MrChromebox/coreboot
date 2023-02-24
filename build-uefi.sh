@@ -36,6 +36,9 @@ for device in "${build_targets[@]}"; do
 	echo -e "\t\t\"url\": \"${rom_path}${filename}\"," >> $json_file
 	echo -e "\t\t\"sha1\": \"$(cat ${filename}.sha1 | awk 'NR==1{print $1}')\"" >> $json_file
 	echo -e "\t}," >> $json_file
-	mv ${filename}* ~/dev/firmware/
+	if [ -d ~/dev/firmware/ ]
+	then
+		mv ${filename}* ~/dev/firmware/
+	fi
 done
 echo -e "}" >> $json_file
