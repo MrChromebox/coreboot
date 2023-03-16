@@ -229,7 +229,8 @@ chip soc/amd/mendocino
 		chip drivers/uart/acpi
 			register "name" = ""CRFP""
 			register "desc" = ""Fingerprint Reader""
-			register "hid" = "ACPI_DT_NAMESPACE_HID"
+			register "hid" = ""CRFP0001""
+			register "cid" = "ACPI_DT_NAMESPACE_HID"
 			register "compat_string" = ""google,cros-ec-uart""
 			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_24)"
 			register "wake" = "GEVENT_15"
