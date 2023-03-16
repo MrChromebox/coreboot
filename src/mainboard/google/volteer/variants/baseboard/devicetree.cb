@@ -511,7 +511,8 @@ chip soc/intel/tigerlake
 		device ref gspi1 on
 			chip drivers/spi/acpi
 				register "name" = ""CRFP""
-				register "hid" = "ACPI_DT_NAMESPACE_HID"
+				register "hid" = ""CRFP0000""
+				register "cid" = "ACPI_DT_NAMESPACE_HID"
 				register "uid" = "1"
 				register "compat_string" = ""google,cros-ec-spi""
 				register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPP_C20)"
