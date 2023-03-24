@@ -201,7 +201,8 @@ const char *smbios_mainboard_product_name(void)
 		case 6: snprintf(product, sizeof(product), "Teemo"); break;
 		case 8: snprintf(product, sizeof(product), "Jax"); break;
 		case 10: snprintf(product, sizeof(product), "Excelsior"); break;
-		default: snprintf(product, sizeof(product), "Fizz"); break;
+		default: snprintf(product, sizeof(product),
+				CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME); break;
 	}
 	return product;
 }
