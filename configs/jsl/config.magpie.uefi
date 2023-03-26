@@ -11,6 +11,8 @@ CONFIG_FSP_M_FILE="3rdparty/blobs/mainboard/google/dedede/magpie/fspm.bin"
 CONFIG_FSP_S_FILE="3rdparty/blobs/mainboard/google/dedede/magpie/fsps.bin"
 CONFIG_CPU_MICROCODE_CBFS_EXTERNAL_BINS=y
 CONFIG_CPU_UCODE_BINARIES="3rdparty/blobs/mainboard/google/dedede/magpie/cpu_microcode_blob.bin"
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_EXTERNAL=y
+CONFIG_EC_GOOGLE_CHROMEEC_FIRMWARE_FILE="3rdparty/blobs/mainboard/google/dedede/magpie/ec.RW.flat"
 CONFIG_HAVE_ME_BIN=y
 CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
 # CONFIG_SET_GOP_DRIVER_VERSION is not set
