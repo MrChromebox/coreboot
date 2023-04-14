@@ -8,4 +8,9 @@
 /* Enable Keyboard Backlight in ACPI */
 #define EC_ENABLE_KEYBOARD_BACKLIGHT
 
+/* Enable Tablet switch for Windows drivers */
+#if !CONFIG(CHROMEOS)
+#define EC_ENABLE_TBMC_DEVICE
+#endif
+
 #endif
