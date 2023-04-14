@@ -8,4 +8,7 @@
 /* Enable Keyboard Backlight in ACPI */
 #define EC_ENABLE_KEYBOARD_BACKLIGHT
 
+/* Enable Tablet switch */
+#define EC_ENABLE_TBMC_DEVICE
+
 #endif
