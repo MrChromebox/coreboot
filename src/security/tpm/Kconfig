@@ -59,6 +59,14 @@ config TPM_DEACTIVATE
 	help
 	  Deactivate TPM by issuing deactivate command.
 
+config TPM_PAYLOAD_CONTROL
+	bool "Allow payload control of TPM"
+	default y if TPM1
+	depends on !VBOOT && !TPM_DEACTIVATE
+	depends on TPM1
+	help
+	  Allows the payload to handle activate/deactivate of TPM.
+
 config DEBUG_TPM
 	bool "Output verbose TPM debug messages"
 	default n

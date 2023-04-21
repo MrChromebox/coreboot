@@ -179,7 +179,8 @@ tpm_result_t tpm_setup(int s3flag)
 	}
 
 #if CONFIG(TPM1)
-	rc = tpm1_invoke_state_machine();
+	if (!CONFIG(TPM_PAYLOAD_CONTROL))
+		rc = tpm1_invoke_state_machine();
 #endif
 	if (CONFIG(TPM_MEASURED_BOOT))
 		rc = tspi_measure_cache_to_pcr();
