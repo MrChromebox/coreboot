@@ -268,6 +268,11 @@ config EDK2_SECURE_BOOT_SUPPORT
 	  Select this option to enable UEFI SecureBoot support in edk2.
 	  UEFI SecureBoot will be disabled by default and can be enabled from the menu option.
 
+config EDK2_NETWORK_PXE_SUPPORT
+	bool "Enable UEFI Network PXE booting"
+	depends on EDK2_REPO_MRCHROMEBOX
+	default n
+
 config EDK2_GOP_DRIVER
 	bool "Add a GOP driver to the Tianocore build"
 	depends on INTEL_GMA_ADD_VBT && NO_GFX_INIT && EDK2_REPO_MRCHROMEBOX
