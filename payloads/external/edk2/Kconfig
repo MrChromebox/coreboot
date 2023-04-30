@@ -301,6 +301,11 @@ config EDK2_USE_LVGL_RENDERER
 	  will noticeably slow down menu rendering. Enabling it also pulls
 	  the LVGL library into the payload, increasing its size.
 
+config EDK2_NETWORK_PXE_SUPPORT
+	bool "Enable UEFI Network PXE booting"
+	depends on EDK2_REPO_MRCHROMEBOX
+	default n
+
 config EDK2_GOP_DRIVER
 	bool "Add a GOP driver to the Tianocore build"
 	depends on INTEL_GMA_ADD_VBT && NO_GFX_INIT && !EDK2_REPO_OFFICIAL
