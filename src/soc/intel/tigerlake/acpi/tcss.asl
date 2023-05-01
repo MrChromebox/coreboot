@@ -321,7 +321,7 @@ Scope (_GPE)
 	}
 }
 
-Scope (\_SB.PCI0)
+Scope (\_SB)
 {
 	Device (IOM)
 	{
@@ -333,7 +333,9 @@ Scope (\_SB.PCI0)
 		})
 		Name (_STA, 0xF)
 	}
-
+}
+Scope (\_SB.PCI0)
+{
 	/*
 	 * Operation region defined to access the TCSS_DEVEN. Get the MCHBAR in offset
 	 * 0x48 in B0:D0:F0. TCSS device enable base address is in offset 0x7090 of MCHBAR.
