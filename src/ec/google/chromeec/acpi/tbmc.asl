@@ -17,7 +17,11 @@ Scope (\_SB.PCI0.LPCB.EC0.CREC)
 		}
 		Method(_STA, 0)
 		{
-			Return (0xF)
+			If (^^^MTNS == 1) {
+				Return (0xF)
+			} Else {
+				Return (0x0)
+			}
 		}
 	}
 }
