@@ -63,6 +63,14 @@ chip soc/intel/alderlake
 		},
 	}"
 
+	register "tcc_offset" = "0"	# TCC of 100
+
+	register "power_limits_config[ADL_P_282_442_482_28W_CORE]" = "{
+		.tdp_pl1_override = 28,
+		.tdp_pl2_override = 64,
+		.tdp_pl4 = 140,
+	}"
+
 	device domain 0 on
 		device ref dtt on
 			chip drivers/intel/dptf
@@ -118,18 +126,18 @@ chip soc/intel/alderlake
 
 				register "controls.power_limits" = "{
 					.pl1 = {
-							.min_power = 18000,
-							.max_power = 20000,
-							.time_window_min = 28 * MSECS_PER_SEC,
-							.time_window_max = 32 * MSECS_PER_SEC,
-							.granularity = 200,
+							.min_power = 3000,
+							.max_power = 28000,
+							.time_window_min = 30 * MSECS_PER_SEC,
+							.time_window_max = 30 * MSECS_PER_SEC,
+							.granularity = 100,
 						},
 					.pl2 = {
-							.min_power = 43000,
-							.max_power = 43000,
-							.time_window_min = 28 * MSECS_PER_SEC,
+							.min_power = 64000,
+							.max_power = 64000,
+							.time_window_min = 32 * MSECS_PER_SEC,
 							.time_window_max = 32 * MSECS_PER_SEC,
-							.granularity = 1000,
+							.granularity = 500,
 						}
 				}"
 
