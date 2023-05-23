@@ -217,7 +217,6 @@ chip soc/intel/alderlake
 				.clk_src = 0,
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 			}"
-			probe BOOT_NVME_MASK BOOT_NVME_ENABLED
 		end
 		device ref cnvi_wifi on
 			chip drivers/wifi/generic
@@ -332,7 +331,6 @@ chip soc/intel/alderlake
 				.clk_req = 4,
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 			}"
-			probe BOOT_EMMC_MASK BOOT_EMMC_ENABLED
 		end	#PCIE3 BH799BB
 		device ref pcie_rp6 off end	# PCIE6 WWAN
 		device ref pcie_rp8 off end	# PCIE8 SD card

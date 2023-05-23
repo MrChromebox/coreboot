@@ -246,7 +246,6 @@ chip soc/intel/alderlake
 				.clk_src = 0,
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 			}"
-			probe BOOT_NVME_MASK BOOT_NVME_ENABLED
 		end
 		device ref tbt_pcie_rp0 off end
 		device ref tbt_pcie_rp1 off end
@@ -383,7 +382,6 @@ chip soc/intel/alderlake
 				.clk_req = 0,
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 			}"
-			probe BOOT_EMMC_MASK BOOT_EMMC_ENABLED
 		end
 		device ref pch_espi on
 			chip ec/google/chromeec
