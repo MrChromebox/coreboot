@@ -20,4 +20,7 @@
 
 #define GPIO_SPI_WP	57
 
+#define GMBUS_PIN_VGADDC	2
+#define GMBUS_PIN_PANEL		3
+
 #endif
