@@ -23,17 +23,6 @@ static void pch_smbus_init(struct device *dev)
 		smbus_set_slave_addr(res->base, SMBUS_SLAVE_ADDR);
 }
 
-static void smbus_set_subsystem(struct device *dev, unsigned vendor,
-				unsigned device)
-{
-	pci_write_config32(dev, PCI_SUBSYSTEM_VENDOR_ID,
-				((0x04B4 & 0xffff) << 16) | (0x18D1 & 0xffff));
-}
-
-static struct pci_operations smbus_pci_ops = {
-	.set_subsystem    = smbus_set_subsystem,
-};
-
 static const char *smbus_acpi_name(const struct device *dev)
 {
 	return "SBUS";
@@ -46,7 +35,7 @@ static struct device_operations smbus_ops = {
 	.scan_bus		= scan_smbus,
 	.init			= pch_smbus_init,
 	.ops_smbus_bus		= &lops_smbus_bus,
-	.ops_pci		= &smbus_pci_ops,
+	.ops_pci		= &pci_dev_ops_pci,
 	.acpi_name		= smbus_acpi_name,
 };
 
