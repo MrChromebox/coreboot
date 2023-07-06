@@ -1,6 +1,6 @@
 chip soc/intel/cannonlake
 	register "power_limits_config" = "{
-		.tdp_pl1_override = 8,
+		.tdp_pl1_override = 12,
 		.tdp_pl2_override = 51,
 	}"
 
