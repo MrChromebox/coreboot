@@ -127,7 +127,7 @@ chip soc/amd/picasso
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
 			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_9)"
-			register "wake" = "GEVENT_22"
+			#register "wake" = "GEVENT_22"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
@@ -136,7 +136,7 @@ chip soc/amd/picasso
 			register "generic.cid" = ""ACPI0C50""
 			register "generic.desc" = ""Synaptics Touchpad""
 			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_9)"
-			register "generic.wake" = "GEVENT_22"
+			#register "generic.wake" = "GEVENT_22"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 2c on end
@@ -189,7 +189,7 @@ chip soc/amd/picasso
 			register "hid" = "ACPI_DT_NAMESPACE_HID"
 			register "compat_string" = ""google,cros-ec-uart""
 			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_6)"
-			register "wake" = "GEVENT_10"
+			#register "wake" = "GEVENT_10"
 			register "uart" = "ACPI_UART_RAW_DEVICE(3000000, 64)"
 			device generic 0 on end
 		end
