@@ -72,7 +72,7 @@
 #define SIO_EC_PS2K_IRQ Interrupt(ResourceConsumer, Level, ActiveLow, Shared) {1}
 
 /* Enable EC sync interrupt */
-#define EC_ENABLE_SYNC_IRQ_GPIO
+// #define EC_ENABLE_SYNC_IRQ_GPIO
 
 /* EC sync irq */
 #define EC_SYNC_IRQ GPIO_84
