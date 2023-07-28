@@ -161,16 +161,16 @@ chip soc/amd/mendocino
 		chip drivers/i2c/generic
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
-			register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_LOW(GPIO_40)"
-			register "wake" = "GEVENT_20"
+			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_40)"
+			#register "wake" = "GEVENT_20"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
 		chip drivers/i2c/hid
 			register "generic.hid" = ""GXTP7863""
 			register "generic.desc" = ""Goodix Touchpad""
-			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_40)"
-			register "generic.wake" = "GEVENT_20"
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_40)"
+			#register "generic.wake" = "GEVENT_20"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 2c on end
@@ -244,7 +244,7 @@ chip soc/amd/mendocino
 			register "hid" = "ACPI_DT_NAMESPACE_HID"
 			register "compat_string" = ""google,cros-ec-uart""
 			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_24)"
-			register "wake" = "GEVENT_15"
+			#register "wake" = "GEVENT_15"
 			register "uart" = "ACPI_UART_RAW_DEVICE(3000000, 64)"
 			register "has_power_resource" = "1"
 			register "reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPIO_12)"
