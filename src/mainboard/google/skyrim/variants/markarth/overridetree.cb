@@ -73,8 +73,8 @@ chip soc/amd/mendocino
 		chip drivers/i2c/generic
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
-			register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_LOW(GPIO_40)"
-			register "wake" = "GEVENT_20"
+			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_40)"
+			#register "wake" = "GEVENT_20"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
@@ -82,8 +82,8 @@ chip soc/amd/mendocino
 			register "generic.hid" = ""SYNA0000""
 			register "generic.cid" = ""ACPI0C50""
 			register "generic.desc" = ""Synaptics Touchpad""
-			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_40)"
-			register "generic.wake" = "GEVENT_20"
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_40)"
+			#register "generic.wake" = "GEVENT_20"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 2c on end
