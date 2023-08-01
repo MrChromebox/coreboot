@@ -87,6 +87,18 @@ chip soc/amd/cezanne
 			.txhsxvtune = 3,
 			.txrestune = 1,
 		},
+		/* WiFi / Bluetooth */
+		.Usb2PhyPort[6] = {
+			.compdstune = 1,
+			.sqrxtune = 3,
+			.txfslstune = 3,
+			.txpreempamptune = 2,
+			.txpreemppulsetune = 0,
+			.txrisetune = 2,
+			.txvreftune = 3,
+			.txhsxvtune = 3,
+			.txrestune = 2,
+		},
 		/* Left USB C0 Port */
 		.Usb3PhyPort[0] = {
 			.tx_term_ctrl=3,
@@ -137,8 +149,8 @@ chip soc/amd/cezanne
 		chip drivers/i2c/generic
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
-			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_9)"
-			register "wake" = "GEVENT_22"
+			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_9)"
+			#register "wake" = "GEVENT_22"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
@@ -146,8 +158,8 @@ chip soc/amd/cezanne
 			register "generic.hid" = ""SYNA0000""
 			register "generic.cid" = ""ACPI0C50""
 			register "generic.desc" = ""Synaptics Touchpad""
-			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_9)"
-			register "generic.wake" = "GEVENT_22"
+			register "generic.irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_9)"
+			#register "generic.wake" = "GEVENT_22"
 			register "generic.detect" = "1"
 			register "hid_desc_reg_offset" = "0x20"
 			device i2c 2c on end
