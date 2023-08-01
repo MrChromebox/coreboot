@@ -58,7 +58,7 @@
 #define EC_ENABLE_MKBP_DEVICE
 
 /* Provide wake pin for EC */
-#define EC_ENABLE_WAKE_PIN GEVENT_3 /* AGPIO 22 -> GPE 3 */
+// #define EC_ENABLE_WAKE_PIN GEVENT_3 /* AGPIO 22 -> GPE 3 */
 
 #define SIO_EC_MEMMAP_ENABLE /* EC Memory Map Resources */
 #define SIO_EC_HOST_ENABLE   /* EC Host Interface Resources */
