@@ -81,8 +81,7 @@ chip soc/amd/cezanne
 		chip drivers/i2c/generic
 			register "hid" = ""ELAN0000""
 			register "desc" = ""ELAN Touchpad""
-			register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_LOW(GPIO_9)"
-			register "wake" = "GEVENT_22"
+			register "irq_gpio" = "ACPI_GPIO_IRQ_EDGE_LOW_WAKE(GPIO_9)"
 			register "detect" = "1"
 			device i2c 15 on end
 		end
@@ -169,8 +168,7 @@ chip soc/amd/cezanne
 			register "desc" = ""Fingerprint Reader""
 			register "hid" = "ACPI_DT_NAMESPACE_HID"
 			register "compat_string" = ""google,cros-ec-uart""
-			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW(GPIO_21)"
-			register "wake" = "GEVENT_5"
+			register "irq_gpio" = "ACPI_GPIO_IRQ_LEVEL_LOW_WAKE(GPIO_21)"
 			register "uart" = "ACPI_UART_RAW_DEVICE(3000000, 64)"
 			register "has_power_resource" = "1"
 			register "reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPIO_11)"
