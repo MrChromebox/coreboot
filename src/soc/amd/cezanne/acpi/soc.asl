@@ -36,7 +36,7 @@ Scope(\_SB) {
 #include <soc/amd/common/acpi/dptc.asl>
 #endif
 
-#include "rtc_workaround.asl"
+// #include "rtc_workaround.asl"
 
 /*
  * Platform Notify
