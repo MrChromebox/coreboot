@@ -39,7 +39,7 @@ Scope(\_SB) {
 /* Enable DPTC interface with AMD ALIB */
 External(\_SB.DPTC, MethodObj)
 
-#include "rtc_workaround.asl"
+//#include "rtc_workaround.asl"
 
 /*
  * Platform Notify
