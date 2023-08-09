@@ -1,0 +1,90 @@
+#
+# MrChromebox Kconfig overrides
+#
+# Consolidates overrides here vs in individual board configs or via editing source directly
+#
+
+# Enable the ME HECI device for HSW/BDW devices
+config DISABLE_ME_PCI
+	default n
+
+#Enable the ME HECI for Intel common SOCs
+config DISABLE_HECI1_AT_PRE_BOOT
+	default n
+
+# No need to output POST codes
+config NO_POST
+	default y
+
+# Add VPD to FMAP by default
+config VPD
+	default y
+
+# Read serial from VPD if used
+config SMBIOS_SERIAL_FROM_VPD
+	depends on VPD && GENERATE_SMBIOS_TABLES
+	default y if !DRIVERS_GENERIC_CBFS_SERIAL && !VENDOR_EMULATION
+
+# Enables WDT on fizz/puff boards
+config USE_PM_ACPI_TIMER
+	default y if BOARD_GOOGLE_BASEBOARD_FIZZ || BOARD_GOOGLE_BASEBOARD_PUFF
+
+# Fixes grub booting - need to check if still needed
+config USE_LEGACY_8254_TIMER
+	default y
+
+# GLK FSP overrides
+config FSP_HEADER_PATH
+	default "src/vendorcode/intel/fsp/fsp2_0/geminilake/2.2.3.1" if SOC_INTEL_GEMINILAKE
+
+config FSP_M_FILE
+	default "3rdparty/blobs/soc/intel/glk/fsp/release/Fsp_M.fd" if SOC_INTEL_GEMINILAKE
+
+config FSP_S_FILE
+	default "3rdparty/blobs/soc/intel/glk/fsp/release/Fsp_S.fd" if SOC_INTEL_GEMINILAKE
+
+# PCIe hotplug defaults
+config PCIEXP_HOTPLUG_PREFETCH_MEM
+	default 0x100000000
+
+config PCIEXP_HOTPLUG_IO
+	default 0x6000
+
+# edk2 payload options
+
+config EDK2_TAG_OR_REV
+	default "origin/uefipayload_202309" if EDK2_REPO_MRCHROMEBOX
+
+config EDK2_BOOT_MANAGER_ESCAPE
+	default y
+
+config EDK2_FOLLOW_BGRT_SPEC
+	default y
+
+config EDK2_FULL_SCREEN_SETUP
+	default n
+
+# Disable serial output
+config CONSOLE_SERIAL
+	default n
+
+# Ensure CBFS large enough for edk2
+config CBFS_SIZE
+	default 0x300000 if COREBOOT_ROMSIZE_KB_8192
+	default 0x450000 if COREBOOT_ROMSIZE_KB_16384 || COREBOOT_ROMSIZE_KB_32768
+
+# Disable CBFS Metadata cache for PCO
+config NO_CBFS_MCACHE
+	default y if SOC_AMD_PICASSO
+
+config EDK2_GOP_FILE
+	depends on EDK2_GOP_DRIVER
+	default "3rdparty/blobs/soc/intel/bdw/IntelGopDriver.efi" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
+	default "3rdparty/blobs/soc/intel/byt/IntelGopDriver.efi" if SOC_INTEL_BAYTRAIL
+	default "3rdparty/blobs/soc/intel/bsw/IntelGopDriver.efi" if SOC_INTEL_BRASWELL
+	default "3rdparty/blobs/soc/intel/kbl/IntelGopDriver.efi" if SOC_INTEL_SKYLAKE || SOC_INTEL_KABYLAKE
+	default "3rdparty/blobs/soc/intel/glk/IntelGopDriver.efi" if SOC_INTEL_GEMINILAKE
+	default "3rdparty/blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
+	default "3rdparty/blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE || SOC_INTEL_WHISKEYLAKE
+	default "3rdparty/blobs/soc/intel/tgl/IntelGopDriver.efi" if SOC_INTEL_TIGERLAKE
+	default "IntelGopDriver.efi"
