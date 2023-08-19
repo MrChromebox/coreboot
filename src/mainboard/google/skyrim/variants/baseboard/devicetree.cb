@@ -182,10 +182,7 @@ chip soc/amd/mendocino
 						chip drivers/usb/acpi
 							register "desc" = ""Bluetooth""
 							register "type" = "UPC_TYPE_INTERNAL"
-							register "has_power_resource" = "true"
-							register "enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPIO_10)"
-							register "enable_delay_ms" = "500"
-							register "enable_off_delay_ms" = "200"
+							register "reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPIO_10)"
 							register "use_gpio_for_status" = "true"
 							device usb 2.0 alias usb2_port5 on end
 						end
