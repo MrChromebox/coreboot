@@ -33,7 +33,7 @@ void fch_pre_init(void)
 
 	/* Setup eSPI to enable port80 routing if the board is using eSPI and the eSPI
 	   interface hasn't already been set up in verstage on PSP */
-	if (CONFIG(SOC_AMD_COMMON_BLOCK_USE_ESPI) && !CONFIG(VBOOT_STARTS_BEFORE_BOOTBLOCK))
+	if (CONFIG(SOC_AMD_COMMON_BLOCK_USE_ESPI))
 		configure_espi_with_mb_hook();
 
 	if (!CONFIG(SOC_AMD_COMMON_BLOCK_USE_ESPI))
