@@ -39,6 +39,44 @@ static void acp_fill_ssdt(const struct device *dev)
 {
 	acpi_device_write_pci_dev(dev);
 	acp_fill_wov_method(dev);
+
+	if (CONFIG(SOC_AMD_CEZANNE)) {
+		/*
+		 * Add an interface to the host bridge for CZN
+		 *
+		 * On CZN, the ACP drivers need to notify the PSP after the DSP
+		 * firmware has been loaded, so the PSP can validate the fw and
+		 * set the qualifiier bit to enable running it. Under Linux, there
+		 * is an existing interface to do so, but under Windows, this ACPI
+		 * workaround is needed.
+		 *
+		 *	Scope (\_SB.PCI0.GP41.ACPD)
+		 *	{
+		 *		Method (SMNR, 1, NotSerialized)
+		 *		{
+		 *			\_SB.PCI0.GNB.SMNA = Arg0
+		 *			Return (\_SB.PCI0.GNB.SMND)
+		 *		}
+		 *
+		 *		Method (SMNW, 2, NotSerialized)
+		 *		{
+		 *			\_SB.PCI0.GNB.SMNA = Arg0
+		 *			\_SB.PCI0.GNB.SMND = Arg1
+		 *		}
+		 *	}
+		 */
+		acpigen_write_scope(acpi_device_path(dev));
+		acpigen_write_method("SMNR", 1);
+		acpigen_write_store_op_to_namestr(ARG0_OP, "\\_SB.PCI0.GNB.SMNA");
+		acpigen_write_return_namestr("\\_SB.PCI0.GNB.SMND");
+		acpigen_write_method_end();
+		acpigen_write_method("SMNW", 2);
+		acpigen_write_store_op_to_namestr(ARG0_OP, "\\_SB.PCI0.GNB.SMNA");
+		acpigen_write_store_op_to_namestr(ARG1_OP, "\\_SB.PCI0.GNB.SMND");
+		acpigen_write_method_end();
+		acpigen_write_scope_end();
+
+	}
 }
 
 struct device_operations amd_acp_ops = {
