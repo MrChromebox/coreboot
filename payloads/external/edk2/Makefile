@@ -141,7 +141,7 @@ BUILD_STR += --pcd gEfiMdeModulePkgTokenSpaceGuid.PcdSetupConOutRow=0
 BUILD_STR += --pcd gEfiMdeModulePkgTokenSpaceGuid.PcdSetupConOutColumn=0
 endif
 
-ifeq ($(CONFIG_TPM_GOOGLE_CR50)$(CONFIG_EDK2_REPO_MRCHROMEBOX),yy)
+ifeq ($(CONFIG_EDK2_DISABLE_TPM),y)
 BUILD_STR += -D TPM_ENABLE=FALSE
 endif
 
