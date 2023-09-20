@@ -458,6 +458,16 @@ Device (EC0)
 #endif
 #ifdef EC_ENABLE_TBMC_DEVICE
 		Notify (^CREC.TBMC, 0x80)
+#if CONFIG(SOC_INTEL_COMMON)
+		If (LEqual ((^TBMD), One)) {
+			Notify (VBTN, 0xCC)
+		} Else {
+			Notify (VBTN, 0xCD)
+		}
+#endif
+#if CONFIG(SOC_AMD_COMMON)
+		Notify (VGBI, 0x81)
+#endif
 #endif
 #if CONFIG(SOC_AMD_COMMON_BLOCK_ACPI_DPTC)
 		If (CondRefOf (\_SB.DPTC)) {
@@ -659,5 +669,14 @@ Device (EC0)
 
 #ifdef EC_ENABLE_KEYBOARD_BACKLIGHT
 	#include "keyboard_backlight.asl"
+#endif
+
+#ifdef EC_ENABLE_TBMC_DEVICE
+#if CONFIG(SOC_INTEL_COMMON)
+	#include "vbtn.asl"
+#endif
+#if CONFIG(SOC_AMD_COMMON)
+	#include "vgbi.asl"
+#endif
 #endif
 }
