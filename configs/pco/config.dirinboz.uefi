@@ -1,0 +1,9 @@
+CONFIG_USE_AMD_BLOBS=y
+CONFIG_VENDOR_GOOGLE=y
+CONFIG_BOARD_GOOGLE_DIRINBOZ=y
+CONFIG_PSP_VERSTAGE_FILE="3rdparty/blobs/mainboard/google/zork/dirinboz_psp_verstage.bin.signed"
+CONFIG_PSP_VERSTAGE_SIGNING_TOKEN="3rdparty/blobs/mainboard/google/zork/PCO_psp_verstagebl_fw_signing.stkn"
+CONFIG_FRAMEBUFFER_SET_VESA_MODE=y
+CONFIG_FRAMEBUFFER_VESA_MODE_USER=y
+CONFIG_FRAMEBUFFER_VESA_MODE=0x1d4
+# CONFIG_SMMSTORE is not set
