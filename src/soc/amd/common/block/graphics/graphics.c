@@ -9,7 +9,9 @@
 #include <console/console.h>
 #include <device/pci.h>
 #include <fmap.h>
+#if CONFIG(RUN_FSP_GOP)
 #include <fsp/graphics.h>
+#endif
 #include <security/vboot/vbios_cache_hash_tpm.h>
 #include <soc/intel/common/vbt.h>
 #include <timestamp.h>
@@ -177,7 +179,7 @@ static void graphics_set_resources(struct device *const dev)
 
 static void graphics_dev_init(struct device *const dev)
 {
-	if (CONFIG(RUN_FSP_GOP)) {
+	#if CONFIG(RUN_FSP_GOP)
 		struct resource *res = probe_resource(dev, PCI_BASE_ADDRESS_0);
 
 		if (res && res->base)
@@ -185,7 +187,7 @@ static void graphics_dev_init(struct device *const dev)
 		else
 			printk(BIOS_ERR, "%s: Unable to find resource for %s\n",
 			       __func__, dev_path(dev));
-	}
+	#endif
 
 	/* Initialize PCI device, load/execute BIOS Option ROM */
 	pci_dev_init(dev);
