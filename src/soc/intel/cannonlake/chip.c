@@ -81,6 +81,7 @@ const char *soc_acpi_name(const struct device *dev)
 	case SA_DEVFN_ROOT:	return "MCHC";
 	case SA_DEVFN_IGD:	return "GFX0";
 	case PCH_DEVFN_ISH:	return "ISHB";
+	case SA_DEVFN_GNA:	return "GNA";
 	case PCH_DEVFN_XHCI:	return "XHCI";
 	case PCH_DEVFN_USBOTG:	return "XDCI";
 	case PCH_DEVFN_THERMAL:	return "THRM";
@@ -126,7 +127,7 @@ const char *soc_acpi_name(const struct device *dev)
 	case PCH_DEVFN_GSPI0:	return "SPI0";
 	case PCH_DEVFN_GSPI1:	return "SPI1";
 	case PCH_DEVFN_GSPI2:	return "SPI2";
-	case PCH_DEVFN_EMMC:	return "EMMC";
+	case PCH_DEVFN_EMMC:	return "PEMC";
 	case PCH_DEVFN_SDCARD:	return "SDXC";
 	case PCH_DEVFN_P2SB:	return "P2SB";
 	case PCH_DEVFN_PMC:	return "PMC_";
