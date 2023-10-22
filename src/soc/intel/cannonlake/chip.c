@@ -128,7 +128,7 @@ const char *soc_acpi_name(const struct device *dev)
 	case PCH_DEVFN_GSPI0:	return "SPI0";
 	case PCH_DEVFN_GSPI1:	return "SPI1";
 	case PCH_DEVFN_GSPI2:	return "SPI2";
-	case PCH_DEVFN_EMMC:	return "EMMC";
+	case PCH_DEVFN_EMMC:	return "PEMC";
 	case PCH_DEVFN_SDCARD:	return "SDXC";
 	case PCH_DEVFN_P2SB:	return "P2SB";
 	case PCH_DEVFN_PMC:	return "PMC_";
