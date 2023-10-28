@@ -283,7 +283,6 @@ chip soc/intel/cannonlake
 		end
 		device ref i2c0		on end
 		device ref i2c1		on end
-		device ref sata		on end
 		device ref i2c4		on end
 		device ref pcie_rp9	on
 			register "PcieRpSlotImplemented[8]" = "1"
