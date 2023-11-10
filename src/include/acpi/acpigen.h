@@ -373,6 +373,7 @@ void acpigen_write_return_namestr(const char *arg);
 void acpigen_write_return_string(const char *arg);
 void acpigen_write_len_f(void);
 void acpigen_pop_len(void);
+void acpigen_pop_len_compress(void);
 void acpigen_set_current(char *curr);
 char *acpigen_get_current(void);
 char *acpigen_write_package(int nr_el);

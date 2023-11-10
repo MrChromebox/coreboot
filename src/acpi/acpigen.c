@@ -50,6 +50,43 @@ void acpigen_pop_len(void)
 
 }
 
+void acpigen_pop_len_compress(void)
+{
+	size_t len;
+	ASSERT(ltop > 0)
+	char *p = len_stack[--ltop];
+	len = gencurrent - p;
+	ASSERT(len <= ACPIGEN_MAXLEN)
+
+	if (len <= 0x3f + 2) {
+		len -= 2;
+		p[0] = len;
+		/* only one PkgLength byte, so move data by 2 bytes */
+		for (size_t i = 0; i < len; i++) {
+			p[1 + i] = p[3 + i];
+		}
+		acpigen_set_current(p + len);
+	} else if (len <= 0xfff + 1) {
+		len -= 1;
+		p[0] = (0x40 | (len & 0xf));
+		p[1] = (len >> 4 & 0xff);
+		/* two PkgLength bytes, so move data by 1 byte */
+		for (size_t i = 0; i < len; i++) {
+			p[2 + i] = p[3 + i];
+		}
+		acpigen_set_current(p + len);
+	} else if (len <= 0xfffff) {
+		/* three PkgLength bytes, so no need to move the data */
+		/* generate store length for 0xfffff max */
+		p[0] = (0x80 | (len & 0xf));
+		p[1] = (len >> 4 & 0xff);
+		p[2] = (len >> 12 & 0xff);
+	} else {
+		/* acpigen_write_len_f only reserves 3 PkgLength bytes */
+		printk(BIOS_ERR, "acpigen: 4 byte PkgLength isn't supported.\n");
+	}
+}
+
 void acpigen_set_current(char *curr)
 {
 	gencurrent = curr;
