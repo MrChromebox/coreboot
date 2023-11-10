@@ -38,20 +38,6 @@ void acpigen_write_len_f(void)
 
 void acpigen_pop_len(void)
 {
-	int len;
-	ASSERT(ltop > 0)
-	char *p = len_stack[--ltop];
-	len = gencurrent - p;
-	ASSERT(len <= ACPIGEN_MAXLEN)
-	/* generate store length for 0xfffff max */
-	p[0] = (0x80 | (len & 0xf));
-	p[1] = (len >> 4 & 0xff);
-	p[2] = (len >> 12 & 0xff);
-
-}
-
-void acpigen_pop_len_compress(void)
-{
 	size_t len;
 	ASSERT(ltop > 0)
 	char *p = len_stack[--ltop];
