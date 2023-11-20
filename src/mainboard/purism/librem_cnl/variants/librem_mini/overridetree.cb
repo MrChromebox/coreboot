@@ -20,6 +20,7 @@ chip soc/intel/cannonlake
 
 # Actual device tree
 	device domain 0 on
+		device pci 04.0 off end # SA Thermal device
 		device pci 14.0 on	# USB xHCI
 			chip drivers/usb/acpi
 				device usb 0.0 on
