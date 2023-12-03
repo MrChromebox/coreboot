@@ -3,7 +3,7 @@
 #include <baseboard/ec.h>
 
 /* Enable PS/2 Mouse */
-#define SIO_EC_ENABLE_PS2M
+//#define SIO_EC_ENABLE_PS2M
 
 #undef MAINBOARD_EC_S3_WAKE_EVENTS
 #undef MAINBOARD_EC_S3_DEVICE_EVENTS
