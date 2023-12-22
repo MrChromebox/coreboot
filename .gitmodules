@@ -8,7 +8,7 @@
 	url = https://review.coreboot.org/nvidia-cbootimage.git
 [submodule "vboot"]
 	path = 3rdparty/vboot
-	url = https://review.coreboot.org/vboot.git
+	url = https://github.com/MrChromebox/vboot.git
 	branch = main
 [submodule "arm-trusted-firmware"]
 	path = 3rdparty/arm-trusted-firmware
