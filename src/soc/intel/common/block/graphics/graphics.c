@@ -176,7 +176,7 @@ static void gma_generate_ssdt(const struct device *device)
 {
 	const struct i915_gpu_controller_info *gfx = intel_igd_get_controller_info(device);
 
-	if (gfx)
+	if (gfx && !CONFIG(DRIVERS_GFX_GENERIC))
 		drivers_intel_gma_displays_ssdt_generate(gfx);
 }
 
