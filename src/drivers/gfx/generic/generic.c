@@ -124,13 +124,49 @@ static void gfx_fill_ssdt_generator(const struct device *dev)
 		if (config->device[i].hid)
 			acpigen_write_name_string("_HID", config->device[i].hid);
 		else
-			acpigen_write_name_integer("_ADR", config->device[i].addr);
+			acpigen_write_name_integer("_ADR", config->device[i].addr & 0xFFFF);
 
 		acpigen_write_name_integer("_STA", 0xF);
 		gfx_fill_privacy_screen_dsm(&config->device[i].privacy);
 
 		if (config->device[i].use_pld)
 			acpigen_write_pld(&config->device[i].pld);
+
+		/* ACPI brightness controls for LCD.  */
+		if (strcmp(config->device[i].name, "LCD") == 0) {
+			/*
+			  Method (_BCL, 0, NotSerialized)
+			  {
+				Return (^^XBCL())
+			  }
+			*/
+			acpigen_write_method("_BCL", 0);
+			acpigen_emit_byte(RETURN_OP);
+			acpigen_emit_namestring("^^XBCL");
+			acpigen_pop_len();
+
+			/*
+			  Method (_BCM, 1, NotSerialized)
+			  {
+				^^XBCM(Arg0)
+			  }
+			*/
+			acpigen_write_method("_BCM", 1);
+			acpigen_emit_namestring("^^XBCM");
+			acpigen_emit_byte(ARG0_OP);
+			acpigen_pop_len();
+
+			/*
+			  Method (_BQC, 0, NotSerialized)
+			  {
+				Return (^^XBQC())
+			  }
+			*/
+			acpigen_write_method("_BQC", 0);
+			acpigen_emit_byte(RETURN_OP);
+			acpigen_emit_namestring("^^XBQC");
+			acpigen_pop_len();
+		}
 
 		acpigen_pop_len(); /* Device */
 	}
