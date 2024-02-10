@@ -753,6 +753,9 @@ config USE_PM_ACPI_TIMER
 	default y if BOARD_GOOGLE_PRIMUS4ES
 	default n
 
+config USE_LEGACY_8254_TIMER
+        default n
+
 config DEFAULT_ADL_NEM
 	bool
 	help
