@@ -1,5 +1,4 @@
 CONFIG_VENDOR_GOOGLE=y
-CONFIG_INTEL_GMA_VBT_FILE="3rdparty/blobs/mainboard/google/dedede/boten/vbt.bin"
 CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/dedede/boten/flashdescriptor.bin"
 CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/dedede/boten/me.bin"
 CONFIG_BOARD_GOOGLE_BOTEN=y
