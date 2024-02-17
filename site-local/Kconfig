@@ -30,8 +30,8 @@ config USE_PM_ACPI_TIMER
 	default y if BOARD_GOOGLE_BASEBOARD_FIZZ || BOARD_GOOGLE_BASEBOARD_PUFF
 
 # Fixes grub booting - need to check if still needed
-config USE_LEGACY_8254_TIMER
-	default y
+#config USE_LEGACY_8254_TIMER
+#	default y
 
 # GLK FSP overrides
 config FSP_HEADER_PATH
