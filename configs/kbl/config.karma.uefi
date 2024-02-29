@@ -1,5 +1,5 @@
 CONFIG_VENDOR_GOOGLE=y
-CONFIG_INCLUDE_NHLT_BLOBS=y
+CONFIG_INCLUDE_NHLT_BLOBS_KARMA=y
 CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/fizz/karma/flashdescriptor.bin"
 CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/fizz/karma/me.bin"
 CONFIG_BOARD_GOOGLE_KARMA=y
