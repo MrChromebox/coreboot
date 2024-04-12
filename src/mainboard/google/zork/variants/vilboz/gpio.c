@@ -15,8 +15,10 @@ static const struct soc_amd_gpio bid_1_gpio_set_stage_ram[] = {
 };
 
 static const struct soc_amd_gpio vilboz_gpio_set_stage_ram[] = {
+#if CONFIG(CHROMEOS)
 	/* P sensor INT */
 	PAD_INT(GPIO_40, PULL_NONE, LEVEL_LOW, STATUS_DELIVERY),
+#endif
 	/* LTE_RST_L */
 	PAD_GPO(GPIO_89, HIGH),
 };
