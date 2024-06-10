@@ -110,6 +110,9 @@ int google_chromeec_reboot(enum ec_reboot_cmd type, uint8_t flags);
 
 void google_chromeec_ap_poweroff(void);
 
+/* EC software sync */
+void google_chromeec_swsync(void);
+
 /**
  * Get data from Cros Board Info
  *
