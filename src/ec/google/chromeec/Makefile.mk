@@ -29,7 +29,7 @@ bootblock-y += crosec_proto.c
 endif
 bootblock-$(CONFIG_EC_GOOGLE_CHROMEEC_MEC) += mec.c
 bootblock-$(CONFIG_EC_GOOGLE_CHROMEEC_RTK) += rtk.c
-ramstage-y += ec.c crosec_proto.c vstore.c usbc_mux.c
+ramstage-y += ec.c crosec_proto.c vstore.c usbc_mux.c ec_sync.c
 ramstage-$(CONFIG_EC_GOOGLE_CHROMEEC_I2C) += ec_i2c.c
 ramstage-$(CONFIG_EC_GOOGLE_CHROMEEC_LPC) += ec_lpc.c
 ramstage-$(CONFIG_EC_GOOGLE_CHROMEEC_SPI) += ec_spi.c
