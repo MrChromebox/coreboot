@@ -112,6 +112,9 @@ void google_chromeec_ap_poweroff(void);
 
 int google_chromeec_offmode_heartbeat(void);
 
+/* EC software sync */
+void google_chromeec_swsync(void);
+
 /**
  * Get data from Cros Board Info
  *
