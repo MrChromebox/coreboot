@@ -94,6 +94,9 @@ int google_chromeec_vstore_write(int slot, uint8_t *data, size_t size);
    success, < 0 otherwise. */
 int google_chromeec_reboot(enum ec_reboot_cmd type, uint8_t flags);
 
+/* EC software sync */
+void google_chromeec_swsync(void);
+
 /**
  * Get data from Cros Board Info
  *
