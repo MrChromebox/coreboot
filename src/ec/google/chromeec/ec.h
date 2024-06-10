@@ -122,6 +122,9 @@ int google_chromeec_offmode_heartbeat(void);
 /* Scheduled AP reset */
 int google_chromeec_apreset_schedule(uint32_t delay_ms);
 
+/* EC software sync */
+void google_chromeec_swsync(void);
+
 /**
  * Get data from Cros Board Info
  *
