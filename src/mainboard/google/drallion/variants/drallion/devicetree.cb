@@ -232,7 +232,6 @@ chip soc/intel/cannonlake
 				device generic 0 on end
 			end
 		end
-		device ref dptf on  end
 		device ref thermal on  end
 		device ref ish on
 			chip drivers/intel/ish
