@@ -231,6 +231,7 @@ chip soc/intel/apollolake
 		device ref spi0		on
 			chip drivers/spi/acpi
 				register "hid" = "ACPI_DT_NAMESPACE_HID"
+				register "cid" = ""GOOG0005""
 				register "compat_string" = ""google,cr50""
 				register "irq" = "ACPI_IRQ_EDGE_LOW(GPIO_63_IRQ)"
 				device spi 0 on end
