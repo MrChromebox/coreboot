@@ -479,6 +479,7 @@ chip soc/intel/tigerlake
 		device ref gspi0 on
 			chip drivers/spi/acpi
 				register "hid" = "ACPI_DT_NAMESPACE_HID"
+				register "cid" = ""GOOG0005""
 				register "compat_string" = ""google,cr50""
 				register "irq" = "ACPI_IRQ_EDGE_LOW(GPP_C21_IRQ)"
 				device spi 0 alias spi_tpm on end
