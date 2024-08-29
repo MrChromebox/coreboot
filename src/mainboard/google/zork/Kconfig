@@ -146,8 +146,7 @@ config VGA_BIOS
 
 config VBOOT
 	bool
-	# selected by default as PSP verstage required for booting at present time
-	default y
+	default n
 	select EC_GOOGLE_CHROMEEC_SWITCHES
 	select VBOOT_LID_SWITCH
 	select VBOOT_STARTS_BEFORE_BOOTBLOCK
