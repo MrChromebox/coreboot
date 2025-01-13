@@ -16,6 +16,7 @@
 #include <cbfs.h>
 #include <cbmem.h>
 #include <halt.h>
+#include <option.h>
 #include <reset.h>
 #include "ec_commands.h"
 
@@ -522,13 +523,16 @@ static void google_chromeec_after_g3_state_sync(void)
 
 void google_chromeec_swsync(void)
 {
+	bool perform_ec_sw_sync =  get_uint_option("ec_sw_sync", 1);
+	bool jump_to_rw =  get_uint_option("ec_rw_jump", 1);
+
 	/* Check which EC image is active */
 	chromeec_get_and_print_ec_version();
 
 	/* Check/update EC RW image if needed */
-	if (ec_sync() != CB_SUCCESS) {
+	if (perform_ec_sw_sync && ec_sync() != CB_SUCCESS) {
 		printk(BIOS_ERR, "ChromeEC SW Sync: EC SW SYNC FAILED\n");
-	} else if (chromeec_get_image_type() != EC_IMAGE_RW) {
+	} else if (jump_to_rw && chromeec_get_image_type() != EC_IMAGE_RW) {
 		/* EC RW image is up to date, switch to it if not already*/
 		printk(BIOS_DEBUG, "ChromeEC SW Sync: Jumping to EC_RW firmware\n");
 		google_chromeec_reboot(EC_REBOOT_JUMP_RW, 0);
@@ -537,6 +541,11 @@ void google_chromeec_swsync(void)
 		google_chromeec_hello();
 		/* re-run version command & print */
 		chromeec_get_and_print_ec_version();
+	} else if (!jump_to_rw) {
+		/* Stay in / jump to RO */
+		if (chromeec_get_image_type() == EC_IMAGE_RW) {
+			google_chromeec_reboot(EC_REBOOT_COLD, 0);
+		}
 	}
 
 	/* Flashing/jumping is done, sync EC running image configuration. */
