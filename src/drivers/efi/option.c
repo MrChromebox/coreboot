@@ -19,7 +19,7 @@ unsigned int get_uint_option(const char *name, const unsigned int fallback)
 	uint32_t size;
 
 	if (smmstore_lookup_region(&rdev)) {
-		printk(BIOS_SPEW, "%s: SMMSTORE not found, returning fallback option for variable %s\n",
+		printk(BIOS_DEBUG, "%s: SMMSTORE not found, returning fallback option for variable %s\n",
 				__func__, name);
 		return fallback;
 	}
@@ -28,11 +28,11 @@ unsigned int get_uint_option(const char *name, const unsigned int fallback)
 	size = sizeof(var);
 	ret = efi_fv_get_option(&rdev, &EficorebootNvDataGuid, name, &var, &size);
 	if (ret != CB_SUCCESS) {
-		printk(BIOS_SPEW, "%s: SMMSTORE variable lookup failed, returning fallback option for variable %s\n",
+		printk(BIOS_DEBUG, "%s: SMMSTORE variable lookup failed, returning fallback option for variable %s\n",
 				__func__, name);
 		return fallback;
 	}
-	printk(BIOS_SPEW, "%s: found variable %s in SMMSTORE; returning value %u\n", __func__, name, var);
+	printk(BIOS_DEBUG, "%s: found variable %s in SMMSTORE; returning value %u\n", __func__, name, var);
 	return var;
 }
 

@@ -121,7 +121,8 @@ static void soc_primary_gfx_config_params(FSP_M_CONFIG *m_cfg,
 	 *
 	 * If disabled, don't reserve memory for it.
 	 */
-	m_cfg->IgdDvmt50PreAlloc = m_cfg->InternalGfx ? 2 : 0;
+	m_cfg->IgdDvmt50PreAlloc = m_cfg->InternalGfx ? get_uint_option("IgdDvmt50PreAlloc", 2) : 0;
+	m_cfg->ApertureSize = get_uint_option("ApertureSize", 0);
 
 	m_cfg->PrimaryDisplay = config->PrimaryDisplay;
 }

@@ -58,6 +58,32 @@ static const struct sm_object me_state_counter = SM_DECLARE_NUMBER({
 	.default_value	= 0,
 });
 
+static const struct sm_object igd_dvmt = SM_DECLARE_ENUM({
+	.opt_name	= "IgdDvmt50PreAlloc",
+	.ui_name	= "IGD DVMT Size",
+	.ui_helptext	= "Size of memory preallocated for internal graphics",
+	.default_value	= 2,
+	.values		= (const struct sm_enum_value[]) {
+				{ "32 MB",		1		},
+				{ "64 MB",		2		},
+				{ "96 MB",		3		},
+				{ "128 MB",		4		},
+				SM_ENUM_VALUE_END			},
+});
+
+static const struct sm_object igd_aperture = SM_DECLARE_ENUM({
+	.opt_name	= "ApertureSize",
+	.ui_name	= "IGD Aperture Size",
+	.ui_helptext	= "Select the Aperture Size",
+	.default_value	= 0,
+	.values		= (const struct sm_enum_value[]) {
+				{ "128 MB",		0		},
+				{ "256 MB",		1		},
+				{ "512 MB",		2		},
+				{ "1024 MB",		3		},
+				SM_ENUM_VALUE_END			},
+});
+
 enum cfr_power_profile {
 	PP_POWER_SAVER = 0,
 	PP_BALANCED    = 1,
@@ -132,6 +158,8 @@ static struct sm_obj_form processor = {
 		&me_state_counter,
 		&vtd,
 		&hyperthreading,
+		&igd_dvmt,
+		&igd_aperture,
 		NULL
 	},
 };
