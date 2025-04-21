@@ -128,7 +128,8 @@ void platform_fsp_memory_init_params_cb(FSPM_UPD *mupd, uint32_t version)
 	m_cfg->PlatformDebugConsent = CONFIG_SOC_INTEL_COMMON_DEBUG_CONSENT;
 
 	/* Configure VT-d */
-	tconfig->VtdDisable = 0;
+	const uint8_t vtd = get_uint_option("vtd", 1);
+	tconfig->VtdDisable = !vtd;
 
 	/* Set HECI1 PCI BAR address */
 	m_cfg->Heci1BarAddress = HECI1_BASE_ADDRESS;
