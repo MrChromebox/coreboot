@@ -30,7 +30,7 @@ chip soc/intel/cannonlake
 	# USB2 PHY Power gating
 	register "PchUsb2PhySusPgDisable" = "1"
 
-	register "s0ix_enable" = "true"
+	register "s0ix_enable" = "false"
 	register "dptf_enable" = "true"
 	register "satapwroptimize" = "1"
 	register "AcousticNoiseMitigation" = "1"
