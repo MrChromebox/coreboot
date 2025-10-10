@@ -26,14 +26,6 @@ fw_config
 		option WIFI_SAR_ID_2			2
 		option WIFI_SAR_ID_3			3
 	end
-	field BOOT_NVME_MASK 12
-		option BOOT_NVME_DISABLED		0
-		option BOOT_NVME_ENABLED		1
-	end
-	field BOOT_EMMC_MASK 13
-		option BOOT_EMMC_DISABLED		0
-		option BOOT_EMMC_ENABLED		1
-	end
 	field THERMAL 16
 		option THERMAL_FAN_TABLE_0		0
 		option THERMAL_FAN_TABLE_1		1
@@ -400,7 +392,6 @@ chip soc/intel/alderlake
 				.clk_src = 0,
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 			}"
-			probe BOOT_NVME_MASK BOOT_NVME_ENABLED
 		end
 		device ref tbt_pcie_rp0 off end
 		device ref tbt_pcie_rp1 off end
@@ -568,7 +559,6 @@ chip soc/intel/alderlake
 				.flags = PCIE_RP_LTR | PCIE_RP_AER,
 				.pcie_rp_aspm = ASPM_L1,
 			}"
-			probe BOOT_EMMC_MASK BOOT_EMMC_ENABLED
 		end
 		device ref gspi1 on
 			chip drivers/spi/acpi
