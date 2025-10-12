@@ -995,6 +995,7 @@ config I2C_TRANSFER_TIMEOUT_US
 config RESOURCE_ALLOCATION_TOP_DOWN
 	bool "Allocate resources from top down"
 	default n if PAYLOAD_EDK2 && EDK2_REPO_OFFICIAL
+	default n if ! PLATFORM_USES_FSP2_0
 	default y
 	help
 	  Top-down allocation is required to place resources above 4G by
