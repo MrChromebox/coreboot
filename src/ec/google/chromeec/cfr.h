@@ -20,7 +20,9 @@ static const struct sm_object ec_sw_sync = SM_DECLARE_BOOL({
 static const struct sm_object ec_rw_jump = SM_DECLARE_BOOL({
 	.opt_name	= "ec_rw_jump",
 	.ui_name	= "Use EC-RW Firmware",
-	.ui_helptext	= "Jump to EC-RW firmware after EC SW Sync (if enabled). "
+	.ui_helptext	= "Jump to EC-RW firmware after EC SW Sync. "
+			  "Warning: Disabling EC-RW may result in undefined behavior, ranging"
+			  "from USB-C/TBT accessories not working to the keyboard not working."
 			  "If disabled, EC-RO firmware will be used instead.",
 	.default_value	= true,
 });
