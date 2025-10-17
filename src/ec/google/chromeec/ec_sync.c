@@ -70,12 +70,9 @@ static int SafeMemcmp(const void *s1, const void *s2, size_t n)
 static void google_chromeec_reboot_ro(void)
 {
 	/* Reboot the EC and make it come back in RO mode */
-	printk(BIOS_DEBUG, "Rebooting with EC in RO mode:\n");
-	post_code(0); /* clear current post code */
-	google_chromeec_reboot(EC_REBOOT_COLD, 0);
-	udelay(1000);
-	board_reset();
-	halt();
+	printk(BIOS_DEBUG, "Switching the EC to RO mode:\n");
+	google_chromeec_reboot(EC_REBOOT_JUMP_RO, 0);
+	mdelay(1000);
 }
 
 static ssize_t burst = 0;
@@ -391,13 +388,9 @@ static enum cb_err ec_sync(void)
 	need_update = SafeMemcmp(ec_hash, ecrw_hash, SHA256_DIGEST_SIZE);
 
 	/* If in RW and need to update, return/reboot to RO */
-	if (need_update && chromeec_get_image_type() == EC_IMAGE_RW
-			&& !CONFIG(SOC_INTEL_CSE_LITE_SKU)
-			&& !CONFIG(BOARD_GOOGLE_BASEBOARD_FIZZ)
-			&& !CONFIG(SOC_AMD_COMMON)) {
-		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW needs update but in RW; rebooting to RO\n");
+	if (need_update && chromeec_get_image_type() == EC_IMAGE_RW) {
+		printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW needs update but in RW; sysjumping to RO\n");
 		google_chromeec_reboot_ro();
-		return CB_ERR;
 	}
 
 	/* Update EC if necessary */
@@ -414,14 +407,6 @@ static enum cb_err ec_sync(void)
 		if (google_chromeec_flash_update_rw(ecrw, ecrw_size)) {
 			printk(BIOS_ERR, "ChromeEC SW Sync: Failed to update EC_RW.\n");
 			return CB_ERR;
-		}
-
-		/* Boards which jump to EC-RW early need a full reset here */
-		if (chromeec_get_image_type() == EC_IMAGE_RW
-				&& (CONFIG(SOC_INTEL_CSE_LITE_SKU) ||
-				CONFIG(BOARD_GOOGLE_BASEBOARD_FIZZ)
-				|| CONFIG(SOC_AMD_COMMON))) {
-			google_chromeec_reboot_ro();
 		}
 
 		/* Have EC recompute hash for new EC_RW block */
@@ -477,7 +462,9 @@ void google_chromeec_swsync(void)
 	} else if (!jump_to_rw) {
 		/* Stay in / jump to RO */
 		if (chromeec_get_image_type() == EC_IMAGE_RW) {
-			google_chromeec_reboot(EC_REBOOT_COLD, 0);
+			google_chromeec_reboot_ro();
+			/* re-run version command & print */
+			chromeec_get_and_print_ec_version();
 		}
 	}
 }
