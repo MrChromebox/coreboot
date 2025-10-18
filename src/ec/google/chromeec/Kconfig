@@ -200,7 +200,7 @@ config EC_GOOGLE_CHROMEEC_AUTO_FAN_CTRL
 config EC_GOOGLE_CHROMEEC_READ_BATTERY_LONG_STRING
 	depends on TPM_GOOGLE
 	bool
-	default y if CHROMEOS
+	default y
 	help
 	  The Chrome EC currently supports two ways to read battery strings on
 	  ACPI platforms:
