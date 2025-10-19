@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
+#include <acpi/acpi.h>
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
@@ -9,6 +10,7 @@
 #include <device/path.h>
 #include <elog.h>
 #include <halt.h>
+#include <option.h>
 #include <reset.h>
 #include <rtc.h>
 #include <security/vboot/vboot_common.h>
@@ -1320,6 +1322,12 @@ void google_chromeec_init(void)
 	if (CONFIG(EC_GOOGLE_CHROMEEC_AUTO_FAN_CTRL)) {
 		ec_cmd_thermal_auto_fan_ctrl(PLAT_EC);
 	}
+
+	/* Set keyboard backlight */
+	int backlight_level = get_uint_option("ec_kb_backlight", -1);
+	if (google_chromeec_has_kbbacklight() && !acpi_is_wakeup_s3()
+			&& backlight_level != -1)
+		google_chromeec_kbbacklight(backlight_level);
 }
 
 int google_ec_running_ro(void)
