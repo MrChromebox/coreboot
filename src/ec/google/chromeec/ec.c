@@ -94,6 +94,16 @@ uint8_t google_chromeec_calc_checksum(const uint8_t *data, int size)
 	return (uint8_t)(csum & 0xff);
 }
 
+int google_chromeec_get_kbbacklight(void)
+{
+	struct ec_response_pwm_get_keyboard_backlight resp = {};
+
+	if (ec_cmd_pwm_get_keyboard_backlight(PLAT_EC, &resp) != 0)
+		return -1;
+
+	return resp.percent;
+}
+
 int google_chromeec_kbbacklight(int percent)
 {
 	const struct ec_params_pwm_set_keyboard_backlight params = {
@@ -104,6 +114,29 @@ int google_chromeec_kbbacklight(int percent)
 		return -1;
 
 	return 0;
+}
+
+bool google_chromeec_has_kbbacklight(void)
+{
+	/* Try the feature flag (most reliable for modern ECs) */
+	int feature_check = google_chromeec_check_feature(EC_FEATURE_PWM_KEYB);
+
+	if (feature_check > 0) {
+		printk(BIOS_DEBUG, "Chrome EC: Keyboard backlight detected (feature flag)\n");
+		return true;
+	} else if (feature_check == 0) {
+		printk(BIOS_DEBUG, "Chrome EC: No keyboard backlight (feature flag)\n");
+		return false;
+	}
+
+	printk(BIOS_DEBUG, "Chrome EC: Feature flag unavailable, testing backlight read\n");
+	if (google_chromeec_get_kbbacklight() >= 0) {
+		printk(BIOS_DEBUG, "Chrome EC: Keyboard backlight detected (read test)\n");
+		return true;
+	} else {
+		printk(BIOS_DEBUG, "Chrome EC: No keyboard backlight (read test)\n");
+		return false;
+	}
 }
 
 void google_chromeec_post(uint8_t postcode)
