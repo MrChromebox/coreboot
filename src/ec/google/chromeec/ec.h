@@ -79,7 +79,6 @@ uint32_t google_chromeec_get_sku_id(void);
 int google_chromeec_set_sku_id(uint32_t skuid);
 uint64_t  google_chromeec_get_events_b(void);
 int google_chromeec_clear_events_b(uint64_t mask);
-int google_chromeec_get_kbbacklight(void);
 int google_chromeec_kbbacklight(int percent);
 void google_chromeec_post(uint8_t postcode);
 uint8_t google_chromeec_get_switches(void);

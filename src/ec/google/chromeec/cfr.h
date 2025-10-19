@@ -27,29 +27,4 @@ static const struct sm_object ec_rw_jump = SM_DECLARE_BOOL({
 	.default_value	= true,
 });
 
-static const struct sm_enum_value ec_backlight_values[] = {
-	{ "0%", 0 },
-	{ "25%", 25 },
-	{ "50%", 50 },
-	{ "100%", 100 },
-	SM_ENUM_VALUE_END,
-};
-
-static void update_kb_backlight(const struct sm_object *obj, struct sm_object *new)
-{
-	if (google_chromeec_get_kbbacklight() == -1) {
-		new->sm_bool.flags = CFR_OPTFLAG_SUPPRESS;
-		new->sm_bool.default_value = -1;
-	}
-}
-
-static const struct sm_object ec_kb_backlight = SM_DECLARE_ENUM({
-        .opt_name       = "ec_kb_backlight",
-        .ui_name        = "Keyboard Backlight Level At Boot",
-        .ui_helptext    = "Specify the level the keyboard backlight should be at boot."
-	                   " Set to 0% to disable the backlight.",
-        .default_value  = 50,
-	.values         = ec_backlight_values,
-}, WITH_CALLBACK(update_kb_backlight));
-
 #endif /* CHROMEEC_CFR_H */
