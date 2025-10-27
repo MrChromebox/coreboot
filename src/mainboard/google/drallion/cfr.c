@@ -25,17 +25,8 @@ static struct sm_obj_form system = {
 	},
 };
 
-static struct sm_obj_form power = {
-	.ui_name = "Power",
-	.obj_list = (const struct sm_object *[]) {
-		&power_on_after_fail,
-		NULL
-	},
-};
-
 static struct sm_obj_form *sm_root[] = {
 	&system,
-	&power,
 	NULL
 };
 
