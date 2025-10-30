@@ -7,6 +7,7 @@ platforms=('snb_ivb' 'hsw' 'byt' 'bdw' 'bsw' 'skl' 'apl' 'kbl' 'whl' 'glk' \
            'cml' 'jsl' 'tgl' 'adl' 'adl_n' 'mtl' 'str' 'pco' 'czn' 'mdn')
 build_targets=()
 debug_mode=false
+cbmem_mode=false
 
 output_folder="../roms"
 mkdir -p ${output_folder}
@@ -15,6 +16,8 @@ mkdir -p ${output_folder}
 for arg in "$@"; do
 	if [ "$arg" = "--debug" ]; then
 		debug_mode=true
+	elif [ "$arg" = "--cbmem" ]; then
+		cbmem_mode=true
 	else
 		build_targets+=("$arg")
 	fi
@@ -46,6 +49,9 @@ for device in "${build_targets[@]}"; do
 	if [ "$debug_mode" = true ]; then
 		echo "CONFIG_CONSOLE_SERIAL=y" >> .config
 		echo "CONFIG_EDK2_DEBUG=y" >> .config
+	fi
+	if [ "$cbmem_mode" = true ]; then
+		echo "CONFIG_EDK2_CBMEM_LOGGING=y" >> .config
 	fi
 	make clean
 	make olddefconfig
