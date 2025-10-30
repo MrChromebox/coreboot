@@ -102,7 +102,11 @@ Scope (\_TZ)
 		}
 
 		Method (_AC4) {
-			Return (CTOK (0))
+			If (\FLVL <= 4) {
+				Return (CTOK (\F4OF))
+			} Else {
+				Return (CTOK (\F4ON))
+			}
 		}
 
 		Name (_AL0, Package () { FAN0 })

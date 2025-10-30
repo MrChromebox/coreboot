@@ -3,23 +3,25 @@
 #ifndef STUMPY_THERMAL_H
 #define STUMPY_THERMAL_H
 
-/* Fan is at default speed */
-#define FAN4_PWM		0x90
+/* Fan is OFF */
+#define FAN4_THRESHOLD_OFF	0
+#define FAN4_THRESHOLD_ON	0
+#define FAN4_PWM		0x00
 
 /* Fan is at LOW speed */
 #define FAN3_THRESHOLD_OFF	48
 #define FAN3_THRESHOLD_ON	55
-#define FAN3_PWM		0xA0
+#define FAN3_PWM		0x40
 
 /* Fan is at MEDIUM speed */
 #define FAN2_THRESHOLD_OFF	52
 #define FAN2_THRESHOLD_ON	64
-#define FAN2_PWM		0xB0
+#define FAN2_PWM		0x80
 
 /* Fan is at HIGH speed */
 #define FAN1_THRESHOLD_OFF	60
 #define FAN1_THRESHOLD_ON	68
-#define FAN1_PWM		0xC0
+#define FAN1_PWM		0xb0
 
 /* Fan is at FULL speed */
 #define FAN0_THRESHOLD_OFF	66
