@@ -30,6 +30,7 @@ static struct sm_obj_form ec = {
 	.obj_list = (const struct sm_object *[]) {
 		&ec_sw_sync,
 		&ec_rw_jump,
+		&auto_fan_control,
 		NULL
 	},
 };
