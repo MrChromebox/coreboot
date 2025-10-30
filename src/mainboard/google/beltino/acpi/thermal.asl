@@ -141,7 +141,11 @@ Scope (\_TZ)
 		}
 
 		Method (_AC4) {
-			Return (CTOK (0))
+			If (\FLVL <= 4) {
+				Return (CTOK (FAN4_THRESHOLD_OFF))
+			} Else {
+				Return (CTOK (FAN4_THRESHOLD_ON))
+			}
 		}
 
 		Name (_AL0, Package () { FAN0 })
