@@ -1,5 +1,4 @@
 CONFIG_VENDOR_GOOGLE=y
-CONFIG_MAINBOARD_SMBIOS_PRODUCT_NAME="Shyvana"
 CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/poppy/rammus/flashdescriptor.bin"
 CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/poppy/rammus/me.bin"
 CONFIG_BOARD_GOOGLE_RAMMUS=y
