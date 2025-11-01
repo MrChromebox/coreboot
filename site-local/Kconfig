@@ -84,5 +84,9 @@ config EDK2_GOP_FILE
 	default "3rdparty/blobs/soc/intel/tgl/IntelGopDriver.efi" if SOC_INTEL_TIGERLAKE
 	default "IntelGopDriver.efi"
 
+# Enable HWID DMI driver by default (except for Fizz and Nami)
+config DRIVERS_HWID_DMI
+	default y if !BOARD_GOOGLE_BASEBOARD_FIZZ && !BOARD_GOOGLE_NAMI
+
 config BOARD_GOOGLE_REX_COMMON
 	select FSP_TYPE_IOT
