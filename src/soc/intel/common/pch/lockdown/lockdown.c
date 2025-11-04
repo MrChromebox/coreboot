@@ -8,6 +8,7 @@
 #include <intelblocks/systemagent.h>
 #include <intelpch/lockdown.h>
 #include <intelblocks/gpmr.h>
+#include <option.h>
 #include <soc/pci_devs.h>
 #include <soc/pcr_ids.h>
 #include <soc/soc_chip.h>
@@ -81,7 +82,7 @@ static void fast_spi_lockdown_cfg(int chipset_lockdown)
 		fast_spi_set_bios_interface_lock_down();
 
 		/* Only allow writes in SMM */
-		if (CONFIG(BOOTMEDIA_SMM_BWP)) {
+		if (get_uint_option("bios_lock", CONFIG(BOOTMEDIA_SMM_BWP))) {
 			fast_spi_set_eiss();
 			fast_spi_enable_wp();
 		}
@@ -102,7 +103,7 @@ static void lpc_lockdown_config(int chipset_lockdown)
 		lpc_set_bios_interface_lock_down();
 
 		/* Only allow writes in SMM */
-		if (CONFIG(BOOTMEDIA_SMM_BWP)) {
+		if (get_uint_option("bios_lock", CONFIG(BOOTMEDIA_SMM_BWP))) {
 			lpc_set_eiss();
 			lpc_enable_wp();
 		}

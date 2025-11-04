@@ -20,6 +20,7 @@
 #include <intelblocks/smihandler.h>
 #include <intelblocks/tco.h>
 #include <intelblocks/uart.h>
+#include <option.h>
 #include <smmstore.h>
 #include <soc/nvs.h>
 #include <soc/pci_devs.h>
@@ -349,7 +350,7 @@ static void finalize(void)
 		/* Re-init SPI driver to handle locked BAR */
 		fast_spi_init();
 
-	if (CONFIG(BOOTMEDIA_SMM_BWP)) {
+	if (get_uint_option("bios_lock", CONFIG(BOOTMEDIA_SMM_BWP))) {
 		fast_spi_enable_wp();
 		set_insmm_sts(false);
 	}
@@ -440,7 +441,8 @@ void smihandler_southbridge_tco(
 	fast_spi_clear_sync_smi_status();
 
 	/* If enabled, enforce SMM BIOS write protection */
-	if (CONFIG(BOOTMEDIA_SMM_BWP) && fast_spi_wpd_status()) {
+	if (get_uint_option("bios_lock", CONFIG(BOOTMEDIA_SMM_BWP))
+			    && fast_spi_wpd_status()) {
 		/*
 		 * BWE is RW, so the SMI was caused by a
 		 * write to BWE, not by a write to the BIOS
