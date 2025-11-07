@@ -48,6 +48,15 @@ static void process_hwid(char *hwid)
 		*end = '\0';
 		end--;
 	}
+
+	/* Normalize casing: capitalize first character, lowercase the rest */
+	if (*hwid) {
+		char *p = hwid;
+
+		*p = toupper((unsigned char)*p);
+		for (p = hwid + 1; *p; p++)
+			*p = tolower((unsigned char)*p);
+	}
 }
 
 const char *smbios_system_product_name(void)
