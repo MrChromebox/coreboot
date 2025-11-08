@@ -5,6 +5,12 @@
 #include <drivers/option/cfr_frontend.h>
 #include <intelblocks/cfr.h>
 #include <soc/cfr.h>
+#include <stdbool.h>
+
+static const struct cfr_default_override cfr_overrides[] = {
+	CFR_OVERRIDE_BOOL("s0ix_enable", false),
+	CFR_OVERRIDE_END,
+};
 
 static struct sm_obj_form system = {
 	.ui_name = "System",
@@ -32,6 +38,7 @@ static struct sm_obj_form *sm_root[] = {
 
 void mb_cfr_setup_menu(struct lb_cfr *cfr_root)
 {
+	cfr_register_overrides(cfr_overrides);
 	cfr_write_setup_menu(cfr_root, sm_root);
 }
 
