@@ -133,6 +133,104 @@ bool google_chromeec_has_kbbacklight(void)
 	}
 }
 
+static bool google_chromeec_rgb_color_to_struct(enum google_chromeec_rgbkbd_color color,
+						struct rgb_s *rgb,
+						const char **name)
+{
+	switch (color) {
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_OFF:
+		*rgb = (struct rgb_s){ .r = 0x00, .g = 0x00, .b = 0x00 };
+		if (name)
+			*name = "off";
+		return true;
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_RED:
+		*rgb = (struct rgb_s){ .r = 0xFF, .g = 0x00, .b = 0x00 };
+		if (name)
+			*name = "red";
+		return true;
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_GREEN:
+		*rgb = (struct rgb_s){ .r = 0x00, .g = 0xFF, .b = 0x00 };
+		if (name)
+			*name = "green";
+		return true;
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_BLUE:
+		*rgb = (struct rgb_s){ .r = 0x00, .g = 0x00, .b = 0xFF };
+		if (name)
+			*name = "blue";
+		return true;
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_YELLOW:
+		*rgb = (struct rgb_s){ .r = 0xFF, .g = 0xFF, .b = 0x00 };
+		if (name)
+			*name = "yellow";
+		return true;
+	case GOOGLE_CHROMEEC_RGBKBD_COLOR_WHITE:
+		*rgb = (struct rgb_s){ .r = 0xFF, .g = 0xFF, .b = 0xFF };
+		if (name)
+			*name = "white";
+		return true;
+	default:
+		return false;
+	}
+}
+
+bool google_chromeec_has_rgbkbd(void)
+{
+	struct ec_params_rgbkbd params = {
+		.subcmd = EC_RGBKBD_SUBCMD_GET_CONFIG,
+	};
+	struct ec_response_rgbkbd resp = {};
+
+	/* Query the EC to determine if RGB keyboard is supported. */
+	if (ec_cmd_rgbkbd(PLAT_EC, &params, &resp) == 0 &&
+			resp.rgbkbd_type != EC_RGBKBD_TYPE_UNKNOWN) {
+		printk(BIOS_DEBUG, "ChromeEC: RGB keyboard detected (type: %d)\n", resp.rgbkbd_type);
+		return true;
+	}
+
+	printk(BIOS_DEBUG, "Chrome EC: No RGB keyboard\n");
+	return false;
+}
+
+int google_chromeec_rgbkbd_set_color(enum google_chromeec_rgbkbd_color color)
+{
+	struct rgb_s target_rgb;
+	const char *color_name = NULL;
+
+	if (color <= GOOGLE_CHROMEEC_RGBKBD_COLOR_UNSET ||
+	    color >= GOOGLE_CHROMEEC_RGBKBD_COLOR_COUNT)
+		return -1;
+
+	if (!google_chromeec_rgb_color_to_struct(color, &target_rgb, &color_name))
+		return -1;
+
+	/*
+	 * Disable any demo mode so the keyboard will honour the static color
+	 * we are about to set. Ignore failures in case older firmware doesn't
+	 * implement the subcommand.
+	 */
+	struct ec_params_rgbkbd params = {
+		.subcmd = EC_RGBKBD_SUBCMD_DEMO,
+		.demo = EC_RGBKBD_DEMO_OFF,
+	};
+	struct ec_response_rgbkbd resp = {};
+
+	(void)ec_cmd_rgbkbd(PLAT_EC, &params, &resp);
+
+	params = (struct ec_params_rgbkbd){
+		.subcmd = EC_RGBKBD_SUBCMD_CLEAR,
+		.color = target_rgb,
+	};
+
+	if (ec_cmd_rgbkbd(PLAT_EC, &params, &resp) != 0)
+		return -1;
+
+	if (color_name)
+		printk(BIOS_DEBUG, "Chrome EC: RGB keyboard color set to %s\n",
+		       color_name);
+
+	return 0;
+}
+
 bool google_chromeec_has_fan(void)
 {
 	/* Try the PWM fan feature flag (most reliable for modern ECs) */
@@ -1366,6 +1464,15 @@ void google_chromeec_init(void)
 	if (google_chromeec_has_kbbacklight() && !acpi_is_wakeup_s3()
 			&& backlight_level != -1)
 		google_chromeec_kbbacklight(backlight_level);
+
+	int rgb_color = get_uint_option("ec_rgb_kb_color",
+					GOOGLE_CHROMEEC_RGBKBD_COLOR_UNSET);
+	if (!acpi_is_wakeup_s3() &&
+	    rgb_color >= GOOGLE_CHROMEEC_RGBKBD_COLOR_OFF &&
+	    rgb_color < GOOGLE_CHROMEEC_RGBKBD_COLOR_COUNT &&
+	    google_chromeec_has_rgbkbd())
+		google_chromeec_rgbkbd_set_color(
+			(enum google_chromeec_rgbkbd_color)rgb_color);
 }
 
 int google_ec_running_ro(void)
