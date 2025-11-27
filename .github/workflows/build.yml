@@ -55,11 +55,16 @@ jobs:
           fi
           ./build-uefi.sh $args
 
-      - name: Upload firmware artifact
+      - name: List generated ROM and checksum files
+        run: |
+          echo "Listing contents of roms directory:"
+          ls -lh roms/* || echo "No files found in roms/"
+
+      - name: Upload firmware and checksum
         uses: actions/upload-artifact@v4
         with:
           name: coreboot-rom
-          path: coreboot/roms/*.rom
+          path: roms/*.{rom,sha1}
           if-no-files-found: warn
           compression-level: 6
           overwrite: false
