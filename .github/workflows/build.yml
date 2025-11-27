@@ -7,6 +7,14 @@ on:
         description: 'Target board name (e.g. panther, lumpy, etc.)'
         required: true
         default: 'panther'
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+      cbmem:
+        description: 'Enable CBMEM logging'
+        required: false
+        default: 'false'
 
 jobs:
   build-coreboot:
@@ -38,10 +46,21 @@ jobs:
       - name: Build firmware
         run: |
           cd coreboot
-          ./build-uefi.sh ${{ github.event.inputs.board }}
+          args="${{ github.event.inputs.board }}"
+          if [[ "${{ github.event.inputs.debug }}" == "true" ]]; then
+            args="--debug $args"
+          fi
+          if [[ "${{ github.event.inputs.cbmem }}" == "true" ]]; then
+            args="--cbmem $args"
+          fi
+          ./build-uefi.sh $args
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
           name: coreboot-rom
-          path: ~/dev/roms/*.rom
+          path: coreboot/roms/*.rom
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
