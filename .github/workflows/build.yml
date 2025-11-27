@@ -13,11 +13,9 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      # 1. 检出仓库
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. 安装依赖
       - name: Install dependencies
         run: |
           sudo apt update
@@ -26,28 +24,24 @@ jobs:
             libncurses5-dev m4 nasm python-is-python3 uuid-dev \
             zlib1g-dev libssl-dev
 
-      # 3. 克隆 coreboot 源码
       - name: Clone coreboot
         run: |
           git clone https://github.com/mrchromebox/coreboot.git
           cd coreboot
           git submodule update --init --checkout --recursive
 
-      # 4. 构建工具链
       - name: Build toolchain
         run: |
           cd coreboot
           make crossgcc-i386 CPUS=$(nproc)
 
-      # 5. 编译固件，使用输入参数
       - name: Build firmware
         run: |
           cd coreboot
           ./build-uefi.sh ${{ github.event.inputs.board }}
 
-      # 6. 保存编译产物
       - name: Upload firmware artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coreboot-rom
           path: ~/dev/roms/*.rom
