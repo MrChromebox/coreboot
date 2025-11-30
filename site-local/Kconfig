@@ -69,8 +69,7 @@ config CONSOLE_SERIAL
 
 # Ensure CBFS large enough for edk2
 config CBFS_SIZE
-	default 0x300000 if COREBOOT_ROMSIZE_KB_8192
-	default 0x450000 if COREBOOT_ROMSIZE_KB_16384 || COREBOOT_ROMSIZE_KB_32768
+	default 0x500000
 
 config EDK2_GOP_FILE
 	depends on EDK2_GOP_DRIVER
