@@ -524,6 +524,14 @@ const char *google_chromeec_acpi_name(const struct device *dev);
 #endif /* HAVE_ACPI_TABLES */
 
 /**
+ * Set After G3 State value.
+ *
+ * @param state		After G3 State value to set.
+ * @return		0 on success, -1 on error.
+ */
+int google_chromeec_after_g3_state_set(enum ec_after_g3_state state);
+
+/**
  * Read bytes from the EMI.
  *
  * @param port		IO port number
