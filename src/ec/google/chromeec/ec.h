@@ -505,6 +505,20 @@ const char *google_chromeec_acpi_name(const struct device *dev);
 
 #endif /* HAVE_ACPI_TABLES */
 
+#if CONFIG(CHROMEEC_AFTER_G3_STATE)
+/**
+ * Set and/or get After G3 State value.
+ *
+ * @param set_state      Set After G3 State value. Passing EC_AFTER_G3_STATE_GET
+ *                       makes the command act as a getter only.
+ * @param *out_cur_state Optional pointer to store retrieved current After G3
+ *                       State value.
+ * @return               0 on success, -1 on error.
+ */
+int google_chromeec_after_g3_state(enum ec_after_g3_state set_state,
+		enum ec_after_g3_state *out_cur_state);
+#endif /* CHROMEEC_AFTER_G3_STATE */
+
 /**
  * Read bytes from the EMI.
  *
