@@ -1866,6 +1866,18 @@ bool google_chromeec_is_battery_present(void)
 	return false;
 }
 
+int google_chromeec_after_g3_state_set(enum ec_after_g3_state state)
+{
+	const struct ec_params_after_g3_state_set params = {
+		.state = (int8_t)state
+	};
+
+	if (ec_cmd_after_g3_state_set(PLAT_EC, &params) != 0)
+		return -1;
+
+	return 0;
+}
+
 /*
  * Performs early power off.
  *

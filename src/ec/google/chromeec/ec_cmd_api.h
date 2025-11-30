@@ -266,6 +266,7 @@ static inline int ec_cmd_fp_info_v2(CROS_EC_COMMAND_INFO *h,
 
 _CROS_EC_C0_F_PF_RF(EC_CMD_ADC_READ, adc_read);
 _CROS_EC_CV_F_P(EC_CMD_ADD_ENTROPY, 0, add_entropy, rollback_add_entropy);
+_CROS_EC_C0_F_PF(EC_CMD_AFTER_G3_STATE_SET, after_g3_state_set);
 _CROS_EC_C0_F_PF(EC_CMD_AP_FW_STATE, ap_fw_state);
 _CROS_EC_C0_F(EC_CMD_AP_RESET, ap_reset);
 _CROS_EC_C0_F(EC_CMD_AP_SHUTDOWN, ap_shutdown);
