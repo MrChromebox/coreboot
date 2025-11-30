@@ -217,6 +217,21 @@ config EC_GOOGLE_CHROMEEC_INCLUDE_SSFC_IN_FW_CONFIG
 	  Fetch Second Source Factory Cache from CBI EEPROM and add it in the most significant
 	  32 bits of firmware configuration.
 
+config EC_GOOGLE_CHROMEEC_AFTER_G3_STATE
+	bool "Enable syncing ChromeEC After G3 State with CFR at boot"
+	depends on DRIVERS_OPTION_CFR_ENABLED
+	help
+	  Enable syncing ChromeEC After G3 State with CFR at boot via host
+	  command, otherwise ChromeEC default compiled after G3 behavior
+	  (usually "Previous State") will override coreboot after G3
+	  configuration.
+
+	  After G3 State is synced from existing coreboot CFR:
+	    "Restore AC power after loss"
+
+	  This option has no effect if ChromeEC running image does not support
+	  custom host command EC_CMD_AFTER_G3_STATE_SET.
+
 config EC_GOOGLE_CHROMEEC_AUTO_FAN_CTRL
 	bool "Enable automatic fan control"
 	help
