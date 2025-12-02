@@ -61,6 +61,8 @@ static struct sm_obj_form ec = {
 	.ui_name = "ChromeEC Embedded Controller",
 	.obj_list = (const struct sm_object *[]) {
 		&ec_kb_backlight,
+		&ec_sw_sync,
+		&ec_rw_jump,
 		NULL
 	},
 };

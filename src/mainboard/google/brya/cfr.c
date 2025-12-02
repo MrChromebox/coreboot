@@ -32,6 +32,8 @@ static struct sm_obj_form ec = {
 		&auto_fan_control,
 		&ec_kb_backlight,
 		&ec_rgb_kb_color,
+		&ec_sw_sync,
+		&ec_rw_jump,
 		NULL
 	},
 };

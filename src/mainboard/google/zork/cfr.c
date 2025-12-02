@@ -9,8 +9,10 @@ static struct sm_obj_form ec = {
 	.obj_list = (const struct sm_object *[]) {
 		&auto_fan_control
 		&ec_kb_backlight,
-		NULL
-	},
+                &ec_sw_sync,
+                &ec_rw_jump,
+                NULL
+        },
 };
 
 static struct sm_obj_form *sm_root[] = {
