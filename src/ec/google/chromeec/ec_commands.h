@@ -8946,10 +8946,8 @@ struct ec_response_get_boot_time {
 #define EC_CMD_AFTER_G3_STATE 0x3AC0
 
 enum ec_after_g3_state {
-	/* Unknown state. */
-	EC_AFTER_G3_STATE_UNKNOWN = 0,
 	/* After restoring power device should always stay off. */
-	EC_AFTER_G3_STATE_OFF,
+	EC_AFTER_G3_STATE_OFF = 0,
 	/* After restoring power device should always auto power on. */
 	EC_AFTER_G3_STATE_ON,
 	/*
@@ -8963,7 +8961,9 @@ enum ec_after_g3_state {
 	/* Make the command act as a getter only. */
 	EC_AFTER_G3_STATE_GET = 100,
 	/* Used for response only. Indicates internal command error. */
-	EC_AFTER_G3_STATE_ERROR
+	EC_AFTER_G3_STATE_ERROR,
+	/* Unknown state. */
+	EC_AFTER_G3_STATE_UNKNOWN
 };
 
 /**

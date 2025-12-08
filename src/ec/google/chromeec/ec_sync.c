@@ -25,11 +25,6 @@
 #include <inttypes.h>
 #include <stddef.h>
 
-#if CONFIG(CHROMEEC_AFTER_G3_STATE)
-/* Required for MAINBOARD_POWER_STATE_*. */
-#include <intelblocks/pmclib.h>
-#endif
-
 #define CROS_EC_COMMAND_INFO const void
 #define CROS_EC_COMMAND(h, c, v, p, ps, r, rs)			\
 	google_chromeec_command(&(struct chromeec_command) {	\
@@ -458,27 +453,30 @@ static void ec_after_g3_state_update(void)
 
 	enum ec_after_g3_state state;
 	const char *state_name;
-	unsigned int cfr_after_g3_state = get_uint_option("power_on_after_fail",
+	unsigned int cfr_state = get_uint_option("power_on_after_fail",
 			CONFIG_MAINBOARD_POWER_FAILURE_STATE);
 
-	switch (cfr_after_g3_state) {
-	case MAINBOARD_POWER_STATE_OFF:
-		state = EC_AFTER_G3_STATE_OFF;
+	/*
+	 * Valid states from enum ec_after_g3_state are in sync with pmclib
+	 * MAINBOARD_POWER_STATE_*.
+	 */
+	switch (cfr_state) {
+	case EC_AFTER_G3_STATE_OFF:
 		state_name = "off";
 		break;
-	case MAINBOARD_POWER_STATE_ON:
-		state = EC_AFTER_G3_STATE_ON;
+	case EC_AFTER_G3_STATE_ON:
 		state_name = "on";
 		break;
-	case MAINBOARD_POWER_STATE_PREVIOUS:
-		state = EC_AFTER_G3_STATE_PREVIOUS;
+	case EC_AFTER_G3_STATE_PREVIOUS:
 		state_name = "previous";
 		break;
 	default:
 		printk(BIOS_WARNING, "%s: Unknown CFR value: %u\n", ag3s_title,
-				cfr_after_g3_state);
+				cfr_state);
 		return;
 	}
+
+	state = (enum ec_after_g3_state)cfr_state;
 
 	printk(BIOS_INFO, "%s: Updating to '%s'\n", ag3s_title, state_name);
 
