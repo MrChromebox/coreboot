@@ -445,8 +445,6 @@ static void ec_log_cmd_update_fail(const char *title, const char *cmd)
 			title, cmd);
 }
 
-#if CONFIG(CHROMEEC_AFTER_G3_STATE)
-
 static void ec_after_g3_state_update(void)
 {
 	static const char *ag3s_title = "ChromeEC After G3 State";
@@ -484,8 +482,6 @@ static void ec_after_g3_state_update(void)
 		ec_log_cmd_update_fail(ag3s_title, "EC_CMD_AFTER_G3_STATE");
 }
 
-#endif /* CHROMEEC_AFTER_G3_STATE */
-
 void google_chromeec_swsync(void)
 {
 	bool perform_ec_sw_sync =  get_uint_option("ec_sw_sync", 1);
@@ -516,8 +512,7 @@ void google_chromeec_swsync(void)
 	}
 
 	/* Update EC configuration via custom EC commands. */
-#if CONFIG(CHROMEEC_AFTER_G3_STATE)
-	ec_after_g3_state_update();
-#endif
+	if (CONFIG(CHROMEEC_AFTER_G3_STATE))
+		ec_after_g3_state_update();
 }
 
