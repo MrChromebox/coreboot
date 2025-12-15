@@ -72,6 +72,21 @@ static inline bool fw_config_is_provisioned(void)
 uint64_t fw_config_get_field(const struct fw_config_field *field);
 
 /**
+ * fw_config_probe_mainboard_override() - Mainboard hook to override specific probes
+ * @match: Structure containing field and option to probe
+ * @handled: Output parameter - set to true if this probe was handled
+ *
+ * Return: Probe result if handled, ignored if not handled
+ *
+ * Mainboards can override this function to handle specific fw_config probes
+ * (e.g., based on CFR/CMOS options). If a probe is handled, set *handled = true
+ * and return the desired result. If not handled, leave *handled = false and
+ * the standard fw_config logic will be used.
+ */
+bool fw_config_probe_mainboard_override(const struct fw_config *match,
+					bool *handled);
+
+/**
  * fw_config_probe() - Check if field and option matches.
  * @match: Structure containing field and option to probe.
  *
