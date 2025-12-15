@@ -1,8 +1,4 @@
 chip soc/intel/skylake
-
-	# IGD Displays
-	register "gfx" = "GMA_STATIC_DISPLAYS(0)"
-
 	register "panel_cfg" = "{
 		.up_delay_ms		= 200,
 		.down_delay_ms		=  50,
@@ -202,7 +198,19 @@ chip soc/intel/skylake
 	}"
 
 	device domain 0 on
-		device ref igpu			on  end
+		device ref igpu			on
+			chip drivers/gfx/generic
+				register "device_count" = "2"
+				register "device[0].name" = ""LCD0""
+				# Internal panel on the first port of the graphics chip
+				register "device[0].type" = "panel"
+				# SKC0 for IPUs
+				register "device[1].name" = ""SKC0""
+				register "device[1].non_vga_device" = "true"
+				register "device[1].addr" = "0xCA00"
+				device generic 0 on end
+			end
+		end
 		device ref sa_thermal		on  end
 		device ref imgu			on  end
 		device ref south_xhci		on
@@ -270,7 +278,52 @@ chip soc/intel/skylake
 				device i2c 0x15 on end
 			end
 		end
-		device ref i2c3			on  end # Camera
+		device ref i2c3			on
+			chip drivers/intel/mipi_camera/pmic
+				register "acpi_uid" = "0"
+				register "acpi_name" = ""DSC0""
+
+				register "cldb.pmic_type" = "CL_TYPE_DISCRETE"
+				register "cldb.pmic_id" = "PMIC_NODE_1"
+
+				register "gpio_panel[0].gpio" = "ACPI_GPIO_OUTPUT(GPP_D8)" #EN_PP3300_DX_CAM
+				register "gpio_panel[0].gpio_function" = "MIPICAM_GPIO_TYPE_POWER"
+				register "gpio_panel[0].gpio_initial_value" = "0"
+				register "gpio_panel[0].gpio_active_value" = "1"
+
+				register "gpio_panel[1].gpio" = "ACPI_GPIO_OUTPUT(GPP_D18)" #EN_CAM_CLOCK
+				register "gpio_panel[1].gpio_function" = "MIPICAM_GPIO_TYPE_CLOCK"
+				register "gpio_panel[1].gpio_initial_value" = "0"
+				register "gpio_panel[1].gpio_active_value" = "1"
+
+				register "gpio_panel[2].gpio" = "ACPI_GPIO_OUTPUT(GPP_D17)" #EN_CAM_PMIC_RST_L
+				register "gpio_panel[2].gpio_function" = "MIPICAM_GPIO_TYPE_RESET"
+				register "gpio_panel[2].gpio_initial_value" = "0"
+				register "gpio_panel[2].gpio_active_value" = "1"
+
+				device generic 0 on end
+			end
+			chip drivers/intel/mipi_camera
+				register "acpi_hid" = ""INT3478""
+				register "acpi_uid" = "0"
+				register "pmic_dep" = ""DSC0""
+				register "acpi_name" = ""CAM0""
+				register "chip_name" = ""Sony IMX208 Camera""
+				register "sensor_name" = ""Q2N04A""
+
+				register "ssdb.lanes_used" = "2"
+				register "ssdb.link_used" = "0"
+				register "ssdb.platform" = "PLAT_SKC"
+				register "ssdb.platform_sub" = "PLAT_SUB_FFD"
+
+				register "ssdb.rom_type" = "ROM_EEPROM_CAT24C08"
+				register "rom_address" = "0x50"
+
+				register "ssdb.control_logic_id" = "PMIC_NODE_1"
+
+				device i2c 10 on end
+			end
+		end
 		device ref heci1		on  end
 		device ref uart2		on  end
 		device ref i2c4			on
