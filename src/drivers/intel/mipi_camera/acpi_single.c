@@ -92,6 +92,40 @@ static void camera_generate_dsm_i2c_v2(const struct device *dev)
 	acpigen_pop_len();	/* If uuid */
 }
 
+/*
+ * Generate ASL DSM code for Computer Vision Framework (CVF)
+ *
+ * Generated ASL:
+ * If (LEqual (Local0, ToUUID ("02f55f0c-2e63-4f05-84f3-bf1980f9af79"))) {
+ *     If (LEqual (Arg2, Zero)) {
+ *         Return (Buffer (One) { 0x3 })
+ *     }
+ *     If (LEqual (Arg2, One)) {
+ *         Return (Zero)
+ *     }
+ * }
+ */
+static void camera_generate_dsm_cvf(const struct device *dev)
+{
+	/* If (LEqual (Local0, ToUUID (UUID_DSM_CVF))) */
+	acpigen_write_if();
+	acpigen_emit_byte(LEQUAL_OP);
+	acpigen_emit_byte(LOCAL0_OP);
+	acpigen_write_uuid(UUID_DSM_CVF);
+
+	/* If (LEqual (Arg2, Zero)) */
+	acpigen_write_if_lequal_op_int(ARG2_OP, 0);
+	acpigen_write_return_singleton_buffer(0x3);
+	acpigen_pop_len();
+
+	/* If (LEqual (Arg2, One)) */
+	acpigen_write_if_lequal_op_int(ARG2_OP, 1);
+	acpigen_write_return_integer(0);
+	acpigen_pop_len();
+
+	acpigen_pop_len();	/* If uuid */
+}
+
 static void camera_generate_dsm(const struct device *dev)
 {
 	/* Method (_DSM, 4, NotSerialized) */
@@ -103,6 +137,7 @@ static void camera_generate_dsm(const struct device *dev)
 	camera_generate_dsm_sensor(dev);
 	camera_generate_dsm_i2c(dev);
 	camera_generate_dsm_i2c_v2(dev);
+	camera_generate_dsm_cvf(dev);
 
 	/* Return (Buffer (One) { 0x0 }) */
 	acpigen_write_return_singleton_buffer(0x0);
