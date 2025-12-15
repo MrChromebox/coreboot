@@ -13,3 +13,12 @@ config DRIVERS_INTEL_MIPI_SUPPORTS_PRE_PRODUCTION_SOC
 	help
 	  Use this config to provide information to IPU kernel driver
 	  if pre-production or production signed IPU FW needs to be loaded.
+
+config MIPI_CAMERA_SINGLE_ACPI_DEVICE
+	bool
+	depends on DRIVERS_INTEL_MIPI_CAMERA
+	default n
+	help
+	  Generates a single ACPI device for all camera related devices,
+	  instead of one for each camera related device. This is the
+	  preferred method for Windows and mainline Linux.
