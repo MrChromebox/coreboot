@@ -12,24 +12,7 @@
 #include <stdio.h>
 
 #include "chip.h"
-
-#define CSI2_DATA_STREAM_INTERFACE_GUID \
-	GUID_INIT(0x8A395669, 0x11F7, 0x4EA9, \
-	0x9C, 0x7D, 0x20, 0xEE, 0x0A, 0xB5, 0xCA, 0x40)
-
-#define UUID_DSM_SENSOR		"822ace8f-2814-4174-a56b-5f029fe079ee"
-#define UUID_DSM_I2C		"26257549-9271-4ca4-bb43-c4899d5a4881"
-#define DEFAULT_ENDPOINT	0
-#define DEFAULT_REMOTE_NAME	"\\_SB.PCI0.CIO2"
-#define CIO2_PCI_DEV		0x14
-#define CIO2_PCI_FN		0x3
-#define POWER_RESOURCE_NAME	"PRIC"
-#define GUARD_VARIABLE_FORMAT	"RES%1d"
-#define ENABLE_METHOD_FORMAT	"ENB%1d"
-#define DISABLE_METHOD_FORMAT	"DSB%1d"
-#define UNKNOWN_METHOD_FORMAT	"UNK%1d"
-#define CLK_ENABLE_METHOD	"MCON"
-#define CLK_DISABLE_METHOD	"MCOF"
+#include "camera.h"
 
 static struct camera_resource_manager res_mgr;
 
