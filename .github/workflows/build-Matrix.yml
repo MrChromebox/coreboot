@@ -1,0 +1,57 @@
+name: Build Coreboot Firmware (Matrix)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-coreboot:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        board: [panther, lumpy, peppy]   # 在这里列出你要编译的主板型号
+      fail-fast: false   # 某个型号失败不会影响其他型号
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            bison build-essential curl flex git gnat imagemagick \
+            libncurses5-dev m4 nasm python-is-python3 uuid-dev \
+            zlib1g-dev libssl-dev
+
+      - name: Clone coreboot
+        run: |
+          git clone https://github.com/mrchromebox/coreboot.git
+          cd coreboot
+          git submodule update --init --checkout --recursive
+
+      - name: Build toolchain
+        run: |
+          cd coreboot
+          make crossgcc-i386 CPUS=$(nproc)
+
+      - name: Build firmware
+        run: |
+          cd coreboot
+          ./build-uefi.sh ${{ matrix.board }}
+
+      - name: List generated ROM and checksum files
+        run: |
+          echo "Listing contents of roms directory for ${{ matrix.board }}:"
+          ls -lh roms/* || echo "No files found in roms/"
+
+      - name: Upload firmware and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: coreboot-${{ matrix.board }}
+          path: |
+            roms/*.rom
+            roms/*.sha1
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false

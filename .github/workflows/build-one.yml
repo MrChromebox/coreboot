@@ -1,0 +1,73 @@
+name: Build Coreboot Firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      board:
+        description: 'Target board name (e.g. panther, lumpy, etc.)'
+        required: true
+        default: 'panther'
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+      cbmem:
+        description: 'Enable CBMEM logging'
+        required: false
+        default: 'false'
+
+jobs:
+  build-coreboot:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            bison build-essential curl flex git gnat imagemagick \
+            libncurses5-dev m4 nasm python-is-python3 uuid-dev \
+            zlib1g-dev libssl-dev
+
+      - name: Clone coreboot
+        run: |
+          git clone https://github.com/mrchromebox/coreboot.git
+          cd coreboot
+          git submodule update --init --checkout --recursive
+
+      - name: Build toolchain
+        run: |
+          cd coreboot
+          make crossgcc-i386 CPUS=$(nproc)
+
+      - name: Build firmware
+        run: |
+          cd coreboot
+          args="${{ github.event.inputs.board }}"
+          if [[ "${{ github.event.inputs.debug }}" == "true" ]]; then
+            args="--debug $args"
+          fi
+          if [[ "${{ github.event.inputs.cbmem }}" == "true" ]]; then
+            args="--cbmem $args"
+          fi
+          ./build-uefi.sh $args
+
+      - name: List generated ROM and checksum files
+        run: |
+          echo "Listing contents of roms directory:"
+          ls -lh roms/* || echo "No files found in roms/"
+
+      - name: Upload firmware and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: coreboot-rom
+          path: |
+            roms/*.rom
+            roms/*.sha1
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
