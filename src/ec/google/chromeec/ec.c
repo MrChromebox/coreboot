@@ -1873,20 +1873,14 @@ bool google_chromeec_is_battery_present(void)
 	return false;
 }
 
-int google_chromeec_after_g3_state(enum ec_after_g3_state set_state,
-		enum ec_after_g3_state *out_cur_state)
+int google_chromeec_after_g3_state_set(enum ec_after_g3_state state)
 {
-	const struct ec_params_after_g3_state params = {
-		.set_state = (uint8_t)set_state
+	const struct ec_params_after_g3_state_set params = {
+		.state = (int8_t)state
 	};
-	struct ec_response_after_g3_state resp = {};
 
-	int rv = ec_cmd_after_g3_state(PLAT_EC, &params, &resp);
-	if (rv != 0 || resp.cur_state == EC_AFTER_G3_STATE_ERROR)
+	if (ec_cmd_after_g3_state_set(PLAT_EC, &params) != 0)
 		return -1;
-
-	if (out_cur_state)
-		*out_cur_state = resp.cur_state;
 
 	return 0;
 }

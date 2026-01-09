@@ -438,21 +438,21 @@ static enum cb_err ec_sync(void)
 	return CB_SUCCESS;
 }
 
-static void ec_log_cmd_update_fail(const char *title, const char *cmd)
+static void log_chromeec_cmd_fail(const char *title, const char *cmd)
 {
-	printk(BIOS_WARNING, "%s: Update failed, either ChromeEC running image"
-			     " does not support %s, or there was an error\n",
-			title, cmd);
+	printk(BIOS_WARNING,
+	       "%s: Command failed, either ChromeEC running image does not"
+	       " support %s or there was an error\n", title, cmd);
 }
 
-static void ec_after_g3_state_update(void)
+static void google_chromeec_after_g3_state_sync(void)
 {
 	static const char *ag3s_title = "ChromeEC After G3 State";
 
 	enum ec_after_g3_state state;
 	const char *state_name;
 	unsigned int cfr_state = get_uint_option("power_on_after_fail",
-			CONFIG_MAINBOARD_POWER_FAILURE_STATE);
+					CONFIG_MAINBOARD_POWER_FAILURE_STATE);
 
 	/*
 	 * Valid states from enum ec_after_g3_state are in sync with pmclib
@@ -470,16 +470,16 @@ static void ec_after_g3_state_update(void)
 		break;
 	default:
 		printk(BIOS_WARNING, "%s: Unknown CFR value: %u\n", ag3s_title,
-				cfr_state);
+		       cfr_state);
 		return;
 	}
 
 	state = (enum ec_after_g3_state)cfr_state;
 
-	printk(BIOS_INFO, "%s: Updating to '%s'\n", ag3s_title, state_name);
+	printk(BIOS_INFO, "%s: Syncing to '%s'\n", ag3s_title, state_name);
 
-	if (google_chromeec_after_g3_state(state, NULL))
-		ec_log_cmd_update_fail(ag3s_title, "EC_CMD_AFTER_G3_STATE");
+	if (google_chromeec_after_g3_state_set(state))
+		log_chromeec_cmd_fail(ag3s_title, "EC_CMD_AFTER_G3_STATE_SET");
 }
 
 void google_chromeec_swsync(void)
@@ -511,8 +511,8 @@ void google_chromeec_swsync(void)
 		}
 	}
 
-	/* Update EC configuration via custom EC commands. */
-	if (CONFIG(CHROMEEC_AFTER_G3_STATE))
-		ec_after_g3_state_update();
+	/* Flashing/jumping is done, sync EC running image configuration. */
+	if (CONFIG(EC_GOOGLE_CHROMEEC_AFTER_G3_STATE))
+		google_chromeec_after_g3_state_sync();
 }
 

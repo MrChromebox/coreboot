@@ -8942,46 +8942,31 @@ struct ec_response_get_boot_time {
 /*****************************************************************************/
 /* Custom MrChromebox commands: range 0x3AC0-0x3ACF */
 
-/* Set and/or get After G3 State value. */
-#define EC_CMD_AFTER_G3_STATE 0x3AC0
+/* Set After G3 State value. */
+#define EC_CMD_AFTER_G3_STATE_SET 0x3AC0
+/* Get After G3 State value. */
+#define EC_CMD_AFTER_G3_STATE_GET 0x3AC1
 
 enum ec_after_g3_state {
-	/* After restoring power device should always stay off. */
-	EC_AFTER_G3_STATE_OFF = 0,
-	/* After restoring power device should always auto power on. */
+	/* Reserved for unknown state. */
+	EC_AFTER_G3_STATE_UNKNOWN = -1,
+	/* Keep the device off when power is restored. */
+	EC_AFTER_G3_STATE_OFF,
+	/* Auto power on the device when power is restored. */
 	EC_AFTER_G3_STATE_ON,
 	/*
-	 * After restoring power device should only stay off if power was lost
-	 * after graceful shutdown, otherwise it should auto power on.
+	 * Keep the device off when power is restored only if it was gracefully
+	 * powered down prior to losing power, otherwise auto power it on.
 	 */
-	EC_AFTER_G3_STATE_PREVIOUS,
-
-	/* Special Values */
-
-	/* Make the command act as a getter only. */
-	EC_AFTER_G3_STATE_GET = 100,
-	/* Used for response only. Indicates internal command error. */
-	EC_AFTER_G3_STATE_ERROR,
-	/* Unknown state. */
-	EC_AFTER_G3_STATE_UNKNOWN
+	EC_AFTER_G3_STATE_PREVIOUS
 };
 
-/**
- * struct ec_params_after_g3_state - Parameters to the After G3 State command.
- * @set_state: Set After G3 State value. Passing EC_AFTER_G3_STATE_GET makes
- *             the command act as a getter only.
- */
-struct ec_params_after_g3_state {
-	uint8_t set_state; /* enum ec_after_g3_state */
+struct ec_params_after_g3_state_set {
+	int8_t state; /* enum ec_after_g3_state */
 } __ec_align1;
 
-/**
- * struct ec_response_after_g3_state - Response to the After G3 State command.
- * @cur_state: Current After G3 State value. EC_AFTER_G3_STATE_ERROR indicates
- *             command failure to set/get value.
- */
-struct ec_response_after_g3_state {
-	uint8_t cur_state; /* enum ec_after_g3_state */
+struct ec_response_after_g3_state_get {
+	int8_t state; /* enum ec_after_g3_state */
 } __ec_align1;
 
 /*****************************************************************************/
