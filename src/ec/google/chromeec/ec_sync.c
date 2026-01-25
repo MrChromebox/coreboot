@@ -415,8 +415,7 @@ static enum cb_err ec_sync(void)
 
 		if (image_type != EC_IMAGE_RO) {
 			printk(BIOS_ERR, "ChromeEC SW Sync: EC failed to switch to RO image\n");
-			rv = CB_ERR;
-			goto cleanup;
+			printk(BIOS_DEBUG, "ChromeEC SW Sync: Will try to update in RW mode\n");
 		}
 	}
 
@@ -438,6 +437,15 @@ static enum cb_err ec_sync(void)
 			printk(BIOS_ERR, "ChromeEC SW Sync: Failed to update EC_RW.\n");
 			rv = CB_ERR;
 			goto cleanup;
+		}
+
+		/* Re-check image type after update to ensure we have current state */
+		image_type = chromeec_get_image_type();
+		/* If we updated RW in RW, reboot to take effect*/
+		if (image_type == EC_IMAGE_RW) {
+			printk(BIOS_DEBUG, "ChromeEC SW Sync: EC_RW updated in RW, rebooting to take effect\n");
+			google_chromeec_reboot(EC_REBOOT_COLD, 0);
+			mdelay(100);
 		}
 
 		/* Have EC recompute hash for new EC_RW block */
