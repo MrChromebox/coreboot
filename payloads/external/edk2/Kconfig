@@ -175,6 +175,7 @@ config EDK2_BOOTSPLASH_FILE
 
 config EDK2_BOOT_MANAGER_ESCAPE
 	bool "Use Escape key for Boot Manager"
+	default y if EDK2_NETWORK_PXE_SUPPORT
 	default n
 	help
 	  Use Escape as the hot-key to access the Boot Manager. This replaces
@@ -182,6 +183,7 @@ config EDK2_BOOT_MANAGER_ESCAPE
 
 config EDK2_BOOT_TIMEOUT
 	int "Set the timeout for boot menu prompt"
+	default 10 if EDK2_NETWORK_PXE_SUPPORT
 	default 2
 	help
 	  The length of time in seconds for which the boot splash/menu prompt will be displayed.
@@ -243,6 +245,7 @@ config EDK2_PRIORITIZE_INTERNAL
 config EDK2_LOAD_OPTION_ROMS
 	bool "Load and Execute OpROMs on PCIe devices"
 	depends on !EDK2_REPO_OFFICIAL
+	default y if EDK2_NETWORK_PXE_SUPPORT
 	default n
 	help
 	  Load and execute OpROMs on PCIe devices.
@@ -309,6 +312,7 @@ config EDK2_USE_LAPIC_TIMER
 
 config EDK2_CUSTOM_BUILD_PARAMS
 	string "edk2 additional custom build parameters"
+	default "-D NETWORK_DRIVER_ENABLE=TRUE -D NETWORK_ENABLE=TRUE -D NETWORK_IP4_ENABLE=TRUE -D NETWORK_IP6_ENABLE=FALSE -D NETWORK_PXE_BOOT_ENABLE=TRUE -D NETWORK_HTTP_BOOT_ENABLE=FALSE -D NETWORK_SNP_ENABLE=TRUE -D NETWORK_TLS_ENABLE=FALSE -D NETWORK_ISCSI_ENABLE=FALSE" if EDK2_NETWORK_PXE_SUPPORT
 	default ""
 	help
 	  edk2 has build options that are not modified by coreboot, and these can be
@@ -316,6 +320,17 @@ config EDK2_CUSTOM_BUILD_PARAMS
 	  additional build options that should have been upstreamed but have not.
 
 	  This option can support both macros `-D` and Pcds `--pcd`.
+
+config EDK2_NETWORK_PXE_SUPPORT
+	bool "Enable EDK2 built-in PXE network boot support"
+	depends on !EDK2_REPO_OFFICIAL
+	default n
+	help
+	  Enable EDK2's built-in PXE network boot support. This uses EDK2's native
+	  Simple Network Protocol (SNP) implementation for network booting.
+
+	  When enabled, EDK2_LOAD_OPTION_ROMS, EDK2_BOOT_TIMEOUT, EDK2_BOOT_MANAGER_ESCAPE
+	  and EDK2_CUSTOM_BUILD_PARAMS (network params) are auto-configured.
 
 config EDK2_ENABLE_IPXE
 	bool "Include iPXE in edk2 payload"
