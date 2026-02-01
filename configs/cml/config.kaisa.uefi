@@ -11,6 +11,7 @@ CONFIG_NO_GFX_INIT=y
 
 # EDK2 built-in PXE (SNP/NetworkPkg), no iPXE
 CONFIG_EDK2_NETWORK_PXE_SUPPORT=y
+CONFIG_EDK2_RTKUNDI_DRIVER=y
 
 # EDK2: use this fork for local/upstream work (cloned to payloads/external/edk2/workspace/edk2 at build)
 CONFIG_EDK2_REPOSITORY="https://github.com/jackadam1981/mrchromebox_edk2.git"
