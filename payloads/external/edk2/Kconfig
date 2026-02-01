@@ -332,6 +332,16 @@ config EDK2_NETWORK_PXE_SUPPORT
 	  When enabled, EDK2_LOAD_OPTION_ROMS, EDK2_BOOT_TIMEOUT, EDK2_BOOT_MANAGER_ESCAPE
 	  and EDK2_CUSTOM_BUILD_PARAMS (network params) are auto-configured.
 
+config EDK2_RTKUNDI_DRIVER
+	bool "Include Realtek UNDI driver (RtkUndiDxe) for RTL8168 PXE"
+	depends on EDK2_NETWORK_PXE_SUPPORT
+	default y
+	help
+	  When enabled, pass -D RTKUNDI_ENABLE=TRUE to EDK2 so that
+	  UefiPayloadPkg.fdf includes RtkUndiDxe.efi for RTL8168/8111 PXE (e.g. Acer CXI4).
+	  Requires EDK2 fork with RtkUndiDxe.efi in UefiPayloadPkg/NetworkDrivers/
+	  and FDF block wrapped in !if $(RTKUNDI_ENABLE) == TRUE.
+
 config EDK2_ENABLE_IPXE
 	bool "Include iPXE in edk2 payload"
 	depends on !EDK2_REPO_OFFICIAL
