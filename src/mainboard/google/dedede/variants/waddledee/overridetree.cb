@@ -55,6 +55,17 @@ chip soc/intel/jasperlake
 	}"
 
 	device domain 0 on
+		device pci 02.0 on
+			chip drivers/gfx/generic
+				register "device_count" = "1"
+				# DDIA for eDP
+				register "device[0].name" = ""LCD0""
+				# Internal panel on the first port of the graphics chip
+				register "device[0].type" = "panel"
+
+				device generic 0 on end
+			end
+		end
 		device pci 05.0 on end # IPU - MIPI Camera
 		device pci 14.0 on
 			chip drivers/usb/acpi
