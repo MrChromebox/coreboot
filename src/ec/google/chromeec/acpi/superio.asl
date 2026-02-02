@@ -95,7 +95,11 @@ Scope (\_SB.PCI0)
 		Name (_CID, Package() { EISAID("PNP0303"), EISAID("PNP030B") } )
 
 		Method (_STA, 0, NotSerialized) {
+#if CONFIG(EC_FOR_CHROMEBOX)
+			Return (0)
+#else
 			Return (0x0F)
+#endif
 		}
 
 		Name (_CRS, ResourceTemplate()

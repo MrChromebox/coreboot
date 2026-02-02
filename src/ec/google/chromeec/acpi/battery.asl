@@ -431,7 +431,11 @@ Device (BAT0)
 
 	Method (_STA, 0, Serialized)
 	{
+#if CONFIG(EC_FOR_CHROMEBOX)
+		Return (0)
+#else
 		Return (BSTA (0))
+#endif
 	}
 
 	Method (_BIF, 0, Serialized)
@@ -521,7 +525,11 @@ Device (BAT1)
 
 	Method (_STA, 0, Serialized)
 	{
+#if CONFIG(EC_FOR_CHROMEBOX)
+		Return (0)
+#else
 		Return (BSTA (1))
+#endif
 	}
 
 	Method (_BIF, 0, Serialized)

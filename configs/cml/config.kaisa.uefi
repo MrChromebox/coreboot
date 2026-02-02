@@ -1,3 +1,6 @@
+# Chromebox (Kaisa): minipc, no battery, no tablet/lid
+CONFIG_SYSTEM_TYPE_MINIPC=y
+
 CONFIG_VENDOR_GOOGLE=y
 CONFIG_IFD_BIN_PATH="3rdparty/blobs/mainboard/google/puff/puff/flashdescriptor.bin"
 CONFIG_ME_BIN_PATH="3rdparty/blobs/mainboard/google/puff/puff/me.bin"
@@ -9,9 +12,19 @@ CONFIG_HAVE_ME_BIN=y
 CONFIG_DO_NOT_TOUCH_DESCRIPTOR_REGION=y
 CONFIG_NO_GFX_INIT=y
 
-# EDK2 built-in PXE (SNP/NetworkPkg), no iPXE
+# Chromebox: no built-in battery, disable long battery string read
+# CONFIG_EC_GOOGLE_CHROMEEC_READ_BATTERY_LONG_STRING is not set
+
+# Hide AC adapter, battery, Chromebook keyboard/vbtn ACPI devices (no such hardware on minipc)
+CONFIG_EC_FOR_CHROMEBOX=y
+
+# Only one TF/SD slot: hide eMMC so Windows shows one SD host controller
+CONFIG_SOC_INTEL_HIDE_EMMC=y
+
+# EDK2 built-in PXE (SNP/NetworkPkg), standard PXE not iPXE
 CONFIG_EDK2_NETWORK_PXE_SUPPORT=y
 CONFIG_EDK2_RTKUNDI_DRIVER=y
+CONFIG_EDK2_ENABLE_IPXE=y
 
 # EDK2: use this fork for local/upstream work (cloned to payloads/external/edk2/workspace/edk2 at build)
 CONFIG_EDK2_REPOSITORY="https://github.com/jackadam1981/mrchromebox_edk2.git"

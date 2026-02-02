@@ -235,6 +235,20 @@ config EC_GOOGLE_CHROMEEC_READ_BATTERY_LONG_STRING
 
 	  If unsure, say N.
 
+config EC_FOR_CHROMEBOX
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide AC adapter, battery, Chromebook EC Bus and keyboard/vbtn ACPI devices on mini PC"
+	default y
+	help
+	  On mini PC / Chromebox (no built-in battery, no laptop keyboard), hide
+	  these ACPI devices so they do not appear in the OS device manager:
+	  - Microsoft AC Adapter (ACPI0003)
+	  - Microsoft ACPI Compatible Control Method Battery (PNP0C0A)
+	  - Chromebook EC Bus (GOOG0004 / CREC)
+	  - Chromebook Keyboard Settings & Buttons (GOOG000A / INT33D6 vbtn)
+
+	  Say Y to hide them when SYSTEM_TYPE_MINIPC is set.
+
 config EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE
 	def_bool n
 	help

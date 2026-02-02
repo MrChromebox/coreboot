@@ -45,7 +45,11 @@ Device (CREC)
 
 	Method(_STA, 0)
 	{
+#if CONFIG(EC_FOR_CHROMEBOX)
+		Return (0)
+#else
 		Return (0xF)
+#endif
 	}
 
 #if CONFIG(DRIVERS_ACPI_THERMAL_ZONE)
