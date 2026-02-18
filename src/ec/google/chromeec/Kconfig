@@ -203,6 +203,7 @@ config EC_GOOGLE_CHROMEEC_INCLUDE_SSFC_IN_FW_CONFIG
 config EC_GOOGLE_CHROMEEC_AFTER_G3_STATE
 	bool "Enable syncing ChromeEC After G3 State with CFR at boot"
 	depends on DRIVERS_OPTION_CFR_ENABLED
+	select HAVE_EC_POWER_STATE_AFTER_FAILURE
 	help
 	  Enable syncing ChromeEC After G3 State with CFR at boot via host
 	  command, otherwise ChromeEC default compiled after G3 behavior
