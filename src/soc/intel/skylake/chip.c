@@ -502,10 +502,18 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	params->PavpEnable = CONFIG(PAVP);
 
 	soc_irq_settings(params);
+
+	mainboard_silicon_init_params_fixup(params);
 }
 
 /* Mainboard FSP Configuration */
 __weak void mainboard_silicon_init_params(FSP_S_CONFIG *params)
+{
+	printk(BIOS_DEBUG, "WEAK: %s/%s called\n", __FILE__, __func__);
+}
+
+/* Mainboard FSP Configuration fixup */
+__weak void mainboard_silicon_init_params_fixup(FSP_S_CONFIG *params)
 {
 	printk(BIOS_DEBUG, "WEAK: %s/%s called\n", __FILE__, __func__);
 }
