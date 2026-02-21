@@ -734,7 +734,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 
 	s_cfg->PeiGraphicsPeimInit = CONFIG(RUN_FSP_GOP) && is_devfn_enabled(SA_DEVFN_IGD);
 
-	s_cfg->PavpEnable = CONFIG(PAVP);
+	s_cfg->PavpEnable = !!get_uint_option("me_pavp", CONFIG(PAVP));
 
 	/*
 	 * Prevent FSP from programming write-once subsystem IDs by providing

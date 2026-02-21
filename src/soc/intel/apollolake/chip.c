@@ -734,7 +734,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *silupd)
 
 	silconfig->PeiGraphicsPeimInit = CONFIG(RUN_FSP_GOP) && is_devfn_enabled(SA_DEVFN_IGD);
 
-	silconfig->PavpEnable = CONFIG(PAVP);
+	silconfig->PavpEnable = !!get_uint_option("me_pavp", CONFIG(PAVP));
 
 	/* SATA config */
 	if (is_devfn_enabled(PCH_DEVFN_SATA)) {

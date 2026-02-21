@@ -46,6 +46,26 @@ static const struct sm_object me_heci1 = SM_DECLARE_ENUM({
 				SM_ENUM_VALUE_END			},
 });
 
+/* Intel ME PAVP (Protected Audio-Video Path) */
+static const struct sm_object me_pavp = SM_DECLARE_ENUM({
+	.opt_name	= "me_pavp",
+	.ui_name	= "Intel ME PAVP",
+	.ui_helptext	= "Enable or disable Intel PAVP (Protected Audio-Video"
+			  " Path). This technology is used to enforce digital"
+			  " rights protections on multimedia content. Streaming"
+			  " or other media playback services may require it to"
+			  " be enabled for correct functioning. You might want"
+			  " to disable this if you do not want DRM content, or"
+			  " if you do not trust the security of the Intel"
+			  " Management Engine, which is where this technology"
+			  " is implemented.",
+	.default_value	= CONFIG(PAVP),
+	.values		= (const struct sm_enum_value[]) {
+				{ "Disabled",		0		},
+				{ "Enabled",		1		},
+				SM_ENUM_VALUE_END			},
+});
+
 /*
  * Power state after power loss
  * Use this option or the one below, but not both

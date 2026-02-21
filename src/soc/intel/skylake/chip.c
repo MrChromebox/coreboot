@@ -499,7 +499,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 
 	params->PeiGraphicsPeimInit = CONFIG(RUN_FSP_GOP) && is_devfn_enabled(SA_DEVFN_IGD);
 
-	params->PavpEnable = CONFIG(PAVP);
+	params->PavpEnable = !!get_uint_option("me_pavp", CONFIG(PAVP));
 
 	soc_irq_settings(params);
 }
