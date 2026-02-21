@@ -18,6 +18,7 @@
 #include <intelblocks/pmclib.h>
 #include <intelblocks/systemagent.h>
 #include <intelblocks/tco.h>
+#include <option.h>
 #include <soc/p2sb.h>
 #include <soc/pci_devs.h>
 #include <soc/pcr_ids.h>
@@ -57,7 +58,7 @@ static void soc_finalize(void *unused)
 	pch_finalize();
 	apm_control(APM_CNT_FINALIZE);
 	tbt_finalize();
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)))
 		heci1_disable();
 
 	/* Indicate finalize step with post code */

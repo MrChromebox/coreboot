@@ -16,6 +16,7 @@
 #include <intelblocks/pmclib.h>
 #include <intelblocks/tco.h>
 #include <intelblocks/thermal.h>
+#include <option.h>
 #include <soc/me.h>
 #include <soc/p2sb.h>
 #include <soc/pci_devs.h>
@@ -60,7 +61,7 @@ static void pch_finalize_script(struct device *dev)
 	pch_thermal_configuration();
 
 	/* we should disable Heci1 based on the config */
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)))
 		heci1_disable();
 
 	/* Hide p2sb device as the OS must not change BAR0. */

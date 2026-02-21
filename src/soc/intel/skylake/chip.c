@@ -394,7 +394,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	 * setting, we set the appropriate PsfUnlock policy in FSP,
 	 * do the changes and then lock it back in coreboot during finalize.
 	 */
-	tconfig->PchSbAccessUnlock = CONFIG(DISABLE_HECI1_AT_PRE_BOOT);
+	tconfig->PchSbAccessUnlock = !get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT));
 
 	const bool lockdown_by_fsp = get_lockdown_config() == CHIPSET_LOCKDOWN_FSP;
 	tconfig->PchLockDownBiosInterface = lockdown_by_fsp;

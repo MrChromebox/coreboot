@@ -31,6 +31,21 @@ static const struct sm_object me_state_counter = SM_DECLARE_NUMBER({
 	.default_value	= 0,
 });
 
+/* Intel ME HECI1(CSE) device */
+static const struct sm_object me_heci1 = SM_DECLARE_ENUM({
+	.opt_name	= "me_heci1",
+	.ui_name	= "Intel ME HECI1(CSE) device",
+	.ui_helptext	= "Allows to disable HECI1(CSE) device at the end of"
+			  " boot. Disabling this hides the device from the OS,"
+			  " preventing communication with the Intel Management"
+			  " Engine, but it does not disable ME.",
+	.default_value	= !CONFIG(DISABLE_HECI1_AT_PRE_BOOT),
+	.values		= (const struct sm_enum_value[]) {
+				{ "Disabled",		0		},
+				{ "Enabled",		1		},
+				SM_ENUM_VALUE_END			},
+});
+
 /*
  * Power state after power loss
  * Use this option or the one below, but not both

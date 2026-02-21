@@ -8,6 +8,7 @@
 #include <intelblocks/cse.h>
 #include <intelblocks/p2sb.h>
 #include <intelblocks/pcr.h>
+#include <option.h>
 #include <soc/cse.h>
 #include <soc/heci.h>
 #include <soc/iomap.h>
@@ -218,7 +219,7 @@ void heci_cse_lockdown(void)
 	 * It is safe to disable HECI1 now since we won't be talking to the ME
 	 * anymore.
 	 */
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)))
 		heci1_disable();
 }
 

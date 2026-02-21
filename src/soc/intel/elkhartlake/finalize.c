@@ -12,6 +12,7 @@
 #include <intelblocks/pmclib.h>
 #include <intelblocks/systemagent.h>
 #include <intelblocks/tco.h>
+#include <option.h>
 #include <soc/p2sb.h>
 #include <soc/pci_devs.h>
 #include <soc/pcr_ids.h>
@@ -34,7 +35,7 @@ static void pch_finalize(void)
 static void heci_finalize(void)
 {
 	heci_set_to_d0i3();
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)))
 		heci1_disable();
 }
 

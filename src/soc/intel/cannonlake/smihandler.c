@@ -3,6 +3,7 @@
 #include <device/device.h>
 #include <intelblocks/cse.h>
 #include <intelblocks/smihandler.h>
+#include <option.h>
 #include <soc/soc_chip.h>
 #include <soc/pci_devs.h>
 #include <soc/pm.h>
@@ -16,7 +17,8 @@
  */
 void smihandler_soc_at_finalize(void)
 {
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT) && CONFIG(HECI_DISABLE_USING_SMM))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)) &&
+	    CONFIG(HECI_DISABLE_USING_SMM))
 		heci1_disable();
 }
 

@@ -13,6 +13,7 @@
 #include <intelblocks/systemagent.h>
 #include <intelblocks/tco.h>
 #include <intelblocks/thermal.h>
+#include <option.h>
 #include <spi-generic.h>
 #include <intelpch/lockdown.h>
 #include <soc/p2sb.h>
@@ -55,7 +56,7 @@ static void sa_finalize(void)
 static void heci_finalize(void)
 {
 	heci_set_to_d0i3();
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (!get_uint_option("me_heci1", !CONFIG(DISABLE_HECI1_AT_PRE_BOOT)))
 		heci1_disable();
 }
 
