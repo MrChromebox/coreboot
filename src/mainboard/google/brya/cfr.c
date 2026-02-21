@@ -43,6 +43,7 @@ static struct sm_obj_form system = {
 		&me_state,
 		&me_state_counter,
 		&me_heci1,
+		&me_pavp,
 		&pciexp_aspm,
 		&pciexp_clk_pm,
 		&pciexp_l1ss,
