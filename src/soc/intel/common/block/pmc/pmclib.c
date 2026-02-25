@@ -776,8 +776,14 @@ void pmc_clear_pmcon_sts(void)
 
 void pmc_set_power_failure_state(const bool target_on)
 {
-	const unsigned int state = get_uint_option("power_on_after_fail",
-					 CONFIG_MAINBOARD_POWER_FAILURE_STATE);
+	/*
+	 * Always set to "auto on" to avoid potential conflicts with EC that
+	 * can result in the inability to boot if EC handles after G3.
+	 */
+	const unsigned int state = (CONFIG(HAVE_EC_POWER_STATE_AFTER_FAILURE) ?
+				    MAINBOARD_POWER_STATE_ON :
+				    get_uint_option("power_on_after_fail",
+				         CONFIG_MAINBOARD_POWER_FAILURE_STATE));
 
 	/*
 	 * On the shutdown path (target_on == false), we only need to
