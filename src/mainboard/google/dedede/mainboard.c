@@ -87,7 +87,8 @@ static void mainboard_init(void *chip_info)
 	 * For chromeboxes, wait for DP HPD to be asserted before
 	 * entering FSP-S, otherwise display init may fail.
 	 */
-	if (!CONFIG(SYSTEM_TYPE_LAPTOP) && display_init_required())
+	if (!CONFIG(SYSTEM_TYPE_LAPTOP) && !CONFIG(SYSTEM_TYPE_CONVERTIBLE) &&
+	    display_init_required())
 		mainboard_wait_for_hpd();
 
 	base_pads = baseboard_gpio_table(&base_num);
