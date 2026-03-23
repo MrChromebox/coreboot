@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
+#include <baseboard/board.h>
 #include <baseboard/variants.h>
 #include <bootmode.h>
 #include <chip.h>
@@ -89,6 +90,16 @@ static void wait_for_hpd(gpio_t gpio, long timeout)
 #define PSYS_IMAX    9600
 #define BJ_VOLTS_MV  19000
 
+unsigned int puff_default_pl2_watts(void)
+{
+	struct device *dev = pcidev_path_on_root(SA_DEVFN_ROOT);
+	const u16 mch_id = dev ? pci_read_config16(dev, PCI_DEVICE_ID) : 0xffff;
+
+	if (mch_id == PCI_DID_INTEL_CML_ULT || mch_id == PCI_DID_INTEL_CML_ULT_6_2)
+		return PUFF_U62_U42_PL2;
+	return PUFF_U22_PL2;
+}
+
 static void mainboard_set_power_limits(struct soc_power_limits_config *conf)
 {
 	enum usb_chg_type type;
@@ -114,11 +125,7 @@ static void mainboard_set_power_limits(struct soc_power_limits_config *conf)
 		psyspl2 = SET_PSYSPL2(watts);
 
 		/* Limit PL2 if the adapter is with lower capability */
-		if (mch_id == PCI_DID_INTEL_CML_ULT ||
-			mch_id == PCI_DID_INTEL_CML_ULT_6_2)
-			pl2 = (psyspl2 > PUFF_U62_U42_PL2) ? PUFF_U62_U42_PL2 : psyspl2;
-		else
-			pl2 = (psyspl2 > PUFF_U22_PL2) ? PUFF_U22_PL2 : psyspl2;
+		pl2 = (psyspl2 > puff_default_pl2_watts()) ? puff_default_pl2_watts() : psyspl2;
 
 		conf->tdp_psyspl3 = psyspl2;
 		/* set max possible time window */
