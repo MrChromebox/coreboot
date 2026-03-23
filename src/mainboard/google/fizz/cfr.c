@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
 #include <boot/coreboot_tables.h>
+#include <drivers/intel/oc_mailbox/cfr.h>
 #include <drivers/option/cfr_frontend.h>
 #include <ec/google/chromeec/cfr.h>
 #include <intelblocks/cfr.h>
@@ -89,6 +90,7 @@ static struct sm_obj_form *sm_root[] = {
 	&system,
 	&ec,
 	&power,
+	&cpu_voltage,
 	NULL
 };
 
