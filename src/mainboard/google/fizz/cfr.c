@@ -6,11 +6,43 @@
 #include <intelblocks/cfr.h>
 #include <soc/cfr.h>
 #include <stdbool.h>
+#include "board.h"
 
 static const struct cfr_default_override cfr_overrides[] = {
 	CFR_OVERRIDE_BOOL("s0ix_enable", false),
 	CFR_OVERRIDE_END,
 };
+
+
+static const struct sm_object tdp_pl1_override = SM_DECLARE_NUMBER({
+	.opt_name	= "tdp_pl1_override",
+	.ui_name	= "CPU PL1 power limit (W)",
+	.ui_helptext	= "Long-duration CPU package power limit.\n"
+			  "Default: 15 W. Range: 15-35 W.",
+	.default_value	= 15,
+	.min		= 15,
+	.max		= 35,
+	.step		= 1,
+	.display_flags	= 0,
+});
+
+static void update_tdp_pl2_default(struct sm_object *new)
+{
+	new->sm_number.default_value = fizz_default_pl2_watts();
+}
+
+static const struct sm_object tdp_pl2_override = SM_DECLARE_NUMBER({
+	.opt_name	= "tdp_pl2_override",
+	.ui_name	= "CPU PL2 power limit (W)",
+	.ui_helptext	= "Short-duration CPU package power limit.\n"
+			  "Default: 29 W (U22 SKUs) or 44 W (U42 SKUs). Range: 29-51 W.\n"
+			  "Must be >= PL1 (enforced at boot).",
+	.default_value	= 29,
+	.min		= 29,
+	.max		= 51,
+	.step		= 1,
+	.display_flags	= 0,
+}, WITH_CALLBACK(update_tdp_pl2_default));
 
 static struct sm_obj_form system = {
 	.ui_name = "System",
@@ -46,6 +78,9 @@ static struct sm_obj_form power = {
 	.ui_name = "Power",
 	.obj_list = (const struct sm_object *[]) {
 		&power_on_after_fail,
+		&tdp_pl1_override,
+		&tdp_pl2_override,
+		&pkg_power_limit_lock,
 		NULL
 	},
 };

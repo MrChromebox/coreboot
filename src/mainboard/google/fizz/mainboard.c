@@ -11,6 +11,7 @@
 #include <ec/google/chromeec/ec.h>
 #include <gpio.h>
 #include <intelblocks/power_limit.h>
+#include <option.h>
 #include <smbios.h>
 #include <soc/pci_devs.h>
 #include <soc/nhlt.h>
@@ -19,6 +20,8 @@
 #include <timer.h>
 
 #include <variant/gpio.h>
+
+#include "board.h"
 
 #define FIZZ_SKU_ID_I7_U42  0x4
 #define FIZZ_SKU_ID_I5_U42  0x5
@@ -77,7 +80,7 @@ static bool is_u42_sku(void)
 	       sku == FIZZ_SKU_ID_I3_U42;
 }
 
-static unsigned int fizz_default_pl2_watts(void)
+unsigned int fizz_default_pl2_watts(void)
 {
 	return is_u42_sku() ? FIZZ_PL2_U42 : FIZZ_PL2_U22;
 }
