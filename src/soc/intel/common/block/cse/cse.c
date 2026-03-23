@@ -1430,7 +1430,7 @@ static void cse_final_ready_to_boot(void)
 {
 	cse_control_global_reset_lock();
 
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT) || cse_is_hfs1_com_soft_temp_disable()) {
+	if (soc_disable_heci1_at_pre_boot() || cse_is_hfs1_com_soft_temp_disable()) {
 		cse_set_to_d0i3();
 		heci1_disable();
 	}

@@ -57,7 +57,7 @@ static void soc_finalize(void *unused)
 	pch_finalize();
 	apm_control(APM_CNT_FINALIZE);
 	tbt_finalize();
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (soc_disable_heci1_at_pre_boot())
 		heci1_disable();
 
 	/* Indicate finalize step with post code */

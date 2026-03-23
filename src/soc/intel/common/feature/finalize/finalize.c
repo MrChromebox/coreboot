@@ -51,7 +51,7 @@ static void sa_finalize(void)
 static void heci_finalize(void)
 {
 	heci_set_to_d0i3();
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (soc_disable_heci1_at_pre_boot())
 		heci1_disable();
 }
 

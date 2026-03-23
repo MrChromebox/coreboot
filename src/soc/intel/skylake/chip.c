@@ -12,6 +12,7 @@
 #include <option.h>
 #include <intelblocks/acpi.h>
 #include <intelblocks/cfg.h>
+#include <intelblocks/cse.h>
 #include <intelblocks/itss.h>
 #include <intelblocks/lpc_lib.h>
 #include <intelblocks/pcie_rp.h>
@@ -396,7 +397,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	 * setting, we set the appropriate PsfUnlock policy in FSP,
 	 * do the changes and then lock it back in coreboot during finalize.
 	 */
-	tconfig->PchSbAccessUnlock = CONFIG(DISABLE_HECI1_AT_PRE_BOOT);
+	tconfig->PchSbAccessUnlock = soc_disable_heci1_at_pre_boot();
 
 	const bool lockdown_by_fsp = get_lockdown_config() == CHIPSET_LOCKDOWN_FSP;
 	tconfig->PchLockDownBiosInterface = lockdown_by_fsp;

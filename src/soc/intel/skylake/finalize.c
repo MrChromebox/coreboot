@@ -59,8 +59,7 @@ static void pch_finalize_script(struct device *dev)
 	 */
 	pch_thermal_configuration();
 
-	/* we should disable Heci1 based on the config */
-	if (CONFIG(DISABLE_HECI1_AT_PRE_BOOT))
+	if (soc_disable_heci1_at_pre_boot())
 		heci1_disable();
 
 	/* Hide p2sb device as the OS must not change BAR0. */

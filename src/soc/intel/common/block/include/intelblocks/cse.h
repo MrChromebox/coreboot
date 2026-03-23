@@ -4,6 +4,7 @@
 #define SOC_INTEL_COMMON_CSE_H
 
 #include <intelblocks/cse_telemetry.h>
+#include <option.h>
 #include <types.h>
 #include <vb2_api.h>
 
@@ -642,5 +643,15 @@ bool is_cse_boot_to_rw(void);
  * Returns true if the host came out of a cold reset, false otherwise.
  */
 bool cse_check_host_cold_reset(void);
+
+/*
+ * Effective DISABLE_HECI1_AT_PRE_BOOT: Kconfig default with optional CFR/CMOS
+ * override (option name disable_heci1_at_pre_boot).
+ */
+static inline bool soc_disable_heci1_at_pre_boot(void)
+{
+	return get_uint_option("disable_heci1_at_pre_boot",
+			       CONFIG(DISABLE_HECI1_AT_PRE_BOOT)) != 0;
+}
 
 #endif // SOC_INTEL_COMMON_CSE_H

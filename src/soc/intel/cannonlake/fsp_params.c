@@ -626,8 +626,8 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 
 	s_cfg->Heci3Enabled = is_devfn_enabled(PCH_DEVFN_CSE_3);
 	/*
-	 * coreboot will handle disabling of HECI1 device if `DISABLE_HECI1_AT_PRE_BOOT`
-	 * config is selected hence, don't let FSP to disable the HECI1 device and set
+	 * coreboot will handle disabling of HECI1 device if DISABLE_HECI1_AT_PRE_BOOT /
+	 * disable_heci1_at_pre_boot (CFR) applies; don't let FSP disable HECI1 and set
 	 * the `Heci1Disabled` UPD to `0`.
 	 */
 	s_cfg->Heci1Disabled = 0;
