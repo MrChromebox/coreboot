@@ -6,6 +6,7 @@
 #include <drivers/intel/dptf/chip.h>
 #include <intelblocks/cpulib.h>
 #include <intelblocks/power_limit.h>
+#include <option.h>
 #include <soc/msr.h>
 #include <soc/pci_devs.h>
 #include <soc/soc_chip.h>
@@ -141,8 +142,8 @@ void set_power_limits(u8 power_limit_1_time,
 
 	/* Set long term power limit to TDP */
 	limit.lo = 0;
-	tdp_pl1 = ((conf->tdp_pl1_override == 0) ?
-			tdp : (conf->tdp_pl1_override * power_unit));
+	const unsigned int tdp_pl1_override = get_uint_option("tdp_pl1_override", conf->tdp_pl1_override);
+	tdp_pl1 = tdp_pl1_override ? (tdp_pl1_override * power_unit) : tdp;
 	printk(BIOS_INFO, "CPU PL1 = %u Watts\n", tdp_pl1 / power_unit);
 	limit.lo |= (tdp_pl1 & PKG_POWER_LIMIT_MASK);
 
@@ -155,12 +156,20 @@ void set_power_limits(u8 power_limit_1_time,
 
 	/* Set short term power limit to 1.25 * TDP if no config given */
 	limit.hi = 0;
-	tdp_pl2 = (conf->tdp_pl2_override == 0) ?
-		(tdp * 125) / 100 : (conf->tdp_pl2_override * power_unit);
+	const unsigned int tdp_pl2_override = get_uint_option("tdp_pl2_override", conf->tdp_pl2_override);
+	tdp_pl2 = tdp_pl2_override ? (tdp_pl2_override * power_unit) : ((tdp * 125) / 100);
+	/* Ensure PL2 isn't less than PL1 */
+	if (tdp_pl2 < tdp_pl1)
+		tdp_pl2 = tdp_pl1;
 	printk(BIOS_INFO, "CPU PL2 = %u Watts\n", tdp_pl2 / power_unit);
 	limit.hi |= (tdp_pl2) & PKG_POWER_LIMIT_MASK;
 	limit.hi |= PKG_POWER_LIMIT_CLAMP;
 	limit.hi |= PKG_POWER_LIMIT_EN;
+
+	if (get_uint_option("pkg_power_limit_lock", 0)) {
+		limit.hi |= PKG_POWER_LIMIT_LOCK;
+		printk(BIOS_INFO, "Locking package power limits\n");
+	}
 
 	/* Power limit 2 time is only programmable on server SKU */
 	wrmsr(MSR_PKG_POWER_LIMIT, limit);
