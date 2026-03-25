@@ -2,6 +2,7 @@
 
 #include <console/console.h>
 #include <device/device.h>
+
 #include <cpu/cpu.h>
 #include <cpu/x86/mtrr.h>
 #include <cpu/x86/msr.h>
@@ -12,6 +13,7 @@
 #include <cpu/intel/turbo.h>
 #include <cpu/x86/name.h>
 #include <delay.h>
+#include <option.h>
 #include <northbridge/intel/haswell/haswell.h>
 #include <southbridge/intel/lynxpoint/pch.h>
 #include <cpu/intel/common/common.h>
@@ -260,6 +262,7 @@ void set_power_limits(u8 power_limit_1_time)
 	msr_t limit;
 	unsigned int power_unit;
 	unsigned int tdp, min_power, max_power, max_time;
+	unsigned int pl1, pl2;
 	u8 power_limit_1_val;
 
 	if (power_limit_1_time >= ARRAY_SIZE(power_limit_time_sec_to_msr))
@@ -292,17 +295,30 @@ void set_power_limits(u8 power_limit_1_time)
 
 	power_limit_1_val = power_limit_time_sec_to_msr[power_limit_1_time];
 
-	/* Set long term power limit to TDP */
+	const unsigned int pl1_override_w = get_uint_option("tdp_pl1_override", 0);
+	const unsigned int pl2_override_w = get_uint_option("tdp_pl2_override", 0);
+
+	/* Set long term power limit to TDP if not overridden */
 	limit.lo = 0;
-	limit.lo |= tdp & PKG_POWER_LIMIT_MASK;
+	pl1 = pl1_override_w ? (pl1_override_w * power_unit) : tdp;
+	printk(BIOS_DEBUG, "CPU PL1 = %u Watts\n", pl1 / power_unit);
+	limit.lo |= pl1 & PKG_POWER_LIMIT_MASK;
 	limit.lo |= PKG_POWER_LIMIT_EN;
 	limit.lo |= (power_limit_1_val & PKG_POWER_LIMIT_TIME_MASK) <<
 		PKG_POWER_LIMIT_TIME_SHIFT;
 
-	/* Set short term power limit to 1.25 * TDP */
+	/* Set short term power limit to 1.25 * TDP if not overridden */
 	limit.hi = 0;
-	limit.hi |= ((tdp * 125) / 100) & PKG_POWER_LIMIT_MASK;
+	pl2 = pl2_override_w ? (pl2_override_w * power_unit) : ((tdp * 125) / 100);
+	if (pl2 < pl1)
+		pl2 = pl1;
+	printk(BIOS_DEBUG, "CPU PL2 = %u Watts\n", pl2 / power_unit);
+	limit.hi |= pl2 & PKG_POWER_LIMIT_MASK;
 	limit.hi |= PKG_POWER_LIMIT_EN;
+	if (get_uint_option("cpu_power_limit_lock", 0)) {
+		limit.hi |= PKG_POWER_LIMIT_LOCK;
+		printk(BIOS_DEBUG, "Locking package power limits\n");
+	}
 	/* Power limit 2 time is only programmable on server SKU */
 
 	wrmsr(MSR_PKG_POWER_LIMIT, limit);
