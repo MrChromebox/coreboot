@@ -178,6 +178,20 @@ void set_power_limits(u8 power_limit_1_time,
 	MCHBAR32(MCH_PKG_POWER_LIMIT_LO) = limit.lo & (~(PKG_POWER_LIMIT_EN));
 	MCHBAR32(MCH_PKG_POWER_LIMIT_HI) = limit.hi;
 
+	/*
+	 * Set PsysPL1 if PL1 is > TDP
+	 * POR value for most SKUs is same as TDP, so adjust it accordingly.
+	 */
+	if (tdp_pl1 > tdp) {
+		limit = rdmsr(MSR_PLATFORM_POWER_LIMIT);
+		limit.lo = 0;
+		printk(BIOS_INFO, "CPU PsysPL1 = %u Watts\n", tdp_pl1 / power_unit);
+		limit.lo |= tdp_pl1 & PKG_POWER_LIMIT_MASK;
+		limit.lo |= PKG_POWER_LIMIT_CLAMP;
+		limit.lo |= PKG_POWER_LIMIT_EN;
+		wrmsr(MSR_PLATFORM_POWER_LIMIT, limit);
+	}
+
 	/* Set PsysPl2 */
 	if (conf->tdp_psyspl2) {
 		limit = rdmsr(MSR_PLATFORM_POWER_LIMIT);
