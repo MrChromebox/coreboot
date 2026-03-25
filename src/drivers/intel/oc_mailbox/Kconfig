@@ -1,0 +1,30 @@
+## SPDX-License-Identifier: GPL-2.0-only
+
+config DRIVERS_INTEL_OC_MAILBOX
+	bool
+	depends on CPU_INTEL_HASWELL || SOC_INTEL_COMMON_SKYLAKE_BASE || SOC_INTEL_CANNONLAKE_BASE
+	help
+	  Provides access to the Intel's OC Mailbox MSR (0x150).
+	  Supports 4th-10th generation Intel Core CPUs (Haswell-Cometlake).
+
+if DRIVERS_INTEL_OC_MAILBOX
+
+config INTEL_OC_MAILBOX_ENABLE_UNDERVOLTING
+	bool "Enable undervolting via OC mailbox"
+	help
+	  Program per-plane voltage offsets via OC Mailbox MSR.
+	  When enabled, coreboot can apply per-domain undervolt settings at boot
+	  (core/GT/cache/SA and I/O planes, depending on CPU generation). Settings
+	  are exposed as runtime options and written using OC_MAILBOX commands.
+
+config HAS_DIGITAL_IO_POWER_DOMAIN
+	bool
+	default y if CPU_INTEL_HASWELL
+	default n
+
+config NUM_OC_MAILBOX_PLANES
+	int
+	default 6 if HAS_DIGITAL_IO_POWER_DOMAIN
+	default 5
+
+endif
