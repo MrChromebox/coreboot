@@ -174,8 +174,8 @@ void set_power_limits(u8 power_limit_1_time,
 	/* Power limit 2 time is only programmable on server SKU */
 	wrmsr(MSR_PKG_POWER_LIMIT, limit);
 
-	/* Set PL2 power limit values in MCHBAR and disable PL1 */
-	MCHBAR32(MCH_PKG_POWER_LIMIT_LO) = limit.lo & (~(PKG_POWER_LIMIT_EN));
+	/* Set package power limit values in MCHBAR */
+	MCHBAR32(MCH_PKG_POWER_LIMIT_LO) = limit.lo;
 	MCHBAR32(MCH_PKG_POWER_LIMIT_HI) = limit.hi;
 
 	/*
