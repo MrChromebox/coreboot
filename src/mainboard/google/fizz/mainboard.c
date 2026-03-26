@@ -29,8 +29,8 @@
 #define FIZZ_SKU_ID_CEL_U22 0x0
 #define FIZZ_PL2_U42        44
 #define FIZZ_PL2_U22        29
-#define FIZZ_PSYSPL2_U22    65
-#define FIZZ_PSYSPL2_U42    90
+#define FIZZ_ADP_WATTS_U22  65
+#define FIZZ_ADP_WATTS_U42  90
 #define FIZZ_MAX_TIME_WINDOW 6
 #define FIZZ_MIN_DUTYCYCLE   4
 /*
@@ -69,6 +69,19 @@ static uint8_t board_sku_id(void)
 	return sku_id;
 }
 
+static bool is_u42_sku(void)
+{
+	uint8_t sku = board_sku_id();
+	return sku == FIZZ_SKU_ID_I7_U42 ||
+	       sku == FIZZ_SKU_ID_I5_U42 ||
+	       sku == FIZZ_SKU_ID_I3_U42;
+}
+
+static unsigned int fizz_default_pl2_watts(void)
+{
+	return is_u42_sku() ? FIZZ_PL2_U42 : FIZZ_PL2_U22;
+}
+
 /*
  * mainboard_set_power_limits
  *
@@ -102,44 +115,33 @@ static uint8_t board_sku_id(void)
 static void mainboard_set_power_limits(struct soc_power_limits_config *conf)
 {
 	enum usb_chg_type type;
-	u32 watts;
 	u16 volts_mv, current_ma;
-	u32 pl2, psyspl2;
+	u32 adapter_watts;
 	int rv = google_chromeec_get_usb_pd_power_info(&type, &current_ma, &volts_mv);
-	uint8_t sku = board_sku_id();
-	const uint32_t u42_mask = (1 << FIZZ_SKU_ID_I7_U42) |
-				  (1 << FIZZ_SKU_ID_I5_U42) |
-				  (1 << FIZZ_SKU_ID_I3_U42);
 
-	/* PL2 value is sku-based, no matter what charger we are using */
-	pl2 = FIZZ_PL2_U22;
-	if ((1 << sku) & u42_mask)
-		pl2 = FIZZ_PL2_U42;
 	conf->tdp_psyspl3 = conf->tdp_pl4 = 0;
 
 	/* If we can't get charger info or not PD charger, assume barrel jack */
 	if (rv != 0 || type != USB_CHG_TYPE_PD) {
-		/* using the barrel jack, get PsysPL2 based on sku id */
-		psyspl2 = FIZZ_PSYSPL2_U22;
-		/* Running a U42 SKU */
-		if ((1 << sku) & u42_mask)
-			psyspl2 = FIZZ_PSYSPL2_U42;
+		/* using the barrel jack, get max adapter power based on sku id */
+		adapter_watts = is_u42_sku() ? FIZZ_ADP_WATTS_U42 : FIZZ_ADP_WATTS_U22;
 	} else {
 		/* Detected TypeC.  Base on max value of adapter */
-		watts = ((u32)volts_mv * current_ma) / 1000000;
-		psyspl2 = watts;
-		conf->tdp_psyspl3 = SET_PSYSPL2(psyspl2);
+		adapter_watts = ((u32)volts_mv * current_ma) / 1000000;
+		conf->tdp_psyspl3 = SET_PSYSPL2(adapter_watts);
 		/* set max possible time window */
 		conf->tdp_psyspl3_time = FIZZ_MAX_TIME_WINDOW;
 		/* set minimum duty cycle */
 		conf->tdp_psyspl3_dutycycle = FIZZ_MIN_DUTYCYCLE;
-		if ((1 << sku) & u42_mask)
-			conf->tdp_pl4 = SET_PSYSPL2(psyspl2);
+		if (is_u42_sku())
+			conf->tdp_pl4 = SET_PSYSPL2(adapter_watts);
 	}
 
-	conf->tdp_pl2_override = pl2;
+	/* PL2 value is sku-based, no matter what charger we are using */
+	conf->tdp_pl2_override = fizz_default_pl2_watts();
+
 	/* set psyspl2 to 90% of max adapter power */
-	conf->tdp_psyspl2 = SET_PSYSPL2(psyspl2);
+	conf->tdp_psyspl2 = SET_PSYSPL2(adapter_watts);
 }
 
 static uint8_t read_oem_id_from_gpio(void)
