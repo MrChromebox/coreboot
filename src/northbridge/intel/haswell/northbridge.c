@@ -4,6 +4,7 @@
 #include <console/console.h>
 #include <acpi/acpi.h>
 #include <delay.h>
+#include <drivers/intel/oc_mailbox/oc_mailbox.h>
 #include <cpu/intel/haswell/haswell.h>
 #include <device/device.h>
 #include <device/pci.h>
@@ -477,6 +478,9 @@ static void northbridge_init(struct device *dev)
 	/* Configure turbo power limits 1ms after reset complete bit. */
 	mdelay(1);
 	set_power_limits(28);
+
+	/* Apply OC mailbox settings (e.g. undervolt) after power limits. */
+	program_oc_mailbox();
 }
 
 static void northbridge_final(struct device *dev)
