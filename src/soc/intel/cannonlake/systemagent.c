@@ -4,6 +4,7 @@
 #include <delay.h>
 #include <device/pci.h>
 #include <device/pci_ops.h>
+#include <drivers/intel/oc_mailbox/oc_mailbox.h>
 #include <intelblocks/power_limit.h>
 #include <intelblocks/systemagent.h>
 #include <soc/cpu.h>
@@ -62,6 +63,9 @@ void soc_systemagent_init(struct device *dev)
 	config = config_of_soc();
 	soc_config = &config->power_limits_config;
 	set_power_limits(MOBILE_SKU_PL1_TIME_SEC, soc_config);
+
+	/* Apply OC mailbox settings (e.g. undervolt) after power limits. */
+	program_oc_mailbox();
 }
 
 uint32_t soc_systemagent_max_chan_capacity_mib(u8 capid0_a_ddrsz)
