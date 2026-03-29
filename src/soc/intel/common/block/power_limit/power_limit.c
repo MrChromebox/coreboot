@@ -132,18 +132,23 @@ void set_power_limits(u8 power_limit_1_time,
 	if (power_limit_time_msr_to_sec[max_time] > power_limit_1_time)
 		power_limit_1_time = power_limit_time_msr_to_sec[max_time];
 
-	if (min_power > 0 && tdp < min_power)
-		tdp = min_power;
-
-	if (max_power > 0 && tdp > max_power)
-		tdp = max_power;
-
 	power_limit_1_val = power_limit_time_sec_to_msr[power_limit_1_time];
 
 	/* Set long term power limit to TDP */
 	limit.lo = 0;
 	const unsigned int tdp_pl1_override = get_uint_option("tdp_pl1_override", conf->tdp_pl1_override);
 	tdp_pl1 = tdp_pl1_override ? (tdp_pl1_override * power_unit) : tdp;
+
+	/* Validate against hardware limits */
+	if (min_power > 0 && tdp_pl1 < min_power) {
+		printk(BIOS_ERR, "PL1 %uW below hardware minimum %uW, clamping\n",
+			tdp_pl1 / power_unit, min_power / power_unit);
+			tdp_pl1 = min_power;
+	} else if (max_power > 0 && tdp_pl1 > max_power) {
+		printk(BIOS_ERR, "PL1 %uW exceeds hardware maximum %uW, clamping\n",
+			tdp_pl1 / power_unit, max_power / power_unit);
+			tdp_pl1 = max_power;
+	}
 	printk(BIOS_INFO, "CPU PL1 = %u Watts\n", tdp_pl1 / power_unit);
 	limit.lo |= (tdp_pl1 & PKG_POWER_LIMIT_MASK);
 
