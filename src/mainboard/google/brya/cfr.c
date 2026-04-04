@@ -7,11 +7,20 @@
 #include <soc/cfr.h>
 
 #if CONFIG(BOARD_GOOGLE_TANIKS) || CONFIG(BOARD_GOOGLE_TAEKO)
+#include <fw_config.h>
 
 enum storage_device {
 	STORAGE_NVME = 0,
 	STORAGE_EMMC = 1,
 };
+
+/* Update storage device default value based on fw_config */
+static void update_storage_device(struct sm_object *new)
+{
+	new->sm_enum.default_value =
+		(fw_config_get() & FW_CONFIG_FIELD_BOOT_EMMC_MASK_MASK) ?
+		STORAGE_EMMC : STORAGE_NVME;
+}
 
 static const struct sm_object storage_device_opt = SM_DECLARE_ENUM({
 	.opt_name	= "storage_device",
@@ -22,7 +31,8 @@ static const struct sm_object storage_device_opt = SM_DECLARE_ENUM({
 				{ "NVMe SSD",		STORAGE_NVME	},
 				{ "eMMC",		STORAGE_EMMC	},
 				SM_ENUM_VALUE_END			},
-});
+}, WITH_CALLBACK(update_storage_device));
+
 static struct sm_obj_form devices = {
 	.ui_name = "Devices",
 	.obj_list = (const struct sm_object *[]) {
