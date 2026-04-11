@@ -9,6 +9,7 @@ platforms=('snb_ivb' 'hsw' 'byt' 'bdw' 'bsw' 'skl' 'apl' 'kbl' 'whl' 'glk' \
 build_targets=()
 debug_mode=false
 edk2_pxe=false
+edk2_ipxe=false
 cbmem_mode=false
 build_all=false
 
@@ -18,6 +19,7 @@ usage() {
 	echo "  --cbmem      Enable EDK2 cbmem logging"
 	echo "               Cannot be used with --debug"
 	echo "  --pxe        Enable EDK2 PXE network support"
+	echo "  --ipxe       Enable EDK2 iPXE network support"
 	echo "  --build-all  Build all supported boards"
 }
 
@@ -50,6 +52,8 @@ for arg in "$@"; do
 		cbmem_mode=true
 	elif [ "$arg" = "--pxe" ]; then
 		edk2_pxe=true
+	elif [ "$arg" = "--ipxe" ]; then
+		edk2_ipxe=true
 	elif [ "$arg" = "--build-all" ]; then
 		build_all=true
 	elif [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
@@ -107,6 +111,9 @@ for device in "${build_targets[@]}"; do
 	fi
 	if [ "$edk2_pxe" = true ]; then
 		echo "CONFIG_EDK2_NETWORK_PXE_SUPPORT=y" >> .config
+	fi
+	if [ "$edk2_ipxe" = true ]; then
+		echo "CONFIG_EDK2_ENABLE_IPXE=y" >> .config
 	fi
 	make clean
 	make olddefconfig
