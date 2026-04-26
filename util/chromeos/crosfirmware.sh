@@ -87,7 +87,7 @@ preferred_channels = ["STABLE", "LTS", "LTC"]
 
 def load(path):
     with open(path, "r", encoding="utf-8") as f:
-	return json.load(f)
+        return json.load(f)
 
 def normalize(s):
     return str(s or "").strip()
