@@ -112,8 +112,10 @@ def match_entry(e):
 
     # 2) hwidmatch regex string typically anchors the platform prefix.
     if hwidmatch:
-        # Common patterns: ^GENESIS-.* , ^ATLAS .* , ^WUKONG [A-Z0-9]...
-        if re.search(rf"^\^?{re.escape(board)}([-_ ].*)", hwidmatch.strip(), re.IGNORECASE):
+        # Common patterns: ^GENESIS-.* , ^ATLAS .* , ^MORPHIUS[-| ].* , ...
+        # Require a word boundary after the board so we accept bracket/suffix
+        # forms without falsely matching a shorter prefix inside another name.
+        if re.match(rf"^\^?{re.escape(board)}\b", hwidmatch.strip(), re.IGNORECASE):
             return True
 
     return False
