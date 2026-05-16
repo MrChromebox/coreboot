@@ -1193,7 +1193,7 @@ endif
 #
 # position, size
 FMAP_FMAP_BASE := $(FMAP_CURRENT_BASE)
-FMAP_FMAP_SIZE := 0x200
+FMAP_FMAP_SIZE := $(CONFIG_FMAP_SIZE)
 
 #
 # X86 COREBOOT default cbfs FMAP region
@@ -1211,7 +1211,7 @@ FMAP_BIOS_BASE := 0
 FMAP_BIOS_SIZE := $(CONFIG_CBFS_SIZE)
 # position and size of flashmap, relative to BIOS_BASE
 FMAP_FMAP_BASE := 0x20000
-FMAP_FMAP_SIZE := 0x200
+FMAP_FMAP_SIZE := $(CONFIG_FMAP_SIZE)
 
 FMAP_CURRENT_BASE := $(call int-add, $(FMAP_FMAP_BASE) $(FMAP_FMAP_SIZE))
 

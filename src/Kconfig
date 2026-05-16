@@ -665,6 +665,16 @@ config FMDFILE
 	  but in some cases more complex setups are required.
 	  When an fmd is specified, it overrides the default format.
 
+config FMAP_SIZE
+	hex "Size of FMAP descriptor region in generated flash map"
+	depends on FMDFILE = ""
+	default 0x200
+	help
+	  Space reserved in the auto-generated flash map for the FMAP structure
+	  written to flash. Must be at least as large as the generated fmap blob.
+	  cbfstool fails to write the FMAP if the region is too small; adjust as
+	  needed in that case.
+
 config CBFS_SIZE
 	hex "Size of coreboot owned area in ROM"
 	depends on FMDFILE = ""
