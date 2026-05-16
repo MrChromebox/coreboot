@@ -107,8 +107,8 @@ config VBOOT
 	select HAS_RECOVERY_MRC_CACHE
 	select VBOOT_LID_SWITCH
 
-config FMDFILE
-	default "src/mainboard/\$(CONFIG_MAINBOARD_DIR)/default.fmd" if !CHROMEOS
+config FMAP_SIZE
+	default 0x300
 
 config CBFS_SIZE
 	default 0x1000000
