@@ -50,7 +50,7 @@ config CHROMEOS_WIFI_SAR
 	select USE_SAR
 
 config DISABLE_HECI1_AT_PRE_BOOT
-	default y
+	default n
 
 config CHROMEOS
 	select GBB_FLAG_FORCE_DEV_SWITCH_ON
