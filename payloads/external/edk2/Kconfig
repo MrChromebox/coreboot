@@ -317,6 +317,24 @@ config EDK2_CUSTOM_BUILD_PARAMS
 
 	  This option can support both macros `-D` and Pcds `--pcd`.
 
+config EDK2_NETWORK_PXE_SUPPORT
+	bool "Enable EDK2 built-in PXE network boot support"
+	depends on !EDK2_REPO_OFFICIAL
+	default n
+	help
+	  Enable EDK2's built-in network stack for standard UEFI PXE boot.
+	  This uses EDK2's native SNP/PXE support and is independent from
+	  iPXE, which is built and included as a separate EFI application.
+
+config EDK2_RTKUNDI_DRIVER
+	bool "Include Realtek UNDI driver (RtkUndiDxe) for RTL8168 PXE"
+	depends on EDK2_NETWORK_PXE_SUPPORT
+	default n
+	help
+	  Pass RTKUNDI_ENABLE=TRUE to the EDK2 build so a downstream EDK2
+	  tree can include RtkUndiDxe.efi for boards that need Realtek
+	  RTL8168/RTL8111 support for standard UEFI PXE boot.
+
 config EDK2_ENABLE_IPXE
 	bool "Include iPXE in edk2 payload"
 	depends on !EDK2_REPO_OFFICIAL
