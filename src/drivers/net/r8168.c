@@ -256,6 +256,7 @@ static void program_mac_address(struct device *dev, u16 io_base)
 			outl(0x8000f0f4, io_base + ERIAR);
 			break;
 		case 9:
+		case 21:
 			outl(maclo, io_base + ERIDR);
 			inl(io_base + ERIDR);
 			outl(0x8000f0e0, io_base + ERIAR);
