@@ -125,6 +125,9 @@ struct soc_intel_cannonlake_config {
 	/* Rank Margin Tool. 1:Enable, 0:Disable */
 	bool RMT;
 
+	/* Skip CPU replacement check. 1:Enable, 0:Disable */
+	bool SkipCpuReplacementCheck;
+
 	/* USB related */
 	struct usb2_port_config usb2_ports[16];
 	struct usb3_port_config usb3_ports[10];

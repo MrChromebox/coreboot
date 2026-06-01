@@ -27,6 +27,8 @@ chip soc/intel/cannonlake
 	register "satapwroptimize" = "1"
 	# Enable System Agent dynamic frequency
 	register "SaGv" = "SaGv_Enabled"
+	# Avoid slow MRC retraining on cold boots when cached memory settings are valid
+	register "SkipCpuReplacementCheck" = "1"
 	# Enable S0ix
 	register "s0ix_enable" = "true"
 	# Enable DPTF
