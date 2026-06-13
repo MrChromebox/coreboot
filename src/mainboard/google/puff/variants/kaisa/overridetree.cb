@@ -150,61 +150,15 @@ chip soc/intel/cannonlake
 	register "usb2_wake_enable_bitmap" = "USB_PORT_WAKE_ENABLE(1) |
 					      USB_PORT_WAKE_ENABLE(2) |
 					      USB_PORT_WAKE_ENABLE(3) |
+					      USB_PORT_WAKE_ENABLE(4) |
 					      USB_PORT_WAKE_ENABLE(5) |
 					      USB_PORT_WAKE_ENABLE(6)"
 	register "usb3_wake_enable_bitmap" = "USB_PORT_WAKE_ENABLE(1) |
 					      USB_PORT_WAKE_ENABLE(2) |
 					      USB_PORT_WAKE_ENABLE(3) |
+					      USB_PORT_WAKE_ENABLE(4) |
 					      USB_PORT_WAKE_ENABLE(5) |
 					      USB_PORT_WAKE_ENABLE(6)"
-
-	# Enable eMMC HS400
-	register "ScsEmmcHs400Enabled" = "1"
-
-	# EMMC Tx CMD Delay
-	# Refer to EDS-Vol2-14.3.7.
-	# [14:8] steps of delay for DDR mode, each 125ps, range: 0 - 39.
-	# [6:0] steps of delay for SDR mode, each 125ps, range: 0 - 39.
-	register "common_soc_config.emmc_dll.emmc_tx_cmd_cntl" = "0x505"
-
-	# EMMC TX DATA Delay 1
-	# Refer to EDS-Vol2-14.3.8.
-	# [14:8] steps of delay for HS400, each 125ps, range: 0 - 78.
-	# [6:0] steps of delay for SDR104/HS200, each 125ps, range: 0 - 79.
-	register "common_soc_config.emmc_dll.emmc_tx_data_cntl1" = "0x911"
-
-	# EMMC TX DATA Delay 2
-	# Refer to EDS-Vol2-14.3.9.
-	# [30:24] steps of delay for SDR50, each 125ps, range: 0 - 79.
-	# [22:16] steps of delay for DDR50, each 125ps, range: 0 - 78.
-	# [14:8] steps of delay for SDR25/HS50, each 125ps, range: 0 -79.
-	# [6:0] steps of delay for SDR12, each 125ps. Range: 0 - 79.
-	register "common_soc_config.emmc_dll.emmc_tx_data_cntl2" = "0x1C262828"
-
-	# EMMC RX CMD/DATA Delay 1
-	# Refer to EDS-Vol2-14.3.10.
-	# [30:24] steps of delay for SDR50, each 125ps, range: 0 - 119.
-	# [22:16] steps of delay for DDR50, each 125ps, range: 0 - 78.
-	# [14:8] steps of delay for SDR25/HS50, each 125ps, range: 0 - 119.
-	# [6:0] steps of delay for SDR12, each 125ps, range: 0 - 119.
-	register "common_soc_config.emmc_dll.emmc_rx_cmd_data_cntl1" = "0x1C16583b"
-
-	# EMMC RX CMD/DATA Delay 2
-	# Refer to EDS-Vol2-14.3.12.
-	# [17:16] stands for Rx Clock before Output Buffer,
-	#         00: Rx clock after output buffer,
-	#         01: Rx clock before output buffer,
-	#         10: Automatic selection based on working mode.
-	#         11: Reserved
-	# [14:8] steps of delay for Auto Tuning Mode, each 125ps, range: 0 - 39.
-	# [6:0] steps of delay for HS200, each 125ps, range: 0 - 79.
-	register "common_soc_config.emmc_dll.emmc_rx_cmd_data_cntl2" = "0x1001D"
-
-	# EMMC Rx Strobe Delay
-	# Refer to EDS-Vol2-14.3.11.
-	# [14:8] Rx Strobe Delay DLL 1(HS400 Mode), each 125ps, range: 0 - 39.
-	# [6:0] Rx Strobe Delay DLL 2(HS400 Mode), each 125ps, range: 0 - 39.
-	register "common_soc_config.emmc_dll.emmc_rx_strobe_cntl" = "0x1515"
 
 	# Intel HDA - disable I2S Audio SSP1 and DMIC0 as kaisa variant does not have them.
 	register "PchHdaAudioLinkSsp1" = "0"
@@ -218,8 +172,8 @@ chip soc/intel/cannonlake
 	#|                   | required to set up a BAR  |
 	#|                   | for TPM communication     |
 	#|                   | before memory is up       |
-	#| I2C2              | PS175                     |
-	#| I2C3              | MST                       |
+	#| I2C2              | NC (no PS175 on CXI4)     |
+	#| I2C3              | NC (no RTD2142 on CXI4)   |
 	#| I2C4              | Audio                     |
 	#+-------------------+---------------------------+
 	register "common_soc_config" = "{
@@ -255,10 +209,10 @@ chip soc/intel/cannonlake
 	# GPIO for SD card detect
 	register "sdcard_cd_gpio" = "vSD3_CD_B"
 
-	# SATA port 1 Gen3 Strength
-	# Port1 Tx De-Emphasis = 20*log(0x20/64) = -6dB
-	register "sata_port[1].TxGen3DeEmphEnable" = "1"
-	register "sata_port[1].TxGen3DeEmph" = "0x20"
+	# CXI4 / Kaisa is NVMe-only; no SATA port on this SKU.
+	register "SataSalpSupport" = "0"
+	register "SataPortsEnable[1]" = "0"
+	register "SataPortsDevSlp[1]" = "0"
 
 	device domain 0 on
 		device ref dptf		on
@@ -328,37 +282,43 @@ chip soc/intel/cannonlake
 			chip drivers/usb/acpi
 				device usb 0.0 on
 					chip drivers/usb/acpi
-						register "desc" = ""USB2 Type-A Front Left""
+						register "usb_lpm_incapable" = "true"
+						register "desc" = ""USB2 Type-A Front Lower""
 						register "type" = "UPC_TYPE_A"
-						register "group" = "ACPI_PLD_GROUP(0, 0)"
+						register "group" = "ACPI_PLD_GROUP(0, 1)"
 						device usb 2.0 on end
 					end
 					chip drivers/usb/acpi
-						register "desc" = ""USB2 Type-C Port Rear""
-						register "type" = "UPC_TYPE_C_USB2_SS_SWITCH"
-						register "group" = "ACPI_PLD_GROUP(1, 3)"
+						register "usb_lpm_incapable" = "true"
+						register "desc" = ""USB2 Type-A Rear Lower""
+						register "type" = "UPC_TYPE_A"
+						register "group" = "ACPI_PLD_GROUP(1, 2)"
 						device usb 2.1 on end
 					end
 					chip drivers/usb/acpi
-						register "desc" = ""USB2 Type-A Front Right""
+						register "usb_lpm_incapable" = "true"
+						register "desc" = ""USB2 Type-A Front Upper""
 						register "type" = "UPC_TYPE_A"
-						register "group" = "ACPI_PLD_GROUP(0, 1)"
+						register "group" = "ACPI_PLD_GROUP(0, 0)"
 						device usb 2.2 on end
 					end
 					chip drivers/usb/acpi
-						register "desc" = ""USB2 Type-A Rear Right""
-						register "type" = "UPC_TYPE_A"
-						register "group" = "ACPI_PLD_GROUP(1, 2)"
+						register "usb_lpm_incapable" = "true"
+						register "desc" = ""USB2 Type-C Port Rear""
+						register "type" = "UPC_TYPE_C_USB2_SS_SWITCH"
+						register "group" = "ACPI_PLD_GROUP(1, 3)"
 						device usb 2.3 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB2 Type-A Rear Middle""
 						register "type" = "UPC_TYPE_A"
 						register "group" = "ACPI_PLD_GROUP(1, 1)"
 						device usb 2.4 on end
 					end
 					chip drivers/usb/acpi
-						register "desc" = ""USB2 Type-A Rear Left""
+						register "usb_lpm_incapable" = "true"
+						register "desc" = ""USB2 Type-A Rear Upper""
 						register "type" = "UPC_TYPE_A"
 						register "group" = "ACPI_PLD_GROUP(1, 0)"
 						device usb 2.5 on end
@@ -367,36 +327,42 @@ chip soc/intel/cannonlake
 						device usb 2.6 off end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-A Front Left""
 						register "type" = "UPC_TYPE_USB3_A"
 						register "group" = "ACPI_PLD_GROUP(0, 0)"
 						device usb 3.0 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-A Front Right""
 						register "type" = "UPC_TYPE_USB3_A"
 						register "group" = "ACPI_PLD_GROUP(0, 1)"
 						device usb 3.1 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-A Rear Right""
 						register "type" = "UPC_TYPE_USB3_A"
 						register "group" = "ACPI_PLD_GROUP(1, 2)"
 						device usb 3.2 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-C Rear""
 						register "type" = "UPC_TYPE_C_USB2_SS_SWITCH"
 						register "group" = "ACPI_PLD_GROUP(1, 3)"
 						device usb 3.3 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-A Rear Left""
 						register "type" = "UPC_TYPE_USB3_A"
 						register "group" = "ACPI_PLD_GROUP(1, 0)"
 						device usb 3.4 on end
 					end
 					chip drivers/usb/acpi
+						register "usb_lpm_incapable" = "true"
 						register "desc" = ""USB3 Type-A Rear Middle""
 						register "type" = "UPC_TYPE_USB3_A"
 						register "group" = "ACPI_PLD_GROUP(1, 1)"
@@ -405,24 +371,9 @@ chip soc/intel/cannonlake
 				end
 			end
 		end
-		device ref i2c2		on
-			# PCON PS175
-			chip drivers/i2c/generic
-				register "hid" = ""1AF80175""
-				register "name" = ""PS17""
-				register "desc" = ""Parade PS175""
-				device i2c 4a hidden end
-			end
-		end
-		device ref i2c3		on
-			# Realtek RTD2142
-			chip drivers/i2c/generic
-				register "hid" = ""10EC2142""
-				register "name" = ""RTD2""
-				register "desc" = ""Realtek RTD2142""
-				device i2c 4a hidden end
-			end
-		end
+		# CXI4 has no internal panel DP retimers (PS175 / RTD2142 are clamshell carryover).
+		device ref i2c2		on end
+		device ref i2c3		on end
 		device ref i2c4		on
 			chip drivers/i2c/generic
 				register "hid" = ""10EC5682""
@@ -437,7 +388,9 @@ chip soc/intel/cannonlake
 				device i2c 1a on end
 			end
 		end
-		device ref emmc		on end
+		device ref sata		off end
+		# CXI4 / Kaisa: no soldered eMMC (NVMe + optional SD slot only).
+		device ref emmc		off end
 		device ref pcie_rp7	on
 			# RTL8111H Ethernet NIC
 			chip drivers/net

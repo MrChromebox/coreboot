@@ -110,8 +110,8 @@ static const struct pad_config early_gpio_table[] = {
 	PAD_CFG_GPO(GPP_C23, 1, DEEP),
 	/* E1  : M2_SSD_PEDET */
 	PAD_CFG_NF(GPP_E1, NONE, DEEP, NF1),
-	/* E5  : SATA_DEVSLP1 */
-	PAD_CFG_NF(GPP_E5, NONE, PLTRST, NF1),
+	/* E5  : NC (no SATA on Kaisa/CXI4) */
+	PAD_NC(GPP_E5, NONE),
 };
 
 const struct pad_config *variant_early_gpio_table(size_t *num)
