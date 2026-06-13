@@ -235,6 +235,14 @@ config EC_GOOGLE_CHROMEEC_READ_BATTERY_LONG_STRING
 
 	  If unsure, say N.
 
+config EC_GOOGLE_CHROMEEC_ACPI_BATTERY
+	bool
+	default n if BOARD_GOOGLE_KAISA
+	default y
+	help
+	  Expose EC ACPI battery and AC adapter devices (BAT0 / ACPI0003) under
+	  EC0. Disable on battery-less Chromebox variants such as Kaisa/CXI4.
+
 config EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE
 	def_bool n
 	help

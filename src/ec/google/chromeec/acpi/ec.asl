@@ -289,7 +289,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC CONNECTED")
 		\PWRS = ACEX
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)
@@ -309,7 +311,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC DISCONNECTED")
 		\PWRS = ACEX
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)
@@ -328,25 +332,31 @@ Device (EC0)
 	Method (_Q06, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY LOW")
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Battery Critical Event
 	Method (_Q07, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY CRITICAL")
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Battery Info Event
 	Method (_Q08, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY INFO")
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (BAT0, 0x81)
 #ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
 		If (CondRefOf (BAT1)) {
 			Notify (BAT1, 0x81)
 		}
+#endif
 #endif
 	}
 
@@ -382,7 +392,9 @@ Device (EC0)
 	Method (_Q11, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY SHUTDOWN")
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Throttle Start
@@ -419,11 +431,13 @@ Device (EC0)
 	Method (_Q17, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY STATUS")
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 		Notify (BAT0, 0x80)
 #ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
 		If (CondRefOf (BAT1)) {
 			Notify (BAT1, 0x80)
 		}
+#endif
 #endif
 
 		/*
@@ -674,8 +688,10 @@ Device (EC0)
 	}
 #endif
 
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_BATTERY)
 	#include "ac.asl"
 	#include "battery.asl"
+#endif
 	#include "cros_ec.asl"
 
 #ifdef EC_ENABLE_ALS_DEVICE

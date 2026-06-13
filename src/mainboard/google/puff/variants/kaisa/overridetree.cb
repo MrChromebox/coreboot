@@ -253,12 +253,6 @@ chip soc/intel/cannonlake
 					.time_window_max = 32 * MSECS_PER_SEC,
 					.granularity = 1000,}"
 
-				## Charger Performance Control (Control, mA)
-				register "controls.charger_perf[0]" = "{ 255, 1700 }"
-				register "controls.charger_perf[1]" = "{  24, 1500 }"
-				register "controls.charger_perf[2]" = "{  16, 1000 }"
-				register "controls.charger_perf[3]" = "{   8,  500 }"
-
 				## Fan Performance Control (Percent, Speed, Noise, Power)
 				register "controls.fan_perf[0]" = "{  90, 6700, 220, 2200, }"
 				register "controls.fan_perf[1]" = "{  80, 5800, 180, 1800, }"
