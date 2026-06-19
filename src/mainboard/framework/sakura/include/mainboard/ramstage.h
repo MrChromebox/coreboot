@@ -5,4 +5,7 @@
 
 void mainboard_configure_gpios(void);
 
+struct device;
+int mainboard_smbios_data(struct device *dev, int *handle, unsigned long *current);
+
 #endif /* MAINBOARD_RAMSTAGE_H */

@@ -30,4 +30,13 @@ static void mainboard_init(void *chip_info)
 	mainboard_ec_init();
 }
 
-struct chip_operations mainboard_ops = {.init = mainboard_init};
+static void mainboard_enable(struct device *dev)
+{
+	if (CONFIG(GENERATE_SMBIOS_TABLES))
+		dev->ops->get_smbios_data = mainboard_smbios_data;
+}
+
+struct chip_operations mainboard_ops = {
+	.init = mainboard_init,
+	.enable_dev = mainboard_enable,
+};
