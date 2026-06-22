@@ -85,4 +85,23 @@ config UART_FOR_CONSOLE
 config USE_PM_ACPI_TIMER
 	default n
 
+# The two USB-C PD controllers are programmed from firmware stored at fixed
+# offsets near the start of the BIOS region (the PD1/PD2 FMAP regions in
+# board.fmd). Point these at the PD firmware blobs to embed them at build time.
+# An option left empty builds its region empty (0xff), so flashing preserves
+# whatever PD firmware is already present on the chip.
+config FRAMEWORK_PD1_FW_FILE
+	string "PD1 firmware blob"
+	default ""
+	help
+	  Path to the PD1 controller firmware. Must fit the PD1 FMAP region
+	  (256K). Leave empty to not touch the PD1 region.
+
+config FRAMEWORK_PD2_FW_FILE
+	string "PD2 firmware blob"
+	default ""
+	help
+	  Path to the PD2 controller firmware. Must fit the PD2 FMAP region
+	  (256K). Leave empty to not touch the PD2 region.
+
 endif
