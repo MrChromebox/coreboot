@@ -174,6 +174,17 @@ Device (EC0)
 
 	Method (_REG, 2, NotSerialized)
 	{
+		/*
+		 * When OS connects to EmbeddedController (Arg0=2, Arg1=1), set fan to
+		 * auto (FAND=0xFF) so that fan automatic control is enabled after
+		 * booting to Windows/Linux. Otherwise the OS may never write FAND
+		 * and the EC can remain in a non-auto state.
+		 */
+		If (LEqual (Arg0, 2)) {
+			If (LEqual (Arg1, 1)) {
+				Store (0xFF, FAND)
+			}
+		}
 		// Initialize AC power state
 		\PWRS = ACEX
 		/*
@@ -249,7 +260,7 @@ Device (EC0)
 			Notify (^CREC, ACPI_NOTIFY_CROS_EC_S0IX_EXIT)
 		}
 	}
-
+`n
 	// Lid Closed Event
 	Method (_Q01, 0, NotSerialized)
 	{

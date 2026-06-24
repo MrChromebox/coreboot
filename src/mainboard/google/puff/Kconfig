@@ -119,6 +119,12 @@ config UART_FOR_CONSOLE
 config FMDFILE
 	default "src/mainboard/\$(CONFIG_MAINBOARD_DIR)/chromeos-16MiB.fmd" if BOARD_ROMSIZE_KB_16384 && CHROMEOS
 	default "src/mainboard/\$(CONFIG_MAINBOARD_DIR)/chromeos-32MiB.fmd" if BOARD_ROMSIZE_KB_32768 && CHROMEOS
+	default "src/mainboard/\$(CONFIG_MAINBOARD_DIR)/uefi-16MiB.fmd" if BOARD_ROMSIZE_KB_16384 && !CHROMEOS
+
+# Default off after AC loss (SoC default is power-on after failure)
+config POWER_STATE_DEFAULT_ON_AFTER_FAILURE
+	bool
+	default n
 
 config CBFS_SIZE
 	default 0xd00000 if BOARD_ROMSIZE_KB_16384

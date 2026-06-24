@@ -224,6 +224,8 @@ int rtc_set(const struct rtc_time *time)
 	return 0;
 }
 
+/* In ramstage with EC RTC, Chrome EC provides rtc_get; avoid duplicate symbol. */
+#if !(ENV_RAMSTAGE && CONFIG(EC_GOOGLE_CHROMEEC_RTC))
 int rtc_get(struct rtc_time *time)
 {
 	wait_uip();
@@ -243,6 +245,7 @@ int rtc_get(struct rtc_time *time)
 	time->wday = bcd2bin(cmos_read(RTC_CLK_DAYOFWEEK)) - 1;
 	return 0;
 }
+#endif
 
 /*
  * Signal coreboot proper completed -- just before running payload
