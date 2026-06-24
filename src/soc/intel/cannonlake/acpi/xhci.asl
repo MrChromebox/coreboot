@@ -3,6 +3,9 @@
 #include <intelblocks/xhci.h>
 #include <soc/gpe.h>
 
+/* Cannonlake USB3 PORTSC offset differs from generic macro (0x540). */
+#define CNL_PORTSCXUSB3_OFFSET 0x580
+
 /* Include UWES method for enabling USB wake */
 #include <soc/intel/common/acpi/xhci_wake.asl>
 
@@ -12,20 +15,30 @@ Device (XHCI)
 {
 	Name (_ADR, 0x00140000)
 
+#if !CONFIG(PUFF_S0IX_NO_XHCI_ACPI_WAKE)
 	Name (_PRW, Package () { GPE0_PME_B0, 4 })
+#endif
 
 	Method (_DSW, 3)
 	{
 		UWES ((\U2WE & 0xFFF), PORTSCN_OFFSET, XMEM)
-		UWES ((\U3WE & 0x3F ), PORTSCXUSB3_OFFSET, XMEM)
+		UWES ((\U3WE & 0x3F ), CNL_PORTSCXUSB3_OFFSET, XMEM)
 	}
 
 	Name (_S3D, 3)	/* D3 supported in S3 */
+#if CONFIG(PUFF_S0IX_NO_XHCI_ACPI_WAKE)
+	Name (_S0W, 0)
+#else
 	Name (_S0W, 3)	/* D3 can wake device in S0 */
+#endif
 	Name (_S3W, 3)	/* D3 can wake system from S3 */
 
 	Name (_S4D, 3)	/* D3 supported in S4 */
+#if CONFIG(PUFF_S0IX_NO_XHCI_ACPI_WAKE)
+	Name (_S4W, 0)
+#else
 	Name (_S4W, 3)	/* D3 can wake system from S4 */
+#endif
 
 	OperationRegion (XPRT, PCI_Config, 0x00, 0x100)
 	Field (XPRT, AnyAcc, NoLock, Preserve)

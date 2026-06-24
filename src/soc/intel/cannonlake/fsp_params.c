@@ -382,7 +382,12 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	s_cfg->PchPmSlpS0Vm075VSupport = config->PchPmSlpS0Vm075VSupport;
 
 	/* S0ix */
+#if CONFIG(PUFF_DEFAULT_S3_SLEEP)
+	config->s0ix_enable = false;
+	printk(BIOS_INFO, "Puff S3 ROM: forcing s0ix_enable=false (ACPI S3 sleep)\n");
+#else
 	config->s0ix_enable = get_uint_option("s0ix_enable", config->s0ix_enable);
+#endif
 	s_cfg->PchPmSlpS0Enable = config->s0ix_enable;
 
 	/* Lan */

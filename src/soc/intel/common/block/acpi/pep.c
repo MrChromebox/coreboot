@@ -247,14 +247,24 @@ static void acpigen_call_ec_s0ix_hook(int state)
 
 static void lpi_s0ix_entry(void *unused)
 {
+#if CONFIG(PUFF_ACPI_S0IX_HOOK)
+	/* Board hook before EC notify (Kaisa PEP timing). */
+	acpigen_write_if_cond_ref_of(MAINBOARD_HOOK);
+	acpigen_emit_namestring(MAINBOARD_HOOK);
+	acpigen_write_integer(1);
+	acpigen_write_if_end();
+#endif
+
 	/* Inform the EC */
 	acpigen_call_ec_s0ix_hook(1);
 
+#if !CONFIG(PUFF_ACPI_S0IX_HOOK)
 	/* Provide a board level S0ix hook */
 	acpigen_write_if_cond_ref_of(MAINBOARD_HOOK);
 	acpigen_emit_namestring(MAINBOARD_HOOK);
 	acpigen_write_integer(1);
 	acpigen_write_if_end();
+#endif
 
 	/* Save the current PM bits then enable GPIO PM with
 	   MISCCFG_GPIO_PM_CONFIG_BITS */
@@ -272,14 +282,23 @@ static void lpi_s0ix_entry(void *unused)
 
 static void lpi_s0ix_exit(void *unused)
 {
+#if CONFIG(PUFF_ACPI_S0IX_HOOK)
+	acpigen_write_if_cond_ref_of(MAINBOARD_HOOK);
+	acpigen_emit_namestring(MAINBOARD_HOOK);
+	acpigen_write_integer(0);
+	acpigen_write_if_end();
+#endif
+
 	/* Inform the EC */
 	acpigen_call_ec_s0ix_hook(0);
 
+#if !CONFIG(PUFF_ACPI_S0IX_HOOK)
 	/* Provide a board level S0ix hook */
 	acpigen_write_if_cond_ref_of(MAINBOARD_HOOK);
 	acpigen_emit_namestring(MAINBOARD_HOOK);
 	acpigen_write_integer(0);
 	acpigen_write_if_end();
+#endif
 
 	/* Restore GPIO all Community PM */
 	acpigen_write_if_cond_ref_of(RESTORE_PM_BITS_HOOK);

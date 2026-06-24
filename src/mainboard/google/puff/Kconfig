@@ -186,4 +186,64 @@ config EDK2_BOOT_TIMEOUT
 config INTEL_OC_MAILBOX_ENABLE_UNDERVOLTING
 	default y
 
+choice PUFF_SLEEP_PROFILE
+	prompt "Chromebox sleep profile (pick one ROM target)"
+	default PUFF_SLEEP_PROFILE_NONE
+
+config PUFF_SLEEP_PROFILE_NONE
+	bool "Default (no Puff sleep tuning)"
+	help
+	  Stock behavior. Desktop/minipc policy may disable S0ix at runtime.
+
+config PUFF_SLEEP_PROFILE_LINUX_S0IX
+	bool "Linux s2idle (S0ix, hub-friendly XHCI wake)"
+	select PUFF_PRESERVE_S0IX
+	select EC_GOOGLE_CHROMEEC_ACPI_S0IX_HOST_SLEEP
+	select PUFF_ACPI_S0IX_HOOK
+	select PUFF_S0IX_PWRB_WAKE
+	select PUFF_S0IX_NO_XHCI_ACPI_WAKE
+	select PUFF_S0IX_USB_PORT_WAKE
+	help
+	  Preserve S0ix for Linux s2idle on Chromebox. Omits XHCI _PRW and
+	  uses _DSW port wake so USB hubs work during suspend.
+
+config PUFF_SLEEP_PROFILE_WINDOWS_S3
+	bool "Windows classic S3 (disable Modern Standby / S0ix)"
+	select PUFF_DEFAULT_S3_SLEEP
+	help
+	  Force s0ix_enable=false via CFR and FSP so Windows uses ACPI S3
+	  instead of Connected Standby. Use when S0ix causes sleep-death on
+	  Kaisa Chromebox.
+
+endchoice
+
+config PUFF_DEFAULT_S3_SLEEP
+	bool
+	help
+	  Internal: selected by PUFF_SLEEP_PROFILE_WINDOWS_S3.
+
+config PUFF_PRESERVE_S0IX
+	bool
+	depends on !PUFF_DEFAULT_S3_SLEEP
+	help
+	  Internal: selected by PUFF_SLEEP_PROFILE_LINUX_S0IX.
+
+config PUFF_ACPI_S0IX_HOOK
+	bool
+	depends on PUFF_PRESERVE_S0IX
+	help
+	  Generate \_SB.MS0X and call it before EC0.S0IX during PEP LPI entry.
+
+config PUFF_S0IX_PWRB_WAKE
+	bool
+	depends on PUFF_PRESERVE_S0IX
+
+config PUFF_S0IX_NO_XHCI_ACPI_WAKE
+	bool
+	depends on PUFF_PRESERVE_S0IX
+
+config PUFF_S0IX_USB_PORT_WAKE
+	bool
+	depends on PUFF_S0IX_NO_XHCI_ACPI_WAKE
+
 endif # BOARD_GOOGLE_BASEBOARD_PUFF

@@ -6,6 +6,10 @@
 #include <soc/ramstage.h>
 #include <variant/gpio.h>
 
+#if CONFIG(PUFF_ACPI_S0IX_HOOK)
+#include <acpi/acpigen.h>
+#endif
+
 void mainboard_silicon_init_params(FSPS_UPD *supd)
 {
 	variant_devtree_update();
@@ -31,9 +35,23 @@ static void mainboard_init(struct device *dev)
 	mainboard_ec_init();
 }
 
+#if CONFIG(PUFF_ACPI_S0IX_HOOK)
+static void puff_fill_ssdt(const struct device *dev)
+{
+	acpigen_write_scope("\\_SB");
+	acpigen_write_method_serialized("MS0X", 1);
+	/* Arg0: 1 = S0ix entry, 0 = exit */
+	acpigen_write_method_end();
+	acpigen_write_scope_end();
+}
+#endif
+
 static void mainboard_enable(struct device *dev)
 {
 	dev->ops->init = mainboard_init;
+#if CONFIG(PUFF_ACPI_S0IX_HOOK)
+	dev->ops->acpi_fill_ssdt = puff_fill_ssdt;
+#endif
 	variant_mainboard_enable(dev);
 }
 

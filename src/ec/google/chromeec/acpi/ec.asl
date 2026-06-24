@@ -250,6 +250,21 @@ Device (EC0)
 		}
 	}
 
+#if CONFIG(EC_GOOGLE_CHROMEEC_ACPI_S0IX_HOST_SLEEP)
+	Method (CHSE, 1, Serialized)
+	{
+		S0IX (Arg0)
+	}
+#endif
+
+#if CONFIG(PUFF_S0IX_PWRB_WAKE)
+	Device (PWRB)
+	{
+		Name (_HID, EisaId ("PNP0C0C"))
+		Name (_PRW, Package () { EC_ENABLE_WAKE_PIN, 0x5 })
+	}
+#endif
+
 	// Lid Closed Event
 	Method (_Q01, 0, NotSerialized)
 	{
