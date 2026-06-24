@@ -254,6 +254,32 @@ config EC_GOOGLE_CHROMEEC_NEEDS_BATTERY_WORKAROUND
 	  logic.
 	  If unsure, say N.
 
+config MINIPC_HIDE_AC
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide AC adapter (ACPI0003) on mini PC / Chromebox"
+	default n
+
+config MINIPC_HIDE_BATTERY
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide battery (PNP0C0A) on mini PC / Chromebox"
+	default n
+
+config MINIPC_HIDE_VBTN
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide Chromebook keyboard/vbtn (GOOG000A, INT33D6) on mini PC / Chromebox"
+	default n
+
+config MINIPC_HIDE_R8168_ACPI
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide RTL8168 ACPI companion device (ACPI\\R8168) on mini PC / Chromebox"
+	default n
+	help
+	  Do not generate the RTL8168 SSDT ACPI device (_HID R8168) for the
+	  Realtek PCI NIC. Windows has no inbox driver for ACPI\\R8168 and
+	  shows Code 28 in Device Manager; the PCI Realtek driver still works.
+	  Linux/ChromeOS may use this ACPI node for wake/power control; say N
+	  if NIC ACPI wake is required on those OSes.
+`n
 config EC_GOOGLE_CHROMEEC_LPC_GENERIC_MEMORY_RANGE
 	def_bool n
 	help

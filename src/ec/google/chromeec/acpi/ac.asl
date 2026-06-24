@@ -14,6 +14,10 @@ Device (AC)
 
 	Method (_STA)
 	{
+#if CONFIG(MINIPC_HIDE_AC)
+		Return (0)
+#else
 		Return (0x0F)
+#endif
 	}
 }

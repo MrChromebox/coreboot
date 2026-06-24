@@ -307,6 +307,17 @@ config MB_HAS_ACTIVE_HIGH_SD_PWR_ENABLE
 	  This will enable a workaround in ASL _PS3 and _PS0 methods to force
 	  SD_PWR_ENABLE to stay low in D3.
 
+config SOC_INTEL_HIDE_EMMC
+	depends on SYSTEM_TYPE_MINIPC
+	bool "Hide eMMC controller from OS (show only SD/TF slot as SD host)"
+	default n
+	help
+	  On mini PC / Chromebox with only one physical SD/TF card slot, the PCH
+	  still exposes both eMMC and SDXC in ACPI; Windows shows two "SD host
+	  controller" devices. Select this to hide the eMMC device (_STA = 0) so
+	  only the real SD/TF slot (SDXC) appears. eMMC will not be usable as
+	  storage in the OS when enabled.
+
 config FSP_HEADER_PATH
 	default "3rdparty/fsp/CoffeeLakeFspBinPkg/Include/" if SOC_INTEL_COFFEELAKE || SOC_INTEL_WHISKEYLAKE
 	default "3rdparty/fsp/CometLakeFspBinPkg/CometLake1/Include/" if SOC_INTEL_COMETLAKE_1
