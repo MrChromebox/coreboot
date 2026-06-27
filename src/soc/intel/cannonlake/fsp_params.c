@@ -359,7 +359,8 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	s_cfg->PchLockDownRtcMemoryLock = 0;
 
 	/* SATA */
-	s_cfg->SataEnable = is_devfn_enabled(PCH_DEVFN_SATA);
+	s_cfg->SataEnable = CONFIG(SOC_INTEL_HIDE_SATA) ? 0 :
+		is_devfn_enabled(PCH_DEVFN_SATA);
 	if (s_cfg->SataEnable) {
 		s_cfg->SataMode = config->SataMode;
 		s_cfg->SataPwrOptEnable = config->satapwroptimize;
@@ -602,7 +603,7 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	};
 
 	/* eMMC and SD */
-	s_cfg->ScsEmmcEnabled = is_devfn_enabled(PCH_DEVFN_EMMC);
+	s_cfg->ScsEmmcEnabled = CONFIG(SOC_INTEL_HIDE_EMMC) ? 0 : is_devfn_enabled(PCH_DEVFN_EMMC);
 	if (s_cfg->ScsEmmcEnabled) {
 		s_cfg->ScsEmmcHs400Enabled = config->ScsEmmcHs400Enabled;
 		s_cfg->PchScsEmmcHs400DllDataValid = config->EmmcHs400DllNeed;
