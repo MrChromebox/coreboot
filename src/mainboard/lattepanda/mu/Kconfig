@@ -67,4 +67,29 @@ config OVERRIDE_DEVICETREE
 config UART_FOR_CONSOLE
 	default 0
 
+if BOARD_LATTEPANDA_MU_DFR1141
+
+choice
+	prompt "HSIO configuration (x4 slot mux)"
+	default DFR1141_HSIO_PCIE_X4
+	help
+	  On the DFR1141 carrier, HSIO10+11 are multiplexed with the x4 slot connector:
+
+	  - PCIe 3.0 x4: all four lanes to the slot (vendor SR-B IFD straps).
+	    SATA is disabled in ramstage.
+	  - PCIe 3.0 x2 + SATA: HSIO10+11 to SATA, slot runs x2 (vendor SR-B-SATA IFD straps).
+
+config DFR1141_HSIO_PCIE_X4
+	bool "PCIe 3.0 x4"
+
+config DFR1141_HSIO_PCIE_X2_SATA
+	bool "PCIe 3.0 x2 + SATA"
+endchoice
+
+config IFD_BIN_PATH
+	default "site-local/lattepanda/mu/flashdescriptor_pcie_x4.bin" if DFR1141_HSIO_PCIE_X4
+	default "site-local/lattepanda/mu/flashdescriptor_pcie_x2_sata.bin"
+
+endif
+
 endif
