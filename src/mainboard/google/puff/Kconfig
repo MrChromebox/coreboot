@@ -187,3 +187,35 @@ config INTEL_OC_MAILBOX_ENABLE_UNDERVOLTING
 	default y
 
 endif # BOARD_GOOGLE_BASEBOARD_PUFF
+
+if BOARD_GOOGLE_KAISA || BOARD_GOOGLE_KAISA_LEGACY
+
+# Kaisa / CXI4 Chromebox only (Mini PC). Not on Puff baseboard — other
+# Puff variants (AIO, other SKUs) keep upstream ACPI/PCI exposure.
+config KAISA_HIDE_VBTN
+	bool "Hide tablet virtual buttons (VBTN / superio keyboard ACPI)"
+	default y
+	depends on SYSTEM_TYPE_MINIPC
+
+config KAISA_HIDE_R8168_ACPI
+	bool "Hide RTL8168 ACPI companion device (ACPI\\R8168)"
+	default y
+	depends on SYSTEM_TYPE_MINIPC
+	help
+	  Skip RTL8168 SSDT; Windows Code 28 on ACPI\\R8168.
+
+config KAISA_HIDE_EMMC
+	bool "Hide eMMC (single TF/SD slot only)"
+	default y
+	depends on SYSTEM_TYPE_MINIPC
+	help
+	  _STA=0 + FSP; Kaisa has TF slot only.
+
+config KAISA_HIDE_SATA
+	bool "Disable PCH SATA AHCI (8086:02d3)"
+	default y
+	depends on SYSTEM_TYPE_MINIPC
+	help
+	  FSP + variants/kaisa overridetree sata off.
+
+endif

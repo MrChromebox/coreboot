@@ -294,7 +294,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC CONNECTED")
 		\PWRS = ACEX
+#if !CONFIG(SYSTEM_HIDE_AC_ADAPTER)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)
@@ -314,7 +316,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC DISCONNECTED")
 		\PWRS = ACEX
+#if !CONFIG(SYSTEM_HIDE_AC_ADAPTER)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)
@@ -333,25 +337,33 @@ Device (EC0)
 	Method (_Q06, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY LOW")
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Battery Critical Event
 	Method (_Q07, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY CRITICAL")
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Battery Info Event
 	Method (_Q08, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY INFO")
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		Notify (BAT0, 0x81)
+#endif
 #ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		If (CondRefOf (BAT1)) {
 			Notify (BAT1, 0x81)
 		}
+#endif
 #endif
 	}
 
@@ -387,7 +399,9 @@ Device (EC0)
 	Method (_Q11, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY SHUTDOWN")
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 	}
 
 	// Throttle Start
@@ -424,11 +438,15 @@ Device (EC0)
 	Method (_Q17, 0, NotSerialized)
 	{
 		Printf ("EC: BATTERY STATUS")
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		Notify (BAT0, 0x80)
+#endif
 #ifdef EC_ENABLE_SECOND_BATTERY_DEVICE
+#if !CONFIG(SYSTEM_HIDE_BATTERY)
 		If (CondRefOf (BAT1)) {
 			Notify (BAT1, 0x80)
 		}
+#endif
 #endif
 
 		/*
