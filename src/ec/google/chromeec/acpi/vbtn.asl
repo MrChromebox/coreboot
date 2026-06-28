@@ -23,7 +23,11 @@ Device (VBTN)
 	}
 	Method(_STA, 0)
 	{
+#if (CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)) && CONFIG(KAISA_HIDE_VBTN)
+		Return (0)
+#else
 		Return (0xF)
+#endif
 	}
 }
 
@@ -33,6 +37,10 @@ Device (VBTO)
 	Name (_CID, "PNP0C60")
 	Method (_STA, 0)
 	{
+#if (CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)) && CONFIG(KAISA_HIDE_VBTN)
+		Return (0)
+#else
 		Return (0xF)
+#endif
 	}
 }

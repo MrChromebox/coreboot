@@ -417,7 +417,7 @@ static void r8168_init(struct device *dev)
 		enable_aspm_l1_2(io_base);
 }
 
-#if CONFIG(HAVE_ACPI_TABLES)
+#if CONFIG(HAVE_ACPI_TABLES) && !((CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)) && CONFIG(KAISA_HIDE_R8168_ACPI))
 #define R8168_ACPI_HID "R8168"
 static void r8168_net_fill_ssdt(const struct device *dev)
 {
@@ -479,7 +479,7 @@ static struct device_operations r8168_ops  = {
 	.set_resources    = pci_dev_set_resources,
 	.enable_resources = pci_dev_enable_resources,
 	.init             = r8168_init,
-#if CONFIG(HAVE_ACPI_TABLES)
+#if CONFIG(HAVE_ACPI_TABLES) && !((CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)) && CONFIG(KAISA_HIDE_R8168_ACPI))
 	.acpi_name        = r8168_net_acpi_name,
 	.acpi_fill_ssdt   = r8168_net_fill_ssdt,
 #endif

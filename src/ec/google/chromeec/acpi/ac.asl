@@ -2,6 +2,7 @@
 
 // Scope (EC0)
 
+#if !CONFIG(SYSTEM_HIDE_AC_ADAPTER)
 Device (AC)
 {
 	Name (_HID, "ACPI0003")
@@ -17,3 +18,4 @@ Device (AC)
 		Return (0x0F)
 	}
 }
+#endif

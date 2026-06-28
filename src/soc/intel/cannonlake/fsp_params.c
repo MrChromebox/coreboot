@@ -359,7 +359,12 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	s_cfg->PchLockDownRtcMemoryLock = 0;
 
 	/* SATA */
+#if CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)
+	s_cfg->SataEnable = CONFIG(KAISA_HIDE_SATA) ? 0 :
+		is_devfn_enabled(PCH_DEVFN_SATA);
+#else
 	s_cfg->SataEnable = is_devfn_enabled(PCH_DEVFN_SATA);
+#endif
 	if (s_cfg->SataEnable) {
 		s_cfg->SataMode = config->SataMode;
 		s_cfg->SataPwrOptEnable = config->satapwroptimize;
@@ -602,7 +607,12 @@ void platform_fsp_silicon_init_params_cb(FSPS_UPD *supd)
 	};
 
 	/* eMMC and SD */
+#if CONFIG(BOARD_GOOGLE_KAISA) || CONFIG(BOARD_GOOGLE_KAISA_LEGACY)
+	s_cfg->ScsEmmcEnabled = CONFIG(KAISA_HIDE_EMMC) ? 0 :
+		is_devfn_enabled(PCH_DEVFN_EMMC);
+#else
 	s_cfg->ScsEmmcEnabled = is_devfn_enabled(PCH_DEVFN_EMMC);
+#endif
 	if (s_cfg->ScsEmmcEnabled) {
 		s_cfg->ScsEmmcHs400Enabled = config->ScsEmmcHs400Enabled;
 		s_cfg->PchScsEmmcHs400DllDataValid = config->EmmcHs400DllNeed;
