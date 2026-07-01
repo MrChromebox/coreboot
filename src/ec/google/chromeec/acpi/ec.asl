@@ -294,7 +294,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC CONNECTED")
 		\PWRS = ACEX
+#if !CONFIG(SYSTEM_HIDE_AC_ADAPTER)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)
@@ -314,7 +316,9 @@ Device (EC0)
 	{
 		Printf ("EC: AC DISCONNECTED")
 		\PWRS = ACEX
+#if !CONFIG(SYSTEM_HIDE_AC_ADAPTER)
 		Notify (AC, 0x80)
+#endif
 #ifdef DPTF_ENABLE_CHARGER
 		If (CondRefOf (\_SB.DPTF.TCHG)) {
 			Notify (\_SB.DPTF.TCHG, 0x80)

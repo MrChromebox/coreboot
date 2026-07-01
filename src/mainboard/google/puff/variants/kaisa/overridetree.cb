@@ -437,7 +437,6 @@ chip soc/intel/cannonlake
 				device i2c 1a on end
 			end
 		end
-		device ref emmc		on end
 		device ref pcie_rp7	on
 			# RTL8111H Ethernet NIC
 			chip drivers/net

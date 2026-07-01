@@ -716,6 +716,11 @@ config SYSTEM_TYPE_TABLET
 	default n
 	bool
 
+# Derived from SYSTEM_TYPE_MINIPC (L2 baseboard select); not user options.
+config SYSTEM_HIDE_AC_ADAPTER
+	def_bool y
+	depends on SYSTEM_TYPE_MINIPC
+
 config CBFS_AUTOGEN_ATTRIBUTES
 	default n
 	bool

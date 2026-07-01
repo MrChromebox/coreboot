@@ -279,7 +279,8 @@ chip soc/intel/cannonlake
 		end
 		device ref sdxc		on end
 		device ref heci1	on end
-		device ref sata		on end
+		device ref sata		off end
+		device ref emmc		off end
 		device ref pcie_rp9	on
 			# X4 NVME
 			register "PcieRpSlotImplemented[8]" = "true"
