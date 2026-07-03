@@ -10,7 +10,7 @@ $(VBOOT_FUTILITY): | check-openssl-presence
 	unset CFLAGS LDFLAGS; $(MAKE) -C $(VBOOT_SOURCE) \
 		BUILD=$(VBOOT_HOST_BUILD) \
 		CC="$(HOSTCC)" \
-		WERROR="-Werror -Wno-deprecated-declarations" \
+		WERROR="-Werror -Wno-deprecated-declarations -Wno-error=discarded-qualifiers" \
 		PKG_CONFIG="$(HOSTPKGCONFIG)" \
 		V=$(V) \
 		USE_FLASHROM=0 \
