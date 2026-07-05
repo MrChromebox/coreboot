@@ -188,15 +188,3 @@ config INTEL_OC_MAILBOX_ENABLE_UNDERVOLTING
 
 endif # BOARD_GOOGLE_BASEBOARD_PUFF
 
-if BOARD_GOOGLE_KAISA || BOARD_GOOGLE_KAISA_LEGACY
-
-# Kaisa / CXI4 Chromebox only (Mini PC). Not on Puff baseboard — other
-# Puff variants (AIO, other SKUs) keep upstream ACPI/PCI exposure.
-config KAISA_HIDE_R8168_ACPI
-	bool "Hide RTL8168 ACPI companion device (ACPI\\R8168)"
-	default y
-	depends on SYSTEM_TYPE_MINIPC
-	help
-	  Skip RTL8168 SSDT; Windows Code 28 on ACPI\\R8168.
-
-endif
