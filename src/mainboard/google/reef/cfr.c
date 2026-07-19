@@ -22,7 +22,6 @@ static struct sm_obj_form system = {
 		&pciexp_clk_pm,
 		&pciexp_l1ss,
 		&pciexp_speed,
-		&s0ix_enable,
 		&vtd,
 		NULL
 	},
