@@ -8,6 +8,7 @@
 #include <ec/ec.h>
 #include <gpio.h>
 #include <nhlt.h>
+#include <option.h>
 #include <smbios.h>
 #include <soc/nhlt.h>
 #include <stdio.h>
@@ -40,6 +41,9 @@ static void mainboard_init(void *chip_info)
 	mainboard_ec_init();
 
 	variant_board_ec_set_skuid();
+
+	/* Ensure S0ix is disabled */
+	set_uint_option("s0ix_enable", 0);
 }
 
 /*
