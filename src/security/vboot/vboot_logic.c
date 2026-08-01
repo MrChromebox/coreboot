@@ -276,6 +276,12 @@ void verstage_main(void)
 	 * invalid secdata and tell us what to do (=reboot). */
 	timestamp_add_now(TS_TPMINIT_START);
 	tpm_rc = vboot_setup_tpm(ctx);
+	if (tpm_rc != TPM_SUCCESS && CONFIG(VBOOT_MOCK_SECDATA)) {
+		printk(BIOS_WARNING, "TPM setup failed (%#x), "
+		       "continuing with mocked secdata\n", tpm_rc);
+		ctx->flags &= ~VB2_CONTEXT_SECDATA_WANTS_REBOOT;
+		tpm_rc = TPM_SUCCESS;
+	}
 	if (tpm_rc == TPM_SUCCESS) {
 		antirollback_read_space_firmware(ctx);
 		antirollback_read_space_kernel(ctx);
