@@ -69,6 +69,23 @@ static const struct sm_object ec_rgb_kb_color = SM_DECLARE_ENUM({
 	.values		= ec_rgb_backlight_values,
 }, WITH_CALLBACK(update_rgb_kb_backlight));
 
+static const struct sm_object ec_sw_sync = SM_DECLARE_BOOL({
+	.opt_name	= "ec_sw_sync",
+	.ui_name	= "EC Software Sync",
+	.ui_helptext	= "Enable or disable updating of EC-RW firmware",
+	.default_value	= true,
+});
+
+static const struct sm_object ec_rw_jump = SM_DECLARE_BOOL({
+	.opt_name	= "ec_rw_jump",
+	.ui_name	= "Use EC-RW Firmware",
+	.ui_helptext	= "Jump to EC-RW firmware after EC SW Sync. "
+			  "Warning: Disabling EC-RW may result in undefined behavior, ranging"
+			  "from USB-C/TBT accessories not working to the keyboard not working."
+			  "If disabled, EC-RO firmware will be used instead.",
+	.default_value	= true,
+});
+
 /*
  * Shared ChromeEC CFR menu. Options that do not apply to a given board are
  * hidden by the callbacks above (fan, keyboard backlight, RGB keyboard).
@@ -83,6 +100,8 @@ static const __cfr_form struct sm_obj_form chromeec = {
 		&auto_fan_control,
 		&ec_kb_backlight,
 		&ec_rgb_kb_color,
+		&ec_sw_sync,
+		&ec_rw_jump,
 		NULL,
 	},
 };
