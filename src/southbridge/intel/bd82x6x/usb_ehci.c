@@ -77,12 +77,40 @@ static void usb_ehci_set_subsystem(struct device *dev, unsigned int vendor,
 
 static const char *usb_ehci_acpi_name(const struct device *dev)
 {
-	switch (dev->path.pci.devfn) {
-	case PCI_DEVFN(0x1a, 0):
-		return "EHC2";
-	case PCI_DEVFN(0x1d, 0):
-		return "EHC1";
+	if (dev->path.type == DEVICE_PATH_USB) {
+		switch (dev->path.usb.port_type) {
+		case 0:
+			if (dev->path.usb.port_id == 0)
+				/* Root Hub */
+				return "HUB7";
+			else if (dev->path.usb.port_id == 1)
+				/* Rate Matching Hub on Port 1 */
+				return "URMH";
+			break;
+		case 2:
+			/* USB2 ports */
+			switch (dev->path.usb.port_id) {
+			case 0: return "PRT0";
+			case 1: return "PRT1";
+			case 2: return "PRT2";
+			case 3: return "PRT3";
+			case 4: return "PRT4";
+			case 5: return "PRT5";
+			case 6: return "PRT6";
+			case 7: return "PRT7";
+			}
+			break;
+		}
+		return NULL;
+	} else if (dev->path.type == DEVICE_PATH_PCI) {
+		switch (dev->path.pci.devfn) {
+		case PCI_DEVFN(0x1a, 0):
+			return "EHC2";
+		case PCI_DEVFN(0x1d, 0):
+			return "EHC1";
+		}
 	}
+
 	return NULL;
 }
 

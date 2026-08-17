@@ -25,7 +25,38 @@ chip northbridge/intel/sandybridge
 			device pci 16.2 alias me_ide_r off end   # Management Engine IDE-R
 			device pci 16.3 alias me_kt off end      # Management Engine KT
 			device pci 19.0 alias gbe off end        # Intel Gigabit Ethernet
-			device pci 1a.0 alias ehci2 off ops bd82x6x_usb_ehci_ops end
+			device pci 1a.0 alias ehci2 off ops bd82x6x_usb_ehci_ops
+				chip drivers/usb/acpi
+					register "desc" = ""Root Hub""
+					register "type" = "UPC_TYPE_HUB"
+					device usb 0.0 alias ehci_root_hub2 off
+						chip drivers/usb/acpi
+							register "desc" = ""RMH""
+							register "type" = "UPC_TYPE_HUB"
+							device usb 0.1 alias ehci_rm_hub2 off
+								chip drivers/usb/acpi
+									device usb 2.0 alias usb2_port8 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.1 alias usb2_port9 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.2 alias usb2_port10 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.3 alias usb2_port11 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.4 alias usb2_port12 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.5 alias usb2_port13 off end
+								end
+							end
+						end
+					end
+				end
+			end
 			device pci 1b.0 alias hda off ops bd82x6x_azalia_ops end        # High Definition Audio
 			device pci 1c.0 alias pcie_rp1 off ops bd82x6x_pcie_rp_ops end   # PCIe Port #1
 			device pci 1c.1 alias pcie_rp2 off ops bd82x6x_pcie_rp_ops end   # PCIe Port #2
@@ -35,7 +66,44 @@ chip northbridge/intel/sandybridge
 			device pci 1c.5 alias pcie_rp6 off ops bd82x6x_pcie_rp_ops end   # PCIe Port #6
 			device pci 1c.6 alias pcie_rp7 off ops bd82x6x_pcie_rp_ops end   # PCIe Port #7
 			device pci 1c.7 alias pcie_rp8 off ops bd82x6x_pcie_rp_ops end   # PCIe Port #8
-			device pci 1d.0 alias ehci1 off ops bd82x6x_usb_ehci_ops end
+			device pci 1d.0 alias ehci1 off ops bd82x6x_usb_ehci_ops
+				chip drivers/usb/acpi
+					register "desc" = ""Root Hub""
+					register "type" = "UPC_TYPE_HUB"
+					device usb 0.0 alias ehci_root_hub1 off
+						chip drivers/usb/acpi
+							register "desc" = ""RMH""
+							register "type" = "UPC_TYPE_HUB"
+							device usb 0.1 alias ehci_rm_hub1 off
+								chip drivers/usb/acpi
+									device usb 2.0 alias usb2_port0 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.1 alias usb2_port1 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.2 alias usb2_port2 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.3 alias usb2_port3 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.4 alias usb2_port4 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.5 alias usb2_port5 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.6 alias usb2_port6 off end
+								end
+								chip drivers/usb/acpi
+									device usb 2.7 alias usb2_port7 off end
+								end
+							end
+						end
+					end
+				end
+			end
 			device pci 1e.0 alias pci_bridge off ops bd82x6x_pci_bridge_ops end
 			device pci 1f.0 alias lpc on ops bd82x6x_lpc_bridge_ops end
 			device pci 1f.2 alias sata1 off end      # SATA Controller 1
