@@ -57,9 +57,6 @@ config PCIEXP_HOTPLUG_IO
 
 # edk2 payload options
 
-config EDK2_TAG_OR_REV
-	default "origin/uefipayload_2605" if EDK2_REPO_MRCHROMEBOX
-
 config EDK2_BOOT_MANAGER_ESCAPE
 	default y
 
