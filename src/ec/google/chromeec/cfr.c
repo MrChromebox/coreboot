@@ -69,6 +69,65 @@ static const struct sm_object ec_rgb_kb_color = SM_DECLARE_ENUM({
 	.values		= ec_rgb_backlight_values,
 }, WITH_CALLBACK(update_rgb_kb_backlight));
 
+/*
+ * Battery sustainer (EC_CMD_CHARGE_CONTROL v2+).
+ * Master switch gates the min/max thresholds; all are hidden when the EC
+ * does not support charge-control v2+.
+ */
+static void update_charge_limit_override(struct sm_object *new)
+{
+	if (!google_chromeec_charge_control_sustainer_supported())
+		new->sm_bool.flags = CFR_OPTFLAG_SUPPRESS;
+}
+
+static const struct sm_object ec_charge_limit_override = SM_DECLARE_BOOL({
+	.opt_name	= "ec_charge_limit_override",
+	.ui_name	= "Override Battery Charge Limits",
+	.ui_helptext	= "When enabled, apply the custom min/max charge thresholds "
+			  "below via the EC battery sustainer. When disabled, clear "
+			  "any sustainer and leave charge behavior at the EC default.",
+	.default_value	= false,
+}, WITH_CALLBACK(update_charge_limit_override));
+
+static void update_charge_control(struct sm_object *new)
+{
+	if (!google_chromeec_charge_control_sustainer_supported())
+		new->sm_enum.flags = CFR_OPTFLAG_SUPPRESS;
+}
+
+static const struct sm_enum_value ec_charge_max_values[] = {
+	{ "100%", 100 },
+	{ "90%", 90 },
+	{ "80%", 80 },
+	SM_ENUM_VALUE_END,
+};
+
+static const struct sm_object ec_max_charge = SM_DECLARE_ENUM({
+	.opt_name	= "ec_max_charge",
+	.ui_name	= "Battery Charge Limit (Max)",
+	.ui_helptext	= "Upper battery SoC threshold for sustainer mode (stop charging).",
+	.default_value	= 100,
+	.values		= ec_charge_max_values,
+}, WITH_DEP_VALUES(&ec_charge_limit_override, true),
+WITH_CALLBACK(update_charge_control));
+
+static const struct sm_enum_value ec_charge_min_values[] = {
+	{ "0%", 0 },
+	{ "10%", 10 },
+	{ "20%", 20 },
+	SM_ENUM_VALUE_END,
+};
+
+static const struct sm_object ec_min_charge = SM_DECLARE_ENUM({
+	.opt_name	= "ec_min_charge",
+	.ui_name	= "Battery Charge Limit (Min)",
+	.ui_helptext	= "Lower battery SoC threshold for sustainer mode (resume charging). "
+			  "Must be less than the maximum charge limit.",
+	.default_value	= 0,
+	.values		= ec_charge_min_values,
+}, WITH_DEP_VALUES(&ec_charge_limit_override, true),
+WITH_CALLBACK(update_charge_control));
+
 static const struct sm_object ec_sw_sync = SM_DECLARE_BOOL({
 	.opt_name	= "ec_sw_sync",
 	.ui_name	= "EC Software Sync",
@@ -100,6 +159,9 @@ static const __cfr_form struct sm_obj_form chromeec = {
 		&auto_fan_control,
 		&ec_kb_backlight,
 		&ec_rgb_kb_color,
+		&ec_charge_limit_override,
+		&ec_max_charge,
+		&ec_min_charge,
 		&ec_sw_sync,
 		&ec_rw_jump,
 		NULL,
