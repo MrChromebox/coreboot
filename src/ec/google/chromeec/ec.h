@@ -187,6 +187,25 @@ bool google_chromeec_is_rtc_event(void);
  */
 bool google_chromeec_is_barrel_charger_present(void);
 
+/**
+ * True if EC_CMD_CHARGE_CONTROL supports battery sustainer (v2+).
+ */
+bool google_chromeec_charge_control_sustainer_supported(void);
+
+/**
+ * Set charge control mode and optional battery sustainer limits (v2+).
+ *
+ * Sustainer thresholds are display SoC percentages. Pass max=min=-1 with
+ * CHARGE_CONTROL_NORMAL to disable the sustainer.
+ *
+ * @param mode		enum ec_charge_control_mode
+ * @param max		sustainer upper threshold, or -1 to disable
+ * @param min		sustainer lower threshold, or -1 to disable
+ * @return		0 on success, -1 on error / unsupported
+ */
+int google_chromeec_set_charge_mode(enum ec_charge_control_mode mode,
+				    int max, int min);
+
 /*
  * Set max current and voltage of a dedicated charger.
  *
