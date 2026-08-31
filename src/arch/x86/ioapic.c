@@ -24,6 +24,8 @@
 #define SMI		(2 << 8)
 #define INT		(1 << 8)
 
+static uintptr_t ioapic_0_base;
+
 static u32 io_apic_read(uintptr_t ioapic_base, u32 reg)
 {
 	write32p(ioapic_base, reg);
@@ -104,26 +106,18 @@ static void clear_vectors(uintptr_t ioapic_base, u8 first, u8 last)
 	}
 }
 
-static void route_i8259_irq0(uintptr_t ioapic_base)
+int ioapic_enable_extint(void)
 {
 	u32 bsp_lapicid = lapicid();
 	u32 low, high;
 
-	ASSERT(bsp_lapicid < 255);
+	if (ioapic_0_base == 0)
+		return -1;
 
-	printk(BIOS_DEBUG, "IOAPIC: Bootstrap Processor Local APIC = 0x%02x\n",
-	       bsp_lapicid);
-
-	/* Enable Virtual Wire Mode. Should this be LOGICAL_DEST instead? */
 	low = INT_ENABLED | TRIGGER_EDGE | POLARITY_HIGH | PHYSICAL_DEST | ExtINT;
 	high = bsp_lapicid << (56 - 32);
-
-	write_vector(ioapic_base, 0, high, low);
-
-	if (io_apic_read(ioapic_base, 0x10) == 0xffffffff) {
-		printk(BIOS_WARNING, "IOAPIC not responding.\n");
-		return;
-	}
+	write_vector(ioapic_0_base, 0, high, low);
+	return 0;
 }
 
 static void set_ioapic_id(uintptr_t ioapic_base, u8 ioapic_id)
@@ -226,8 +220,8 @@ void register_new_ioapic_gsi0_fixed(uintptr_t ioapic_base, u8 ioapic_id)
 	set_ioapic_id(ioapic_base, ioapic_id);
 	clear_vectors(ioapic_base, 0, ioapic_get_max_vectors(ioapic_base) - 1);
 
-	if (!CONFIG(NO_PCAT_8259))
-		route_i8259_irq0(ioapic_base);
+	/* Keep track which ioapic potentially drives EXTINT for i8259 and i8254. */
+	ioapic_0_base = ioapic_base;
 }
 
 void register_new_ioapic_gsi0(uintptr_t ioapic_base)
