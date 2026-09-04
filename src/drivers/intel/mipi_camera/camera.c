@@ -10,6 +10,7 @@
 #include <device/device.h>
 #include <device/pci_def.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "chip.h"
 
@@ -581,11 +582,19 @@ static void camera_fill_sensor(const struct device *dev)
 
 	if (config->remote_name) {
 		remote_name = config->remote_name;
-	} else {
-		if (cio2)
-			remote_name = acpi_device_path(cio2);
-		else
+	} else if (cio2) {
+		/*
+		 * Skylake names the PCI device ICIO while DSDT declares
+		 * Device (CIO2). Prefer the DSDT name for remote-endpoint.
+		 */
+		const char *cio2_name = acpi_device_name(cio2);
+
+		if (cio2_name && !strcmp(cio2_name, "ICIO"))
 			remote_name = DEFAULT_REMOTE_NAME;
+		else
+			remote_name = acpi_device_path(cio2);
+	} else {
+		remote_name = DEFAULT_REMOTE_NAME;
 	}
 
 	acpi_dp_add_reference(remote, NULL, remote_name);
@@ -1223,6 +1232,24 @@ static void camera_fill_ssdt(const struct device *dev)
 		write_i2c_camera_device(dev, scope);
 		break;
 	case DEVICE_PATH_GENERIC:
+		/*
+		 * Skylake/KBL declare Device (CIO2) in DSDT (soc ipu.asl) while
+		 * the PCI device ACPI name is ICIO. When acpi_name is set, Scope
+		 * into that existing device and only emit port/_DSD.
+		 */
+		if (config->device_type == INTEL_ACPI_CAMERA_CIO2 && config->acpi_name) {
+			char cio2_path[16];
+
+			snprintf(cio2_path, sizeof(cio2_path), "\\_SB.PCI0.%s",
+				 config->acpi_name);
+			acpigen_write_scope(cio2_path);
+			camera_fill_cio2(dev);
+			acpigen_pop_len(); /* Scope */
+			printk(BIOS_INFO, "%s: %s (existing device)\n", cio2_path,
+			       dev->chip_ops->name);
+			return;
+		}
+
 		scope = acpi_device_scope(pdev);
 		if (!scope)
 			return;
