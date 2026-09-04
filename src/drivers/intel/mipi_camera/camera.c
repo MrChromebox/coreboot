@@ -980,6 +980,19 @@ static void fill_power_res_sequence(struct drivers_intel_mipi_camera_config *con
 	}
 }
 
+static bool camera_emit_local_power_resource(
+	const struct drivers_intel_mipi_camera_config *config)
+{
+	/*
+	 * Local PRIC power resource. On Windows/Linux, when acpi_dep points at an
+	 * INT3472 control-logic device, that PMIC owns power/clock/reset via CLDB
+	 * and GPIO _DSM - do not also emit PRIC on the sensor.
+	 */
+	return config->has_power_resource &&
+	       !(CONFIG(MIPI_ACPI_TYPE_WINDOWS_LINUX) && config->acpi_dep &&
+		 config->device_type == INTEL_ACPI_CAMERA_SENSOR);
+}
+
 static void write_pci_camera_device(const struct device *dev)
 {
 	if (dev->path.type != DEVICE_PATH_PCI) {
@@ -1005,7 +1018,7 @@ static void write_i2c_camera_device(const struct device *dev, const char *scope)
 	acpigen_write_device(acpi_device_name(dev));
 
 	/* add power resource */
-	if (config->has_power_resource) {
+	if (camera_emit_local_power_resource(config)) {
 		acpigen_write_power_res(POWER_RESOURCE_NAME, 0, 0, NULL, 0);
 		acpigen_write_name_integer("STA", 0);
 		acpigen_write_STA_ext("STA");
@@ -1051,7 +1064,13 @@ static void write_i2c_camera_device(const struct device *dev, const char *scope)
 		acpigen_write_name_string("_DDN", config->sensor_name);
 	else
 		acpigen_write_name_string("_DDN", config->chip_name);
-	if (config->acpi_dep) {
+	/*
+	 * ChromeOS + local PRIC: skip _DEP on a Win-only INT3472 (pmic_enable
+	 * does not emit it). VCM/NVM keep their _DEP (e.g. on the sensor).
+	 */
+	if (config->acpi_dep &&
+	    !(CONFIG(MIPI_ACPI_TYPE_CHROMEOS) && config->has_power_resource &&
+	      config->device_type == INTEL_ACPI_CAMERA_SENSOR)) {
 		acpigen_write_name("_DEP");
 		acpigen_write_package(1);
 		acpigen_emit_namestring(config->acpi_dep);
@@ -1071,17 +1090,19 @@ static void write_i2c_camera_device(const struct device *dev, const char *scope)
 	acpi_device_write_i2c(&i2c);
 
 	/*
-	 * The optional vcm/nvram devices are presumed to be on the same I2C bus as the camera
-	 * sensor.
+	 * Windows/Linux: optional VCM/NVM share the sensor ACPI device _CRS.
+	 * ChromeOS: VCM/NVM are separate devices; do not pack their addresses.
 	 */
-	if (config->device_type == INTEL_ACPI_CAMERA_SENSOR &&
+	if (CONFIG(MIPI_ACPI_TYPE_WINDOWS_LINUX) &&
+	    config->device_type == INTEL_ACPI_CAMERA_SENSOR &&
 	    config->ssdb.vcm_type && config->vcm_address) {
 		struct acpi_i2c i2c_vcm = i2c;
 		i2c_vcm.address = config->vcm_address;
 		acpi_device_write_i2c(&i2c_vcm);
 	}
 
-	if (config->device_type == INTEL_ACPI_CAMERA_SENSOR &&
+	if (CONFIG(MIPI_ACPI_TYPE_WINDOWS_LINUX) &&
+	    config->device_type == INTEL_ACPI_CAMERA_SENSOR &&
 	    config->ssdb.rom_type && config->rom_address) {
 		struct acpi_i2c i2c_rom = i2c;
 		i2c_rom.address = config->rom_address;
@@ -1104,15 +1125,24 @@ static void write_camera_device_common(const struct device *dev)
 		acpigen_write_name_integer("CAMD", config->device_type);
 	}
 
-	if (config->pr0 || config->has_power_resource) {
+	const bool emit_local_pr = camera_emit_local_power_resource(config);
+
+	if (config->pr0 || emit_local_pr) {
 		acpigen_write_name("_PR0");
 		acpigen_write_package(1);
 		if (config->pr0)
-			acpigen_emit_namestring(config->pr0); /* External power resource */
+			acpigen_emit_namestring(config->pr0);
 		else
 			acpigen_emit_namestring(POWER_RESOURCE_NAME);
-
 		acpigen_pop_len(); /* _PR0 */
+
+		acpigen_write_name("_PR3");
+		acpigen_write_package(1);
+		if (config->pr0)
+			acpigen_emit_namestring(config->pr0);
+		else
+			acpigen_emit_namestring(POWER_RESOURCE_NAME);
+		acpigen_pop_len(); /* _PR3 */
 	}
 
 	switch (config->device_type) {
@@ -1152,7 +1182,7 @@ static void camera_fill_ssdt(const struct device *dev)
 
 		acpigen_write_scope(scope);
 
-		if (config->has_power_resource && pdev && pdev->enabled) {
+		if (camera_emit_local_power_resource(config) && pdev && pdev->enabled) {
 			add_guarded_operations(config, &config->on_seq);
 			add_guarded_operations(config, &config->off_seq);
 		}
@@ -1169,7 +1199,7 @@ static void camera_fill_ssdt(const struct device *dev)
 	}
 
 	/* Multi-device mode */
-	if (config->has_power_resource) {
+	if (camera_emit_local_power_resource(config)) {
 		if (!pdev || !pdev->enabled)
 			return;
 
