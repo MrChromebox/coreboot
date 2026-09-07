@@ -8402,6 +8402,36 @@ struct ec_params_ap_fw_state {
 	uint32_t state;
 } __ec_align1;
 
+/*****************************************************************************/
+/*
+ * Get/set which scancodes the Vivaldi top-row keys emit.
+ *
+ * With no params (params_size == 0): return the current mode.
+ * With params: apply the requested mode, then return it.
+ *
+ * KEYBD_TOP_ROW_ACTION (default after EC init): ChromeOS action codes
+ *   (back, refresh, brightness, volume, ...) from the Vivaldi config.
+ * KEYBD_TOP_ROW_FUNCTION: standard F1..Fn make codes on the same matrix
+ *   positions (useful for Windows / firmware setups that want Fx keys).
+ *
+ * Does not change EC_CMD_GET_KEYBD_CONFIG; coreboot/OS can still read the
+ * action-key layout while choosing which codes the EC actually sends.
+ */
+#define EC_CMD_KEYBD_TOP_ROW 0x013F
+
+enum keybd_top_row_mode {
+	KEYBD_TOP_ROW_ACTION = 0,
+	KEYBD_TOP_ROW_FUNCTION = 1,
+};
+
+struct ec_params_keybd_top_row {
+	uint8_t mode; /* enum keybd_top_row_mode */
+} __ec_align1;
+
+struct ec_response_keybd_top_row {
+	uint8_t mode; /* enum keybd_top_row_mode */
+} __ec_align1;
+
 /*
  * UCSI OPM-PPM commands
  *

@@ -109,6 +109,30 @@ int google_chromeec_kbbacklight(int percent)
 	return 0;
 }
 
+bool google_chromeec_keybd_top_row_supported(void)
+{
+	struct ec_response_keybd_top_row resp = {};
+
+	/* GET succeeds only when the EC has Vivaldi and the command. */
+	return ec_cmd_get_keybd_top_row(PLAT_EC, &resp) == 0;
+}
+
+int google_chromeec_set_keybd_top_row(enum keybd_top_row_mode mode)
+{
+	const struct ec_params_keybd_top_row params = {
+		.mode = mode,
+	};
+	struct ec_response_keybd_top_row resp = {};
+
+	if (ec_cmd_keybd_top_row(PLAT_EC, &params, &resp) != 0) {
+		printk(BIOS_ERR, "ChromeEC: KEYBD_TOP_ROW SET failed (mode=%u)\n",
+		       mode);
+		return -1;
+	}
+
+	return 0;
+}
+
 bool google_chromeec_has_kbbacklight(void)
 {
 	/* Try the feature flag (most reliable for modern ECs) */
@@ -1519,6 +1543,26 @@ void google_chromeec_init(void)
 	/* Enable automatic fan control */
 	if (get_uint_option("auto_fan_control", CONFIG(EC_GOOGLE_CHROMEEC_AUTO_FAN_CTRL))) {
 		ec_cmd_thermal_auto_fan_ctrl(PLAT_EC);
+	}
+
+	/*
+	 * Vivaldi top-row mode (action vs F1..Fn). Always apply the saved
+	 * preference: a platform reboot does not reset the EC, so switching
+	 * from function back to action must rewrite the scancode table.
+	 */
+	if (google_chromeec_keybd_top_row_supported()) {
+		const unsigned int top_row = get_uint_option(
+			"ec_keybd_top_row", KEYBD_TOP_ROW_ACTION);
+
+		if (top_row == KEYBD_TOP_ROW_ACTION || top_row == KEYBD_TOP_ROW_FUNCTION) {
+			if (google_chromeec_set_keybd_top_row(top_row))
+				printk(BIOS_WARNING,
+				       "ChromeEC: failed to set top-row mode %u\n", top_row);
+			else
+				printk(BIOS_INFO,
+				       "ChromeEC: top-row mode set to %s\n",
+				       top_row == KEYBD_TOP_ROW_FUNCTION ? "function" : "action");
+		}
 	}
 
 	/* Skip setting the below options on S3 resume. */
