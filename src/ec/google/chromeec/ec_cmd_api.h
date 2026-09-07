@@ -393,6 +393,8 @@ _CROS_EC_C0_F_RF(EC_CMD_HOST_SLEEP_SIGNAL_TRANSITIONS,
 _CROS_EC_C0_F_PF_RF(EC_CMD_I2C_CONTROL, i2c_control);
 _CROS_EC_C0_F_PF_RF(EC_CMD_I2C_PASSTHRU_PROTECT, i2c_passthru_protect);
 _CROS_EC_C0_F_RF(EC_CMD_KEYBOARD_FACTORY_TEST, keyboard_factory_test);
+_CROS_EC_CV_F_R(EC_CMD_KEYBD_TOP_ROW, 0, get_keybd_top_row, keybd_top_row);
+_CROS_EC_C0_F_PF_RF(EC_CMD_KEYBD_TOP_ROW, keybd_top_row);
 _CROS_EC_CV_F_P_R(EC_CMD_LED_CONTROL, 1, led_control_v1, led_control,
 		  led_control);
 _CROS_EC_C0_F_PF_RF(EC_CMD_LOCATE_CHIP, locate_chip);

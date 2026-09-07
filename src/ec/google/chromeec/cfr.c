@@ -69,6 +69,30 @@ static const struct sm_object ec_rgb_kb_color = SM_DECLARE_ENUM({
 	.values		= ec_rgb_backlight_values,
 }, WITH_CALLBACK(update_rgb_kb_backlight));
 
+static const struct sm_enum_value ec_keybd_top_row_values[] = {
+	{ "Action keys (Vivaldi)",	KEYBD_TOP_ROW_ACTION },
+	{ "Function keys (F1-Fn)",	KEYBD_TOP_ROW_FUNCTION },
+	SM_ENUM_VALUE_END,
+};
+
+static void update_keybd_top_row(struct sm_object *new)
+{
+	if (!google_chromeec_keybd_top_row_supported()) {
+		new->sm_enum.flags = CFR_OPTFLAG_SUPPRESS;
+		new->sm_enum.default_value = KEYBD_TOP_ROW_ACTION;
+	}
+}
+
+static const struct sm_object ec_keybd_top_row = SM_DECLARE_ENUM({
+	.opt_name	= "ec_keybd_top_row",
+	.ui_name	= "Keyboard Top Row Mode",
+	.ui_helptext	= "Choose whether Vivaldi top-row keys send ChromeOS action "
+			  "codes (back, brightness, volume, ...) or standard F1-Fn "
+			  "scancodes. Applied by the EC at each boot.",
+	.default_value	= KEYBD_TOP_ROW_ACTION,
+	.values		= ec_keybd_top_row_values,
+}, WITH_CALLBACK(update_keybd_top_row));
+
 /*
  * Battery sustainer (EC_CMD_CHARGE_CONTROL v2+).
  * Master switch gates the min/max thresholds; all are hidden when the EC
@@ -147,7 +171,8 @@ static const struct sm_object ec_rw_jump = SM_DECLARE_BOOL({
 
 /*
  * Shared ChromeEC CFR menu. Options that do not apply to a given board are
- * hidden by the callbacks above (fan, keyboard backlight, RGB keyboard).
+ * hidden by the callbacks above (fan, keyboard backlight, RGB keyboard,
+ * top-row mode, charge sustainer).
  *
  * Framework boards provide their own EC CFR options, so suppress this form
  * there to avoid a duplicate/conflicting ChromeEC menu.
@@ -159,6 +184,7 @@ static const __cfr_form struct sm_obj_form chromeec = {
 		&auto_fan_control,
 		&ec_kb_backlight,
 		&ec_rgb_kb_color,
+		&ec_keybd_top_row,
 		&ec_charge_limit_override,
 		&ec_max_charge,
 		&ec_min_charge,
