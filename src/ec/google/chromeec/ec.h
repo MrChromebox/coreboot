@@ -82,6 +82,17 @@ uint64_t  google_chromeec_get_events_b(void);
 int google_chromeec_clear_events_b(uint64_t mask);
 int google_chromeec_kbbacklight(int percent);
 bool google_chromeec_has_kbbacklight(void);
+/**
+ * True if EC_CMD_KEYBD_TOP_ROW is available (Vivaldi top-row mode switch).
+ */
+bool google_chromeec_keybd_top_row_supported(void);
+/**
+ * Set Vivaldi top-row scancode mode (action codes vs F1..Fn).
+ *
+ * @param mode	KEYBD_TOP_ROW_ACTION or KEYBD_TOP_ROW_FUNCTION
+ * @return	0 on success, -1 on error / unsupported
+ */
+int google_chromeec_set_keybd_top_row(enum keybd_top_row_mode mode);
 enum google_chromeec_rgbkbd_color {
 	GOOGLE_CHROMEEC_RGBKBD_COLOR_UNSET = -1,
 	GOOGLE_CHROMEEC_RGBKBD_COLOR_OFF = 0,
