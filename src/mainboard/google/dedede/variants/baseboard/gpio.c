@@ -490,8 +490,15 @@ static const struct cros_gpio cros_gpios[] = {
 
 DECLARE_WEAK_CROS_GPIOS(cros_gpios);
 
+static const gpio_t hpd_gpios[] = {
+	/* A16 : EC_AP_USB_C0_HPD */
+	GPP_A16,
+	/* B23 : EC_AP_USB_C1_HDMI_HPD */
+	GPP_B23,
+};
+
 const gpio_t *__weak variant_hpd_gpios(size_t *num)
 {
-	*num = 0;
-	return NULL;
+	*num = ARRAY_SIZE(hpd_gpios);
+	return hpd_gpios;
 }
