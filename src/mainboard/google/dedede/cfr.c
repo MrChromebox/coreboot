@@ -11,6 +11,15 @@ static const struct cfr_default_override cfr_overrides[] = {
 	CFR_OVERRIDE_END,
 };
 
+static const struct sm_object wait_for_external_display = SM_DECLARE_BOOL({
+	.opt_name	= "wait_for_external_display",
+	.ui_name	= "Wait for External Display",
+	.ui_helptext	= "Wait for HDMI/USB-C HPD before graphics init. Enable when\n"
+			  "using an external display (e.g. broken or disconnected panel).",
+	/* Chromeboxes historically always waited; laptops/convertibles opt in. */
+	.default_value	= !CONFIG(SYSTEM_TYPE_LAPTOP) && !CONFIG(SYSTEM_TYPE_CONVERTIBLE),
+});
+
 static const struct sm_object touchscreen = SM_DECLARE_ENUM({
 	.opt_name	= "touchscreen",
 	.ui_name	= "Touchscreen Type",
@@ -44,6 +53,7 @@ static struct sm_obj_form system = {
 		&pciexp_speed,
 		&s0ix_enable,
 		&vtd,
+		&wait_for_external_display,
 		NULL
 	},
 };

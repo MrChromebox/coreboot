@@ -9,6 +9,7 @@
 #include <device/device.h>
 #include <drivers/tpm/cr50.h>
 #include <ec/ec.h>
+#include <option.h>
 #include <security/tpm/tss.h>
 #include <soc/soc_chip.h>
 #include <static.h>
@@ -84,11 +85,15 @@ static void mainboard_init(void *chip_info)
 	size_t base_num, override_num;
 
 	/*
-	 * For chromeboxes, wait for DP HPD to be asserted before
-	 * entering FSP-S, otherwise display init may fail.
+	 * Wait for DP/HDMI HPD before FSP-S when enabled (CFR:
+	 * wait_for_external_display). Default matches prior behavior: on for
+	 * chromeboxes, off for laptops/convertibles. Variants without HPD
+	 * GPIOs return immediately from mainboard_wait_for_hpd().
 	 */
-	if (!CONFIG(SYSTEM_TYPE_LAPTOP) && !CONFIG(SYSTEM_TYPE_CONVERTIBLE) &&
-	    display_init_required())
+	if (display_init_required() &&
+	    get_uint_option("wait_for_external_display",
+			    !CONFIG(SYSTEM_TYPE_LAPTOP) &&
+			    !CONFIG(SYSTEM_TYPE_CONVERTIBLE)))
 		mainboard_wait_for_hpd();
 
 	base_pads = baseboard_gpio_table(&base_num);
