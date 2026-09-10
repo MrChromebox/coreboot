@@ -10,6 +10,7 @@
 #include <device/device.h>
 #include <device/pci_def.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "chip.h"
 
@@ -585,11 +586,19 @@ static void camera_fill_sensor(const struct device *dev)
 
 	if (config->remote_name) {
 		remote_name = config->remote_name;
-	} else {
-		if (cio2)
-			remote_name = acpi_device_path(cio2);
-		else
+	} else if (cio2) {
+		/*
+		 * Skylake names the PCI device ICIO while DSDT declares
+		 * Device (CIO2). Prefer the DSDT name for remote-endpoint.
+		 */
+		const char *cio2_name = acpi_device_name(cio2);
+
+		if (cio2_name && !strcmp(cio2_name, "ICIO"))
 			remote_name = DEFAULT_REMOTE_NAME;
+		else
+			remote_name = acpi_device_path(cio2);
+	} else {
+		remote_name = DEFAULT_REMOTE_NAME;
 	}
 
 	acpi_dp_add_reference(remote, NULL, remote_name);
@@ -1157,6 +1166,28 @@ static void write_camera_device_common(const struct device *dev)
 	}
 }
 
+/*
+ * Skylake/KBL declare Device (CIO2) in DSDT while the PCI ACPI name is ICIO.
+ * When acpi_name is set, Scope into that existing device and emit port/_DSD.
+ * Returns true if SSDT generation for this device is complete.
+ */
+static bool camera_fill_existing_cio2(const struct device *dev)
+{
+	struct drivers_intel_mipi_camera_config *config = dev->chip_info;
+	char cio2_path[sizeof("\\_SB.PCI0.") + ACPI_NAME_BUFFER_SIZE - 1];
+
+	if (config->device_type != INTEL_ACPI_CAMERA_CIO2 || !config->acpi_name)
+		return false;
+
+	snprintf(cio2_path, sizeof(cio2_path), "\\_SB.PCI0.%s", config->acpi_name);
+	acpigen_write_scope(cio2_path);
+	camera_fill_cio2(dev);
+	acpigen_pop_len(); /* Scope */
+	printk(BIOS_INFO, "%s: %s (existing device)\n", cio2_path,
+	       dev->chip_ops->name);
+	return true;
+}
+
 static void camera_fill_ssdt(const struct device *dev)
 {
 	struct drivers_intel_mipi_camera_config *config = dev->chip_info;
@@ -1164,13 +1195,19 @@ static void camera_fill_ssdt(const struct device *dev)
 	const struct device *pdev = dev->upstream->dev;
 
 	if (CONFIG(MIPI_ACPI_TYPE_WINDOWS_LINUX)) {
-		/* Only generate SSDT for an i2c-attached sensor device */
-		if (dev->path.type != DEVICE_PATH_I2C || config->device_type != INTEL_ACPI_CAMERA_SENSOR)
+		if (dev->path.type == DEVICE_PATH_GENERIC &&
+		    camera_fill_existing_cio2(dev))
+			return;
+
+		/* Sensors: generate SSDT for an i2c-attached SENSOR only */
+		if (dev->path.type != DEVICE_PATH_I2C ||
+		    config->device_type != INTEL_ACPI_CAMERA_SENSOR)
 			return;
 
 		scope = acpi_device_scope(dev);
 		if (!scope) {
-			printk(BIOS_ERR, "Failed to get scope for device %s\n", dev_path(dev));
+			printk(BIOS_ERR, "Failed to get scope for device %s\n",
+			       dev_path(dev));
 			return;
 		}
 
@@ -1217,6 +1254,14 @@ static void camera_fill_ssdt(const struct device *dev)
 		write_i2c_camera_device(dev, scope);
 		break;
 	case DEVICE_PATH_GENERIC:
+		/*
+		 * Skylake/KBL declare Device (CIO2) in DSDT (soc ipu.asl) while
+		 * the PCI device ACPI name is ICIO. When acpi_name is set, Scope
+		 * into that existing device and only emit port/_DSD.
+		 */
+		if (camera_fill_existing_cio2(dev))
+			return;
+
 		scope = acpi_device_scope(pdev);
 		if (!scope)
 			return;
