@@ -89,6 +89,7 @@ void setup_lapic_interrupts(void)
 	lapic_update32(LAPIC_LVT1, ~mask, LAPIC_DELIVERY_MODE_NMI);
 }
 
+/* No IOAPIC in this link: tell lapic_enable_extint() to unmask LINT0. */
 int __weak ioapic_enable_extint(void) { return -1; }
 void __weak ioapic_disable_extint(void) { }
 
@@ -106,9 +107,10 @@ void lapic_enable_extint(void)
 	uint32_t mask = LAPIC_LVT_MASKED | LAPIC_LVT_LEVEL_TRIGGER | LAPIC_INPUT_POLARITY |
 			LAPIC_DELIVERY_MODE_MASK;
 
-	/**
-	 * When using the legacy PIC, unmask EXTINT if IOAPIC is not present.
-	 * With IOAPIC, EXTINT is driven as an MSI instead of the LINT0 pin.
+	/*
+	 * Prefer ExtINT via IOAPIC GSI0 when that route is ready. If GSI0 is
+	 * not registered yet (or never will be), unmask LINT0 so the legacy
+	 * PIC can drive virtual-wire ExtINT until/unless GSI0 takes over.
 	 */
 	if (ioapic_enable_extint() < 0)
 		lapic_update32(LAPIC_LVT0, ~mask, LAPIC_DELIVERY_MODE_EXTINT);
