@@ -15,12 +15,7 @@ config VPD
 
 # Read serial from VPD if used
 config SMBIOS_SERIAL_FROM_VPD
-	depends on VPD && GENERATE_SMBIOS_TABLES
 	default y if !DRIVERS_GENERIC_CBFS_SERIAL && !VENDOR_EMULATION
-
-# Enables WDT on fizz/puff boards
-config USE_PM_ACPI_TIMER
-	default y if BOARD_GOOGLE_BASEBOARD_FIZZ || BOARD_GOOGLE_BASEBOARD_PUFF
 
 # GLK FSP overrides
 config FSP_HEADER_PATH
@@ -33,9 +28,6 @@ config FSP_S_FILE
 	default "3rdparty/blobs/soc/intel/glk/fsp/release/Fsp_S.fd" if SOC_INTEL_GEMINILAKE
 
 # ADL-N / Twinlake FSP overrides (3rdparty/blobs/soc/intel/twl/fsp)
-config FSP_USE_REPO
-	default n if SOC_INTEL_ALDERLAKE_PCH_N
-
 config FSP_HEADER_PATH
 	default "3rdparty/blobs/soc/intel/twl/fsp/Include" if SOC_INTEL_ALDERLAKE_PCH_N
 
@@ -78,7 +70,6 @@ config CBFS_SIZE
 	default 0x500000
 
 config EDK2_GOP_FILE
-	depends on EDK2_GOP_DRIVER
 	default "3rdparty/blobs/soc/intel/bdw/IntelGopDriver.efi" if NORTHBRIDGE_INTEL_HASWELL || SOC_INTEL_BROADWELL
 	default "3rdparty/blobs/soc/intel/byt/IntelGopDriver.efi" if SOC_INTEL_BAYTRAIL
 	default "3rdparty/blobs/soc/intel/bsw/IntelGopDriver.efi" if SOC_INTEL_BRASWELL
@@ -87,7 +78,6 @@ config EDK2_GOP_FILE
 	default "3rdparty/blobs/soc/intel/apl/IntelGopDriver.efi" if SOC_INTEL_APOLLOLAKE
 	default "3rdparty/blobs/soc/intel/cml/IntelGopDriver.efi" if SOC_INTEL_COMETLAKE || SOC_INTEL_WHISKEYLAKE
 	default "3rdparty/blobs/soc/intel/tgl/IntelGopDriver.efi" if SOC_INTEL_TIGERLAKE
-	default "IntelGopDriver.efi"
 
 # Enable HWID DMI driver by default (except for Fizz and Nami, which set based on SKU ID)
 config DRIVERS_HWID_DMI
@@ -97,5 +87,4 @@ config BOARD_GOOGLE_REX_COMMON
 	select FSP_TYPE_IOT
 
 config INTEL_GMA_HAVE_VBT
-	default y if BOARD_GOOGLE_BASEBOARD_BRYA
 	default y if BOARD_GOOGLE_BASEBOARD_BROX
