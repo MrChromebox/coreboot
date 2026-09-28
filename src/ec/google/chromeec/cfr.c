@@ -138,14 +138,20 @@ static void update_charge_control(struct sm_object *new)
 static const struct sm_enum_value ec_charge_max_values[] = {
 	{ "100%", 100 },
 	{ "90%", 90 },
+	{ "85%", 85 },
 	{ "80%", 80 },
+	{ "75%", 75 },
+	{ "70%", 70 },
+	{ "60%", 60 },
+	{ "50%", 50 },
+	{ "40%", 40 },
 	SM_ENUM_VALUE_END,
 };
 
 static const struct sm_object ec_max_charge = SM_DECLARE_ENUM({
 	.opt_name	= "ec_max_charge",
 	.ui_name	= "Battery Charge Limit (Max)",
-	.ui_helptext	= "Upper battery SoC threshold for sustainer mode (stop charging).",
+	.ui_helptext	= "Stop charging at this battery level; the system then runs from AC.",
 	.default_value	= 100,
 	.values		= ec_charge_max_values,
 }, WITH_DEP_VALUES(&ec_charge_limit_override, true),
@@ -155,13 +161,19 @@ static const struct sm_enum_value ec_charge_min_values[] = {
 	{ "0%", 0 },
 	{ "10%", 10 },
 	{ "20%", 20 },
+	{ "30%", 30 },
+	{ "40%", 40 },
+	{ "50%", 50 },
+	{ "60%", 60 },
+	{ "70%", 70 },
+	{ "75%", 75 },
 	SM_ENUM_VALUE_END,
 };
 
 static const struct sm_object ec_min_charge = SM_DECLARE_ENUM({
 	.opt_name	= "ec_min_charge",
 	.ui_name	= "Battery Charge Limit (Min)",
-	.ui_helptext	= "Lower battery SoC threshold for sustainer mode (resume charging). "
+	.ui_helptext	= "Resume charging on AC once the battery drops below this level. "
 			  "Must be less than the maximum charge limit.",
 	.default_value	= 0,
 	.values		= ec_charge_min_values,
