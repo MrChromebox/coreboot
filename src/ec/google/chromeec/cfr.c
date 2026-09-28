@@ -173,7 +173,9 @@ static const struct sm_enum_value ec_charge_min_values[] = {
 static const struct sm_object ec_min_charge = SM_DECLARE_ENUM({
 	.opt_name	= "ec_min_charge",
 	.ui_name	= "Battery Charge Limit (Min)",
-	.ui_helptext	= "Resume charging on AC once the battery drops below this level. "
+	.ui_helptext	= "Only start charging on AC when the battery is below this level. "
+			  "0% always charges up to the maximum. "
+			  "On some devices, AC connect always charges up to the maximum. "
 			  "Must be less than the maximum charge limit.",
 	.default_value	= 0,
 	.values		= ec_charge_min_values,
