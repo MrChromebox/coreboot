@@ -10,6 +10,7 @@
 #include <drivers/usb/acpi/chip.h>
 #include <drivers/intel/usb4/retimer/retimer.h>
 #include <ec/google/common/dptf.h>
+#include <option.h>
 
 #include "chip.h"
 #include "ec.h"
@@ -260,6 +261,13 @@ static void fill_ssdt_ps2_keyboard(const struct device *dev)
 	    !keybd.num_top_row_keys ||
 	    keybd.num_top_row_keys > MAX_TOP_ROW_KEYS) {
 		printk(BIOS_INFO, "PS2K: Unsupported or bad resp from EC. Vivaldi disabled!\n");
+		return;
+	}
+
+	/* In function mode the top row sends standard scancodes; use OS defaults. */
+	if (google_chromeec_keybd_top_row_supported() &&
+	    get_uint_option("ec_keybd_top_row", KEYBD_TOP_ROW_ACTION) == KEYBD_TOP_ROW_FUNCTION) {
+		printk(BIOS_INFO, "PS2K: Top row in function mode. Vivaldi disabled!\n");
 		return;
 	}
 
