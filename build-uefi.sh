@@ -181,7 +181,7 @@ for device in "${build_targets[@]}"; do
 	fi
 	if [ "$edk2_pxe" = true ]; then
 		sed -i '/^CONFIG_EDK2_ENABLE_IPXE=y/d' .config
-		echo "CONFIG_EDK2_NETWORK_PXE_SUPPORT=y" >> .config
+		echo "CONFIG_EDK2_CUSTOM_BUILD_PARAMS=\"-D NETWORK_PXE_BOOT=TRUE\"" >> .config
 	fi
 	if [ "$edk2_ipxe" = true ]; then
 		echo "CONFIG_EDK2_ENABLE_IPXE=y" >> .config
