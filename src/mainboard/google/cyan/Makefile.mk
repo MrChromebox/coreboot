@@ -8,6 +8,7 @@ romstage-y += spd/spd.c
 ramstage-$(CONFIG_CHROMEOS) += chromeos.c
 ramstage-$(CONFIG_DRIVERS_OPTION_CFR) += cfr.c
 ramstage-y += ec.c
+ramstage-$(CONFIG_MAINBOARD_USE_LIBGFXINIT) += gma-mainboard.ads
 ramstage-y += irqroute.c
 ramstage-y += w25q64.c
 
