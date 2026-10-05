@@ -109,7 +109,6 @@
 #define PCH_ACPI_MODE 2
 
 #define SOC_DEVID 0x2280
-#define GFX_DEVID 0x22b1
 #define PUNIT_DEVID 0x22DC
 #define MMC_DEVID 0x2294
 #define SDIO_DEVID 0x2295
