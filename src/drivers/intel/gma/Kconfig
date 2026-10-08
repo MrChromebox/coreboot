@@ -104,6 +104,13 @@ config GFX_GMA_IGNORE_PRESENCE_STRAPS
 	  is present/enabled. Select this option if a board doesn't correctly implement
 	  these straps, causing libgfxinit to fail to detect an attached panel.
 
+config GFX_GMA_EDP_LOW_VOLTAGE_SWING
+	def_bool n
+	depends on MAINBOARD_HAS_LIBGFXINIT
+	help
+	  Use the low voltage swing buffer translations for the eDP port (DDI A)
+	  in libgfxinit. Select this option if the board's VBT asks for them.
+
 config GFX_GMA
 	def_bool y
 	depends on NORTHBRIDGE_INTEL_GM45 || NORTHBRIDGE_INTEL_X4X \
