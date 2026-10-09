@@ -111,6 +111,15 @@ config GFX_GMA_EDP_LOW_VOLTAGE_SWING
 	  Use the low voltage swing buffer translations for the eDP port (DDI A)
 	  in libgfxinit. Select this option if the board's VBT asks for them.
 
+config GFX_GMA_EDP_AUX_BACKLIGHT
+	def_bool n
+	depends on MAINBOARD_HAS_LIBGFXINIT
+	help
+	  Make libgfxinit set the brightness of the eDP panel (DDI A) through
+	  the VESA eDP AUX backlight interface (DPCD) in addition to the PWM
+	  pin. Select this option if the board's VBT asks for the VESA eDP AUX
+	  backlight interface.
+
 config GFX_GMA
 	def_bool y
 	depends on NORTHBRIDGE_INTEL_GM45 || NORTHBRIDGE_INTEL_X4X \
