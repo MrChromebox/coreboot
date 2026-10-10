@@ -393,9 +393,10 @@ void verstage_main(void)
 		if (tpm_rc) {
 			printk(BIOS_WARNING, "Failed to extend TPM PCRs (%#x)\n",
 				tpm_rc);
-			vboot_fail_and_reboot(ctx,
-				VB2_RECOVERY_RO_TPM_U_ERROR,
-				tpm_rc);
+			if (!CONFIG(VBOOT_MOCK_SECDATA))
+				vboot_fail_and_reboot(ctx,
+					VB2_RECOVERY_RO_TPM_U_ERROR,
+					tpm_rc);
 		}
 		timestamp_add_now(TS_TPMPCR_END);
 	}
