@@ -6,4 +6,7 @@ config MB_COMMON_DIR
 	string
 	default "framework/common" if EC_GOOGLE_CHROMEEC
 
+config EDK2_BOOTSPLASH_FILE
+	default "src/mainboard/framework/common/logo.png"
+
 endif # VENDOR_FRAMEWORK
