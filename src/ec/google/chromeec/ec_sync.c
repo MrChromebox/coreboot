@@ -530,8 +530,8 @@ static void google_chromeec_after_g3_state_sync(void)
 
 void google_chromeec_swsync(void)
 {
-	bool perform_ec_sw_sync = get_uint_option("ec_sw_sync", 1);
-	bool jump_to_rw = get_uint_option("ec_rw_jump", 1);
+	bool perform_ec_sw_sync = get_uint_option("ec_sw_sync", CONFIG(VENDOR_GOOGLE) ? 1 : 0);
+	bool jump_to_rw = get_uint_option("ec_rw_jump", CONFIG(VENDOR_GOOGLE) ? 1 : 0);
 
 	/* Check which EC image is active */
 	chromeec_get_and_print_ec_version();
