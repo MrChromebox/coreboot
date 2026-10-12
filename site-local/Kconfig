@@ -45,7 +45,7 @@ config PCIEXP_HOTPLUG_PREFETCH_MEM
 	default 0x100000000
 
 config PCIEXP_HOTPLUG_IO
-	default 0x6000
+	default 0x2000
 
 # edk2 payload options
 
