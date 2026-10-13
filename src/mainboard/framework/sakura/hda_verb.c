@@ -179,6 +179,12 @@ AZALIA_ARRAY_SIZES;
 #define ALC1320_SAMPLES		16
 #define ALC1320_MAX_BLOCKS	8
 
+/* The amp must not be powered up before its MCU is ready (rt1320-sdw.c) */
+#define ALC1320_KR0_INT_READY	0x1000f021
+#define ALC1320_KR0_READY	0x1f
+#define ALC1320_AMP_POWER	0x41001988	/* SDCA PDE23 requested power state */
+#define ALC1320_MCU_READY_MS	200
+
 struct alc1320_bridge {
 	u8 *base;
 	u16 coefs[ALC1320_COEF_COUNT];
@@ -401,6 +407,28 @@ static int alc1320_matches(struct alc1320_bridge *bridge, const struct alc1320_x
 	return data == w->data;
 }
 
+static int alc1320_wait_mcu_ready(struct alc1320_bridge *bridge, u16 i2c_addr)
+{
+	const struct alc1320_xfer kr0 = {
+		.i2c_addr = i2c_addr,
+		.reg = ALC1320_KR0_INT_READY,
+		.len = 1,
+	};
+	struct stopwatch sw;
+	u32 status;
+
+	stopwatch_init_msecs_expire(&sw, ALC1320_MCU_READY_MS);
+	do {
+		if (alc1320_read(bridge, &kr0, &status) < 0)
+			return -1;
+		if (status == ALC1320_KR0_READY)
+			return 0;
+	} while (!stopwatch_expired(&sw));
+
+	printk(BIOS_WARNING, "ALC1320: MCU not ready (status %02x)\n", status);
+	return 0;
+}
+
 /*
  * Check evenly spaced writes of a block, including the last one. The block is
  * written in ascending order, so a match on the last write means an earlier
@@ -429,8 +457,8 @@ static int alc1320_block_loaded(struct alc1320_bridge *bridge,
 /*
  * The vendor sequence writes one byte per transfer and rewrites every
  * coefficient each time. Merge writes to consecutive registers into transfers
- * of up to four bytes instead, and skip runs of the MCU patch that the amp
- * already holds.
+ * of up to four bytes instead, skip runs of the MCU patch that the amp
+ * already holds, and wait for the MCU before powering the amp up.
  */
 static void alc1320_init(u8 *base)
 {
@@ -460,6 +488,9 @@ static void alc1320_init(u8 *base)
 
 		if (skip)
 			continue;
+		if (w.reg == ALC1320_AMP_POWER && w.len == 1 && w.data == 0 &&
+		    alc1320_wait_mcu_ready(&bridge, w.i2c_addr) < 0)
+			goto fail;
 		if (alc1320_write(&bridge, &w) < 0)
 			goto fail;
 	}
