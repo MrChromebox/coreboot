@@ -148,8 +148,9 @@ AZALIA_ARRAY_SIZES;
  * data bytes, right-aligned with the first byte most significant. Writing a
  * command with bit 5 set to coefficient 0x29 starts the transfer. Bits 3:2
  * of the command hold the data length - 1 and bits 1:0 the register address
- * length - 1. Bit 14 is set while the bridge is busy. The amp
- * auto-increments the register address for each data byte.
+ * length - 1. Bit 4 selects a read, which returns the data in 0x2a-0x2b.
+ * Bit 14 is set while the bridge is busy. The amp auto-increments the
+ * register address for each data byte.
  */
 #define ALC1320_I2C_ADDR	0x24
 #define ALC1320_REG_HI		0x25
@@ -157,12 +158,26 @@ AZALIA_ARRAY_SIZES;
 #define ALC1320_DATA_HI		0x27
 #define ALC1320_DATA_LO		0x28
 #define ALC1320_BRIDGE_CTRL	0x29
+#define ALC1320_READ_HI		0x2a
 #define ALC1320_BRIDGE_BUSY	BIT(14)
 #define ALC1320_BRIDGE_WRITE(len)	(0xb023 | ((len) - 1) << 2)
+#define ALC1320_BRIDGE_READ(len)	(0xb033 | ((len) - 1) << 2)
 #define ALC1320_BRIDGE_US	500
 #define ALC1320_BRIDGE_TIMEOUT_MS	10
 #define ALC1320_COEF_COUNT	0x30
 #define ALC1320_MAX_LEN		4
+
+/*
+ * The amp keeps the MCU patch across reboots, so long runs of writes to it are
+ * skipped if samples read back from the amp already match. The coefficient
+ * table at 0xe000 is not skipped: the sequence resets the DSP, which then
+ * reinitializes parts of it.
+ */
+#define ALC1320_MCU_START	0x10007000
+#define ALC1320_MCU_END		0x10008000
+#define ALC1320_MIN_BLOCK	16	/* writes */
+#define ALC1320_SAMPLES		16
+#define ALC1320_MAX_BLOCKS	8
 
 struct alc1320_bridge {
 	u8 *base;
@@ -179,6 +194,26 @@ struct alc1320_xfer {
 	size_t len;
 };
 
+/* Walks the vendor sequence, merging writes to consecutive registers */
+struct alc1320_iter {
+	size_t pos;
+	u16 coefs[ALC1320_COEF_COUNT];
+	struct alc1320_xfer pending;
+};
+
+/* A run of writes to consecutive addresses in the MCU patch */
+struct alc1320_block {
+	size_t first;
+	size_t count;
+	u32 start;
+	u32 end;
+};
+
+struct alc1320_plan {
+	struct alc1320_block blocks[ALC1320_MAX_BLOCKS];
+	size_t block_count;
+};
+
 static int alc285_verb(u8 *base, u32 verb)
 {
 	return azalia_program_verb_table(base, &verb, 1);
@@ -190,6 +225,87 @@ static int alc285_write_coef(u8 *base, u8 index, u16 value)
 	    alc285_verb(base, ALC285_SET_COEF | value) < 0)
 		return -1;
 	return 0;
+}
+
+static bool alc1320_next(struct alc1320_iter *it, struct alc1320_xfer *w)
+{
+	while (it->pos + 1 < ARRAY_SIZE(alc1320_verbs)) {
+		const u8 index = alc1320_verbs[it->pos] & 0xff;
+		struct alc1320_xfer *p = &it->pending;
+		u32 reg;
+
+		it->pos += 2;
+		if (index >= ALC1320_COEF_COUNT)
+			continue;
+		it->coefs[index] = alc1320_verbs[it->pos - 1] & 0xffff;
+		if (index != ALC1320_BRIDGE_CTRL)
+			continue;
+
+		reg = (u32)it->coefs[ALC1320_REG_HI] << 16 | it->coefs[ALC1320_REG_LO];
+		if (p->len && p->len < ALC1320_MAX_LEN &&
+		    p->i2c_addr == it->coefs[ALC1320_I2C_ADDR] && p->reg + p->len == reg) {
+			p->data = p->data << 8 | (it->coefs[ALC1320_DATA_LO] & 0xff);
+			p->len++;
+			continue;
+		}
+
+		*w = *p;
+		p->i2c_addr = it->coefs[ALC1320_I2C_ADDR];
+		p->reg = reg;
+		p->data = it->coefs[ALC1320_DATA_LO] & 0xff;
+		p->len = 1;
+		if (w->len)
+			return true;
+	}
+
+	*w = it->pending;
+	it->pending.len = 0;
+	return w->len != 0;
+}
+
+static bool alc1320_in_mcu(const struct alc1320_xfer *w)
+{
+	return w->reg >= ALC1320_MCU_START && w->reg + w->len <= ALC1320_MCU_END;
+}
+
+/* Returns false if the sequence doesn't fit, in which case nothing is skipped */
+static bool alc1320_plan(struct alc1320_plan *plan)
+{
+	struct alc1320_iter it = { 0 };
+	struct alc1320_block run = { 0 };
+	struct alc1320_xfer w;
+	size_t n = 0;
+	bool more;
+
+	plan->block_count = 0;
+
+	do {
+		more = alc1320_next(&it, &w);
+		if (more && alc1320_in_mcu(&w) && run.count && run.end == w.reg) {
+			run.count++;
+			run.end += w.len;
+			n++;
+			continue;
+		}
+
+		/* A short run would leave patch bytes that a skipped block doesn't cover */
+		if (run.count && (run.count < ALC1320_MIN_BLOCK ||
+				  plan->block_count == ALC1320_MAX_BLOCKS))
+			return false;
+		if (run.count)
+			plan->blocks[plan->block_count++] = run;
+
+		run.count = 0;
+		if (more && alc1320_in_mcu(&w)) {
+			run.first = n;
+			run.count = 1;
+			run.start = w.reg;
+			run.end = w.reg + w.len;
+		}
+		n++;
+	} while (more);
+
+	return true;
 }
 
 static int alc1320_wait_bridge_idle(u8 *base)
@@ -220,67 +336,134 @@ static int alc1320_set_coef(struct alc1320_bridge *bridge, u8 index, u16 value)
 	return 0;
 }
 
-static int alc1320_flush(struct alc1320_bridge *bridge, const struct alc1320_xfer *w)
+static int alc1320_start(struct alc1320_bridge *bridge, u16 cmd)
 {
-	if (alc1320_set_coef(bridge, ALC1320_I2C_ADDR, w->i2c_addr) < 0 ||
-	    alc1320_set_coef(bridge, ALC1320_REG_HI, w->reg >> 16) < 0 ||
-	    alc1320_set_coef(bridge, ALC1320_REG_LO, w->reg & 0xffff) < 0 ||
-	    (w->len > 2 && alc1320_set_coef(bridge, ALC1320_DATA_HI, w->data >> 16) < 0) ||
-	    alc1320_set_coef(bridge, ALC1320_DATA_LO, w->data & 0xffff) < 0)
-		return -1;
-
 	/* The coefficients are only latched when a transfer starts */
 	if (bridge->transfer_started && !stopwatch_expired(&bridge->transfer) &&
 	    alc1320_wait_bridge_idle(bridge->base) < 0)
 		return -1;
 
-	if (alc285_write_coef(bridge->base, ALC1320_BRIDGE_CTRL,
-			      ALC1320_BRIDGE_WRITE(w->len)) < 0)
+	if (alc285_write_coef(bridge->base, ALC1320_BRIDGE_CTRL, cmd) < 0)
 		return -1;
 	stopwatch_init_usecs_expire(&bridge->transfer, ALC1320_BRIDGE_US);
 	bridge->transfer_started = true;
 	return 0;
 }
 
+static int alc1320_set_reg(struct alc1320_bridge *bridge, const struct alc1320_xfer *w)
+{
+	if (alc1320_set_coef(bridge, ALC1320_I2C_ADDR, w->i2c_addr) < 0 ||
+	    alc1320_set_coef(bridge, ALC1320_REG_HI, w->reg >> 16) < 0 ||
+	    alc1320_set_coef(bridge, ALC1320_REG_LO, w->reg & 0xffff) < 0)
+		return -1;
+	return 0;
+}
+
+static int alc1320_write(struct alc1320_bridge *bridge, const struct alc1320_xfer *w)
+{
+	if (alc1320_set_reg(bridge, w) < 0 ||
+	    (w->len > 2 && alc1320_set_coef(bridge, ALC1320_DATA_HI, w->data >> 16) < 0) ||
+	    alc1320_set_coef(bridge, ALC1320_DATA_LO, w->data & 0xffff) < 0)
+		return -1;
+	return alc1320_start(bridge, ALC1320_BRIDGE_WRITE(w->len));
+}
+
+static int alc1320_read(struct alc1320_bridge *bridge, const struct alc1320_xfer *w,
+			u32 *data)
+{
+	const u32 mask = w->len < 4 ? (1U << (8 * w->len)) - 1 : ~0U;
+	u16 hi, lo;
+
+	if (alc1320_set_reg(bridge, w) < 0 ||
+	    alc1320_start(bridge, ALC1320_BRIDGE_READ(w->len)) < 0 ||
+	    alc1320_wait_bridge_idle(bridge->base) < 0 ||
+	    alc285_verb(bridge->base, ALC285_SET_COEF_INDEX | ALC1320_READ_HI) < 0 ||
+	    alc285_verb(bridge->base, ALC285_GET_COEF) < 0)
+		return -1;
+	hi = read32(bridge->base + HDA_IR_REG);
+	/* Reads advance the coefficient index */
+	if (alc285_verb(bridge->base, ALC285_GET_COEF) < 0)
+		return -1;
+	lo = read32(bridge->base + HDA_IR_REG);
+	bridge->transfer_started = false;
+
+	*data = ((u32)hi << 16 | lo) & mask;
+	return 0;
+}
+
+/* Returns 1 if the amp already holds the data of the write, 0 if not */
+static int alc1320_matches(struct alc1320_bridge *bridge, const struct alc1320_xfer *w)
+{
+	u32 data;
+
+	if (alc1320_read(bridge, w, &data) < 0)
+		return -1;
+	return data == w->data;
+}
+
+/*
+ * Check evenly spaced writes of a block, including the last one. The block is
+ * written in ascending order, so a match on the last write means an earlier
+ * boot wrote all of it.
+ */
+static int alc1320_block_loaded(struct alc1320_bridge *bridge,
+				const struct alc1320_block *block, struct alc1320_iter it,
+				const struct alc1320_xfer *first)
+{
+	const size_t stride = MAX(block->count / ALC1320_SAMPLES, 1);
+	struct alc1320_xfer w = *first;
+
+	for (size_t i = 0; i < block->count; i++) {
+		if (i && !alc1320_next(&it, &w))
+			return 0;
+		if (i % stride && i != block->count - 1)
+			continue;
+
+		const int match = alc1320_matches(bridge, &w);
+		if (match <= 0)
+			return match;
+	}
+	return 1;
+}
+
 /*
  * The vendor sequence writes one byte per transfer and rewrites every
  * coefficient each time. Merge writes to consecutive registers into transfers
- * of up to four bytes instead.
+ * of up to four bytes instead, and skip runs of the MCU patch that the amp
+ * already holds.
  */
 static void alc1320_init(u8 *base)
 {
 	struct alc1320_bridge bridge = { .base = base };
-	struct alc1320_xfer w = { 0 };
-	u16 coefs[ALC1320_COEF_COUNT] = { 0 };
+	struct alc1320_iter it = { 0 };
+	struct alc1320_plan plan;
+	const struct alc1320_block *block = NULL;
+	struct alc1320_xfer w;
+	size_t n = 0, b = 0;
+	bool skip = false;
 
-	for (size_t i = 0; i + 1 < ARRAY_SIZE(alc1320_verbs); i += 2) {
-		const u8 index = alc1320_verbs[i] & 0xff;
-		u32 reg;
+	if (!alc1320_plan(&plan))
+		plan.block_count = 0;
 
-		if (index >= ALC1320_COEF_COUNT)
-			continue;
-		coefs[index] = alc1320_verbs[i + 1] & 0xffff;
-		if (index != ALC1320_BRIDGE_CTRL)
-			continue;
-
-		reg = (u32)coefs[ALC1320_REG_HI] << 16 | coefs[ALC1320_REG_LO];
-		if (w.len && w.len < ALC1320_MAX_LEN &&
-		    w.i2c_addr == coefs[ALC1320_I2C_ADDR] && w.reg + w.len == reg) {
-			w.data = w.data << 8 | (coefs[ALC1320_DATA_LO] & 0xff);
-			w.len++;
-			continue;
+	for (; alc1320_next(&it, &w); n++) {
+		if (b < plan.block_count && n == plan.blocks[b].first) {
+			const int loaded = alc1320_block_loaded(&bridge, &plan.blocks[b], it, &w);
+			if (loaded < 0)
+				goto fail;
+			block = &plan.blocks[b++];
+			skip = loaded;
+			printk(BIOS_DEBUG, "ALC1320: %x-%x %s\n", block->start, block->end - 1,
+			       skip ? "already loaded, skipping" : "not loaded, writing");
 		}
+		if (block && n == block->first + block->count)
+			skip = false;
 
-		if (w.len && alc1320_flush(&bridge, &w) < 0)
+		if (skip)
+			continue;
+		if (alc1320_write(&bridge, &w) < 0)
 			goto fail;
-		w.i2c_addr = coefs[ALC1320_I2C_ADDR];
-		w.reg = reg;
-		w.data = coefs[ALC1320_DATA_LO] & 0xff;
-		w.len = 1;
 	}
 
-	if (w.len && alc1320_flush(&bridge, &w) < 0)
-		goto fail;
 	if (alc1320_wait_bridge_idle(base) < 0)
 		goto fail;
 	return;
