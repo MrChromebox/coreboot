@@ -142,22 +142,61 @@ AZALIA_ARRAY_SIZES;
 #define ALC285_SET_COEF		0x02040000
 #define ALC285_GET_COEF		0x020c0000
 
-/* Writing coefficient 0x29 starts an I2C transfer to the ALC1320 */
+/*
+ * The ALC285 has an I2C bridge to the ALC1320. Coefficient 0x24 holds the I2C
+ * address, 0x25-0x26 the 32-bit register address and 0x27-0x28 up to four
+ * data bytes, right-aligned with the first byte most significant. Writing a
+ * command with bit 5 set to coefficient 0x29 starts the transfer. Bits 3:2
+ * of the command hold the data length - 1 and bits 1:0 the register address
+ * length - 1. Bit 14 is set while the bridge is busy. The amp
+ * auto-increments the register address for each data byte.
+ */
+#define ALC1320_I2C_ADDR	0x24
+#define ALC1320_REG_HI		0x25
+#define ALC1320_REG_LO		0x26
+#define ALC1320_DATA_HI		0x27
+#define ALC1320_DATA_LO		0x28
 #define ALC1320_BRIDGE_CTRL	0x29
 #define ALC1320_BRIDGE_BUSY	BIT(14)
-#define ALC1320_BRIDGE_US	300
+#define ALC1320_BRIDGE_WRITE(len)	(0xb023 | ((len) - 1) << 2)
+#define ALC1320_BRIDGE_US	500
+#define ALC1320_BRIDGE_TIMEOUT_MS	10
 #define ALC1320_COEF_COUNT	0x30
+#define ALC1320_MAX_LEN		4
+
+struct alc1320_bridge {
+	u8 *base;
+	u16 coefs[ALC1320_COEF_COUNT];
+	bool known[ALC1320_COEF_COUNT];
+	struct stopwatch transfer;
+	bool transfer_started;
+};
+
+struct alc1320_xfer {
+	u16 i2c_addr;
+	u32 reg;
+	u32 data;
+	size_t len;
+};
 
 static int alc285_verb(u8 *base, u32 verb)
 {
 	return azalia_program_verb_table(base, &verb, 1);
 }
 
+static int alc285_write_coef(u8 *base, u8 index, u16 value)
+{
+	if (alc285_verb(base, ALC285_SET_COEF_INDEX | index) < 0 ||
+	    alc285_verb(base, ALC285_SET_COEF | value) < 0)
+		return -1;
+	return 0;
+}
+
 static int alc1320_wait_bridge_idle(u8 *base)
 {
 	struct stopwatch sw;
 
-	stopwatch_init_msecs_expire(&sw, 10);
+	stopwatch_init_msecs_expire(&sw, ALC1320_BRIDGE_TIMEOUT_MS);
 	do {
 		if (alc285_verb(base, ALC285_SET_COEF_INDEX | ALC1320_BRIDGE_CTRL) < 0 ||
 		    alc285_verb(base, ALC285_GET_COEF) < 0)
@@ -169,44 +208,81 @@ static int alc1320_wait_bridge_idle(u8 *base)
 	return -1;
 }
 
+/* Skips writes that don't change the coefficient's current value */
+static int alc1320_set_coef(struct alc1320_bridge *bridge, u8 index, u16 value)
+{
+	if (bridge->known[index] && bridge->coefs[index] == value)
+		return 0;
+	if (alc285_write_coef(bridge->base, index, value) < 0)
+		return -1;
+	bridge->coefs[index] = value;
+	bridge->known[index] = true;
+	return 0;
+}
+
+static int alc1320_flush(struct alc1320_bridge *bridge, const struct alc1320_xfer *w)
+{
+	if (alc1320_set_coef(bridge, ALC1320_I2C_ADDR, w->i2c_addr) < 0 ||
+	    alc1320_set_coef(bridge, ALC1320_REG_HI, w->reg >> 16) < 0 ||
+	    alc1320_set_coef(bridge, ALC1320_REG_LO, w->reg & 0xffff) < 0 ||
+	    (w->len > 2 && alc1320_set_coef(bridge, ALC1320_DATA_HI, w->data >> 16) < 0) ||
+	    alc1320_set_coef(bridge, ALC1320_DATA_LO, w->data & 0xffff) < 0)
+		return -1;
+
+	/* The coefficients are only latched when a transfer starts */
+	if (bridge->transfer_started && !stopwatch_expired(&bridge->transfer) &&
+	    alc1320_wait_bridge_idle(bridge->base) < 0)
+		return -1;
+
+	if (alc285_write_coef(bridge->base, ALC1320_BRIDGE_CTRL,
+			      ALC1320_BRIDGE_WRITE(w->len)) < 0)
+		return -1;
+	stopwatch_init_usecs_expire(&bridge->transfer, ALC1320_BRIDGE_US);
+	bridge->transfer_started = true;
+	return 0;
+}
+
 /*
- * Coefficient writes that don't change the current value are skipped. A new
- * transfer is only started once the previous one has finished.
+ * The vendor sequence writes one byte per transfer and rewrites every
+ * coefficient each time. Merge writes to consecutive registers into transfers
+ * of up to four bytes instead.
  */
 static void alc1320_init(u8 *base)
 {
-	u16 coefs[ALC1320_COEF_COUNT];
-	bool known[ALC1320_COEF_COUNT] = { 0 };
-	struct stopwatch transfer;
-	bool transfer_started = false;
+	struct alc1320_bridge bridge = { .base = base };
+	struct alc1320_xfer w = { 0 };
+	u16 coefs[ALC1320_COEF_COUNT] = { 0 };
 
 	for (size_t i = 0; i + 1 < ARRAY_SIZE(alc1320_verbs); i += 2) {
 		const u8 index = alc1320_verbs[i] & 0xff;
-		const u16 value = alc1320_verbs[i + 1] & 0xffff;
+		u32 reg;
 
 		if (index >= ALC1320_COEF_COUNT)
 			continue;
+		coefs[index] = alc1320_verbs[i + 1] & 0xffff;
+		if (index != ALC1320_BRIDGE_CTRL)
+			continue;
 
-		if (index == ALC1320_BRIDGE_CTRL) {
-			if (transfer_started && !stopwatch_expired(&transfer) &&
-			    alc1320_wait_bridge_idle(base) < 0)
-				goto fail;
-		} else if (known[index] && coefs[index] == value) {
+		reg = (u32)coefs[ALC1320_REG_HI] << 16 | coefs[ALC1320_REG_LO];
+		if (w.len && w.len < ALC1320_MAX_LEN &&
+		    w.i2c_addr == coefs[ALC1320_I2C_ADDR] && w.reg + w.len == reg) {
+			w.data = w.data << 8 | (coefs[ALC1320_DATA_LO] & 0xff);
+			w.len++;
 			continue;
 		}
 
-		if (alc285_verb(base, ALC285_SET_COEF_INDEX | index) < 0 ||
-		    alc285_verb(base, ALC285_SET_COEF | value) < 0)
+		if (w.len && alc1320_flush(&bridge, &w) < 0)
 			goto fail;
-
-		coefs[index] = value;
-		known[index] = true;
-
-		if (index == ALC1320_BRIDGE_CTRL) {
-			stopwatch_init_usecs_expire(&transfer, ALC1320_BRIDGE_US);
-			transfer_started = true;
-		}
+		w.i2c_addr = coefs[ALC1320_I2C_ADDR];
+		w.reg = reg;
+		w.data = coefs[ALC1320_DATA_LO] & 0xff;
+		w.len = 1;
 	}
+
+	if (w.len && alc1320_flush(&bridge, &w) < 0)
+		goto fail;
+	if (alc1320_wait_bridge_idle(base) < 0)
+		goto fail;
 	return;
 
 fail:
