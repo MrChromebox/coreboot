@@ -487,7 +487,7 @@ int google_chromeec_clear_events_b(uint64_t mask)
 
 int google_chromeec_get_mkbp_event(struct ec_response_get_next_event *event)
 {
-	return ec_cmd_get_next_event(PLAT_EC, event);
+	return ec_cmd_get_next_event(PLAT_EC, event) ? -1 : 0;
 }
 
 /* Get the current device event mask */
@@ -750,7 +750,7 @@ int google_chromeec_flash_write_block(const uint8_t *params_data,
 
 	assert(params_data);
 
-	return google_chromeec_command(&cmd);
+	return google_chromeec_command(&cmd) ? -1 : 0;
 }
 
 /*
@@ -896,7 +896,7 @@ int google_chromeec_reboot(enum ec_reboot_cmd type, uint8_t flags)
 		.flags = flags,
 	};
 
-	return ec_cmd_reboot_ec(PLAT_EC, &params);
+	return ec_cmd_reboot_ec(PLAT_EC, &params) ? -1 : 0;
 }
 
 void google_chromeec_ap_poweroff(void)
@@ -930,7 +930,7 @@ static int cbi_read(void *buf, size_t bufsize, uint32_t tag, bool check_size)
 
 	int rv = google_chromeec_command(&cmd);
 	if (rv)
-		return rv;
+		return -1;
 
 	if (check_size && cmd.cmd_size_out != bufsize) {
 		printk(BIOS_ERR, "Wrong out size for CBI tag %d: expected %zu, got %u\n",
@@ -1500,7 +1500,7 @@ int google_chromeec_get_num_pd_ports(unsigned int *num_ports)
 
 	rv = ec_cmd_usb_pd_ports(PLAT_EC, &resp);
 	if (rv)
-		return rv;
+		return -1;
 
 	*num_ports = resp.num_ports;
 	return 0;
@@ -1514,7 +1514,7 @@ int google_chromeec_get_pd_chip_info(int port, int renew,
 		.live = renew,
 	};
 
-	return ec_cmd_pd_chip_info(PLAT_EC, &p, r);
+	return ec_cmd_pd_chip_info(PLAT_EC, &p, r) ? -1 : 0;
 }
 
 int google_chromeec_get_pd_port_caps(int port,
@@ -1528,7 +1528,7 @@ int google_chromeec_get_pd_port_caps(int port,
 
 	rv = ec_cmd_get_pd_port_caps(PLAT_EC, &params, &resp);
 	if (rv)
-		return rv;
+		return -1;
 
 	port_caps->power_role_cap = resp.pd_power_role_cap;
 	port_caps->try_power_role_cap = resp.pd_try_power_role_cap;
@@ -1676,7 +1676,7 @@ static int google_chromeec_usb_pd_get_info(int port, bool *ufp, bool *dbg_acc,
 	};
 	struct ec_response_usb_pd_control_v2 resp = {};
 
-	if (ec_cmd_usb_pd_control_v2(PLAT_EC, &pd_control, &resp) < 0)
+	if (ec_cmd_usb_pd_control_v2(PLAT_EC, &pd_control, &resp))
 		return -1;
 
 	*ufp = !(resp.role & PD_CTRL_RESP_ROLE_DATA);
@@ -1705,7 +1705,7 @@ int google_chromeec_typec_control_enter_dp_mode(int port)
 		.mode_to_enter = TYPEC_MODE_DP,
 	};
 
-	if (ec_cmd_typec_control(PLAT_EC, &typec_control) < 0)
+	if (ec_cmd_typec_control(PLAT_EC, &typec_control))
 		return -1;
 
 	return 0;
@@ -1725,7 +1725,7 @@ int google_chromeec_usb_get_pd_mux_info(int port, uint8_t *flags)
 	if (port < 0)
 		return -1;
 
-	if (ec_cmd_usb_pd_mux_info(PLAT_EC, &req_mux, &resp_mux) < 0)
+	if (ec_cmd_usb_pd_mux_info(PLAT_EC, &req_mux, &resp_mux))
 		return -1;
 
 	*flags = resp_mux.flags;
@@ -1781,7 +1781,7 @@ static int google_chromeec_pd_get_amode(uint16_t svid)
 	int i;
 	int ret = 0;
 
-	if (ec_cmd_usb_pd_ports(PLAT_EC, &resp) < 0)
+	if (ec_cmd_usb_pd_ports(PLAT_EC, &resp))
 		return -1;
 
 	for (i = 0; i < resp.num_ports; i++) {
@@ -1803,7 +1803,7 @@ static int google_chromeec_pd_get_amode(uint16_t svid)
 			cmd.cmd_size_out = sizeof(resp2);
 			cmd.cmd_dev_index = 0;
 
-			if (google_chromeec_command(&cmd) < 0)
+			if (google_chromeec_command(&cmd))
 				return -1;
 			if (resp2.svid == svid)
 				ret |= BIT(i);
@@ -2122,7 +2122,7 @@ static int google_chromeec_read_batt_state_of_charge_cmd(uint32_t *state)
 
 	params.cmd = CHARGE_STATE_CMD_GET_STATE;
 
-	if (ec_cmd_charge_state(PLAT_EC, &params, &resp) < 0)
+	if (ec_cmd_charge_state(PLAT_EC, &params, &resp))
 		return -1;
 
 	*state = resp.get_state.batt_state_of_charge;
@@ -2234,7 +2234,7 @@ static int google_chromeec_read_batt_voltage_cmd(uint32_t *voltage)
 
 	params.cmd = CHARGE_STATE_CMD_GET_STATE;
 
-	if (ec_cmd_charge_state(PLAT_EC, &params, &resp) < 0)
+	if (ec_cmd_charge_state(PLAT_EC, &params, &resp))
 		return -1;
 
 	*voltage = resp.get_state.chg_voltage;
@@ -2344,7 +2344,7 @@ int google_chromeec_get_charge_control(struct ec_response_charge_control *resp)
 		.cmd = EC_CHARGE_CONTROL_CMD_GET,
 	};
 
-	return ec_cmd_charge_control_v2(PLAT_EC, &params, resp);
+	return ec_cmd_charge_control_v2(PLAT_EC, &params, resp) ? -1 : 0;
 }
 
 /*
