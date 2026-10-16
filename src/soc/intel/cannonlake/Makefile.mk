@@ -100,6 +100,7 @@ CPPFLAGS_common += -I$(src)/soc/intel/cannonlake
 CPPFLAGS_common += -I$(src)/soc/intel/cannonlake/include
 
 # DSP firmware settings files.
+ifneq ($(CONFIG_SOC_INTEL_NHLT_FROM_CBFS),y)
 NHLT_BLOB_PATH = 3rdparty/blobs/soc/intel/cnl/nhlt-blobs
 DMIC_1CH_48KHZ_16B = dmic-1ch-48khz-16b.bin
 DMIC_2CH_48KHZ_16B = dmic-2ch-48khz-16b.bin
@@ -108,6 +109,11 @@ MAX98357_RENDER = max98357-render-2ch-48khz-24b.bin
 DA7219_RENDER_CAPTURE = dialog-2ch-48khz-24b.bin
 MAX98373_RENDER_24B = max98373-render-2ch-48khz-24b.bin
 MAX98373_RENDER_16B = max98373-render-2ch-48khz-16b.bin
+RT5682_RENDER_CAPTURE = rt5682-2ch-48khz-24b.bin
+RT1011_RENDER_24B = rt1011-render-4ch-48khz-24b.bin
+RT1011_RENDER_16B = rt1011-render-4ch-48khz-16b.bin
+MAX98390_RENDER_24B = max98390-render-2ch-48khz-24b.bin
+MAX98390_RENDER_16B = max98390-render-2ch-48khz-16b.bin
 
 cbfs-files-$(CONFIG_NHLT_DMIC_1CH_16B) += $(DMIC_1CH_48KHZ_16B)
 $(DMIC_1CH_48KHZ_16B)-file := $(NHLT_BLOB_PATH)/$(DMIC_1CH_48KHZ_16B)
@@ -136,5 +142,27 @@ $(MAX98373_RENDER_24B)-type := raw
 cbfs-files-$(CONFIG_NHLT_DA7219) += $(DA7219_RENDER_CAPTURE)
 $(DA7219_RENDER_CAPTURE)-file := $(NHLT_BLOB_PATH)/$(DA7219_RENDER_CAPTURE)
 $(DA7219_RENDER_CAPTURE)-type := raw
+
+cbfs-files-$(CONFIG_NHLT_RT5682) += $(RT5682_RENDER_CAPTURE)
+$(RT5682_RENDER_CAPTURE)-file := $(NHLT_BLOB_PATH)/$(RT5682_RENDER_CAPTURE)
+$(RT5682_RENDER_CAPTURE)-type := raw
+
+cbfs-files-$(CONFIG_NHLT_RT1011) += $(RT1011_RENDER_24B)
+$(RT1011_RENDER_24B)-file := $(NHLT_BLOB_PATH)/$(RT1011_RENDER_24B)
+$(RT1011_RENDER_24B)-type := raw
+
+cbfs-files-$(CONFIG_NHLT_RT1011) += $(RT1011_RENDER_16B)
+$(RT1011_RENDER_16B)-file := $(NHLT_BLOB_PATH)/$(RT1011_RENDER_16B)
+$(RT1011_RENDER_16B)-type := raw
+
+cbfs-files-$(CONFIG_NHLT_MAX98390) += $(MAX98390_RENDER_24B)
+$(MAX98390_RENDER_24B)-file := $(NHLT_BLOB_PATH)/$(MAX98390_RENDER_24B)
+$(MAX98390_RENDER_24B)-type := raw
+
+cbfs-files-$(CONFIG_NHLT_MAX98390) += $(MAX98390_RENDER_16B)
+$(MAX98390_RENDER_16B)-file := $(NHLT_BLOB_PATH)/$(MAX98390_RENDER_16B)
+$(MAX98390_RENDER_16B)-type := raw
+
+endif
 
 endif

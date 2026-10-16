@@ -14,6 +14,7 @@
 #include <intelblocks/acpi_wake_source.h>
 #include <intelblocks/acpi.h>
 #include <intelblocks/lpc_lib.h>
+#include <intelblocks/nhlt_cbfs.h>
 #include <intelblocks/pmclib.h>
 #include <intelblocks/sgx.h>
 #include <intelblocks/tco.h>
@@ -138,7 +139,10 @@ unsigned long southbridge_write_acpi_tables(const struct device *device,
 						ACPI_ACCESS_SIZE_DWORD_ACCESS);
 	}
 
-	return acpi_write_hpet(device, current, rsdp);
+	current = acpi_write_hpet(device, current, rsdp);
+	if (CONFIG(SOC_INTEL_NHLT_FROM_CBFS))
+		current = intel_nhlt_write_from_cbfs(current, rsdp);
+	return current;
 }
 
 __weak

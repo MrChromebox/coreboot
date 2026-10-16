@@ -3,6 +3,12 @@
 #include <acpi/acpi_device.h>
 #include <acpi/acpigen.h>
 #include <device/device.h>
+#if CONFIG(SOC_INTEL_NHLT_SOF_SELECT)
+#include <console/console.h>
+#include <intelblocks/nhlt_cbfs.h>
+#include <stdio.h>
+#include <string.h>
+#endif
 
 #include "chip.h"
 
@@ -46,6 +52,80 @@ static const char *get_mic_tplg_str(enum _mic_tplg tplg)
 	default: return "default";
 	}
 }
+
+#if CONFIG(SOC_INTEL_NHLT_SOF_SELECT)
+extern struct chip_operations drivers_sof_ops;
+extern struct chip_operations drivers_intel_soundwire_ops;
+
+const char *intel_nhlt_cbfs_name(void)
+{
+	const struct drivers_sof_config *selected = NULL;
+	const char *board_name;
+	const char *platform, *speaker, *headset, *mic;
+	unsigned int soundwire_count = 0;
+	static char name[128];
+
+	board_name = intel_nhlt_board_cbfs_name();
+	if (board_name)
+		return board_name;
+	if (CONFIG(BOARD_GOOGLE_PALKIA) || CONFIG(BOARD_GOOGLE_HELIOS_DISKSWAP))
+		return NULL;
+
+	/* FW_CONFIG has disabled unmatched nodes and their descendants before ACPI. */
+	for (const struct device *dev = all_devices; dev; dev = dev->next) {
+		if (!dev->enabled)
+			continue;
+		if (CONFIG(DRIVERS_INTEL_SOUNDWIRE) &&
+		    dev->chip_ops == &drivers_intel_soundwire_ops) {
+			soundwire_count++;
+			continue;
+		}
+		if (dev->chip_ops != &drivers_sof_ops)
+			continue;
+		if (selected || !dev->chip_info)
+			return NULL;
+		selected = dev->chip_info;
+	}
+	if (!selected)
+		return NULL;
+
+	/* These SKUs retain native SoundWire ACPI and publish only their PDM0 DMIC. */
+	if (soundwire_count) {
+		if (soundwire_count != 1 || selected->mic_tplg != _2ch_pdm0)
+			return NULL;
+		if (CONFIG(BOARD_GOOGLE_VOLTEER) || CONFIG(BOARD_GOOGLE_VOLTEER2))
+			return "nhlt/tgl-sdw-max98373-rt5682-2ch-pdm0.nhlt";
+		if (CONFIG(BOARD_GOOGLE_BRYA0) || CONFIG(BOARD_GOOGLE_SKOLAS) ||
+		    CONFIG(BOARD_GOOGLE_SKOLAS4ES))
+			return "nhlt/adl-sdw-max98373-rt5682-2ch-pdm0.nhlt";
+		printk(BIOS_ERR, "NHLT: SoundWire board has no table policy\n");
+		return NULL;
+	}
+
+	if (CONFIG(BOARD_GOOGLE_BASEBOARD_HATCH))
+		platform = "cml";
+	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_VOLTEER))
+		platform = "tgl";
+	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_REX))
+		platform = "mtl";
+	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_BRYA) ||
+		 CONFIG(BOARD_GOOGLE_BASEBOARD_NISSA) || CONFIG(BOARD_GOOGLE_BASEBOARD_BROX))
+		platform = "adl";
+	else
+		return NULL;
+
+	speaker = get_spkr_tplg_str(selected->spkr_tplg);
+	headset = get_jack_tplg_str(selected->jack_tplg);
+	mic = get_mic_tplg_str(selected->mic_tplg);
+	if (!strcmp(speaker, "default") || !strcmp(headset, "default") ||
+	    !strcmp(mic, "default"))
+		return NULL;
+
+	int len = snprintf(name, sizeof(name), "nhlt/%s-%s-%s-%s.nhlt",
+			   platform, speaker, headset, mic);
+	return len > 0 && (size_t)len < sizeof(name) ? name : NULL;
+}
+#endif
 
 static void sof_fill_ssdt_generator(const struct device *dev)
 {
