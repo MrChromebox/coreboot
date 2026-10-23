@@ -122,6 +122,14 @@ chip soc/intel/cannonlake
 	device domain 0 on
 		device ref igpu		on
 			register "gfx" = "GMA_DEFAULT_PANEL(0)"
+			# Brightness is set through DPCD (GFX_GMA_EDP_AUX_BACKLIGHT)
+			register "panel_cfg" = "{
+				.up_delay_ms		= 150,
+				.down_delay_ms		= 100,
+				.cycle_delay_ms		= 510,
+				.backlight_on_delay_ms	=  50,
+				.backlight_off_delay_ms	=   2,
+			}"
 		end
 		device ref xhci		on
 			chip drivers/usb/acpi

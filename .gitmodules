@@ -18,7 +18,7 @@
 	url = https://review.coreboot.org/libhwbase.git
 [submodule "libgfxinit"]
 	path = 3rdparty/libgfxinit
-	url = https://review.coreboot.org/libgfxinit.git
+	url = https://github.com/MrChromebox/libgfxinit.git
 [submodule "3rdparty/fsp"]
 	path = 3rdparty/fsp
 	url = https://review.coreboot.org/fsp.git
@@ -78,4 +78,3 @@
 	path = src/vendorcode/amd/opensil/turin_poc/opensil
 	url = https://github.com/openSIL/openSIL.git
 	branch = turin_poc
-

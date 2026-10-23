@@ -193,7 +193,16 @@ chip soc/intel/cannonlake
 	register "gpio_pm[COMM_4]" = "0"
 
 	device domain 0 on
-		device ref igpu		on end
+		device ref igpu		on
+			register "panel_cfg" = "{
+				.up_delay_ms		= 200,
+				.down_delay_ms		=  50,
+				.cycle_delay_ms		= 500,
+				.backlight_on_delay_ms	=   1,
+				.backlight_off_delay_ms	= 200,
+				.backlight_pwm_hz	= 1000,
+			}"
+		end
 		device ref dptf		on end
 		device ref thermal	on end
 		device ref xhci		on

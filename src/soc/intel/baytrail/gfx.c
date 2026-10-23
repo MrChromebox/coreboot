@@ -1,11 +1,14 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
+#include <acpi/acpi.h>
+#include <bootmode.h>
 #include <device/mmio.h>
 #include <device/pci_ops.h>
 #include <console/console.h>
 #include <device/device.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
+#include <drivers/intel/gma/libgfxinit.h>
 #include <drivers/intel/gma/opregion.h>
 #include <reg_script.h>
 #include <soc/gfx.h>
@@ -298,10 +301,12 @@ static void set_backlight_pwm(struct device *dev, uint32_t bklt_reg, int req_hz)
 static void gfx_panel_setup(struct device *dev)
 {
 	struct soc_intel_baytrail_config *config = config_of(dev);
+	/* libgfxinit sequences panel VDD itself */
+	const u32 pp_control = PP_CONTROL_UNLOCK |
+		(CONFIG(MAINBOARD_USE_LIBGFXINIT) ? 0 : PP_CONTROL_EDP_FORCE_VDD);
 	struct reg_script gfx_pipea_init[] = {
 		/* CONTROL */
-		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEA_REG(PP_CONTROL),
-				PP_CONTROL_UNLOCK | PP_CONTROL_EDP_FORCE_VDD),
+		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEA_REG(PP_CONTROL), pp_control),
 		/* POWER ON */
 		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEA_REG(PP_ON_DELAYS),
 				((u32)config->gpu_pipea_port_select << 30 |
@@ -318,8 +323,7 @@ static void gfx_panel_setup(struct device *dev)
 	};
 	struct reg_script gfx_pipeb_init[] = {
 		/* CONTROL */
-		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEB_REG(PP_CONTROL),
-				PP_CONTROL_UNLOCK | PP_CONTROL_EDP_FORCE_VDD),
+		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEB_REG(PP_CONTROL), pp_control),
 		/* POWER ON */
 		REG_RES_WRITE32(PCI_BASE_ADDRESS_0, PIPEB_REG(PP_ON_DELAYS),
 				((u32)config->gpu_pipeb_port_select << 30 |
@@ -362,8 +366,16 @@ static void gfx_init(struct device *dev)
 
 	gfx_panel_setup(dev);
 
-	/* Run VBIOS */
-	pci_dev_init(dev);
+	if (CONFIG(MAINBOARD_USE_LIBGFXINIT)) {
+		if (!acpi_is_wakeup_s3() && display_init_required()) {
+			int lightup_ok;
+			gma_gfxinit(&lightup_ok);
+			gfx_set_init_done(lightup_ok);
+		}
+	} else {
+		/* Run VBIOS */
+		pci_dev_init(dev);
+	}
 
 	/* Post VBIOS Init */
 	gfx_post_vbios_init(dev);

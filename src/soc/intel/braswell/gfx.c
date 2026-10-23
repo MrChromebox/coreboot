@@ -1,12 +1,15 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
 #include "chip.h"
+#include <acpi/acpi.h>
+#include <bootmode.h>
 #include <console/console.h>
 #include <device/device.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
-#include <drivers/intel/gma/opregion.h>
 #include <drivers/intel/gma/i915.h>
+#include <drivers/intel/gma/libgfxinit.h>
+#include <drivers/intel/gma/opregion.h>
 #include <reg_script.h>
 #include <soc/gfx.h>
 #include <soc/pci_devs.h>
@@ -47,16 +50,25 @@ static void gfx_init(struct device *dev)
 {
 	intel_gma_init_igd_opregion();
 
-	if (!CONFIG(RUN_FSP_GOP)) {
-		/* Pre VBIOS Init */
-		gfx_pre_vbios_init(dev);
+	if (CONFIG(RUN_FSP_GOP))
+		return;
 
+	/* Pre VBIOS Init */
+	gfx_pre_vbios_init(dev);
+
+	if (CONFIG(MAINBOARD_USE_LIBGFXINIT)) {
+		if (!acpi_is_wakeup_s3() && display_init_required()) {
+			int lightup_ok;
+			gma_gfxinit(&lightup_ok);
+			gfx_set_init_done(lightup_ok);
+		}
+	} else {
 		/* Run VBIOS */
 		pci_dev_init(dev);
-
-		/* Post VBIOS Init */
-		gfx_post_vbios_init(dev);
 	}
+
+	/* Post VBIOS Init */
+	gfx_post_vbios_init(dev);
 }
 
 static void gma_generate_ssdt(const struct device *dev)
@@ -75,8 +87,16 @@ static struct device_operations gfx_device_ops = {
 	.acpi_fill_ssdt		= gma_generate_ssdt,
 };
 
+static const unsigned short gfx_device_ids[] = {
+	PCI_DID_INTEL_BSW_IGD_0,
+	PCI_DID_INTEL_BSW_IGD_1,
+	PCI_DID_INTEL_BSW_IGD_2,
+	PCI_DID_INTEL_BSW_IGD_3,
+	0
+};
+
 static const struct pci_driver gfx_driver __pci_driver = {
-	.ops	= &gfx_device_ops,
-	.vendor	= PCI_VID_INTEL,
-	.device	= GFX_DEVID,
+	.ops		= &gfx_device_ops,
+	.vendor		= PCI_VID_INTEL,
+	.devices	= gfx_device_ids,
 };

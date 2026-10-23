@@ -35,21 +35,76 @@ is
    function Default_Framebuffer_Pipe return Pipe_Index
    is
    begin
-      -- On i945, LVDS has to use Pipe B.  Display probing swaps it from
-      -- Primary to Secondary when LVDS is the only active display; that
-      -- swap is the only way Primary can be disabled with Secondary active.
-      if configs (Primary).Port = Disabled and then
-         configs (Secondary).Port /= Disabled
-      then
-         return Secondary;
-      else
-         return Primary;
-      end if;
+      -- Display probing may leave pipes disabled in front of active ones,
+      -- e.g. on i945 LVDS has to use pipe B, and on Braswell port D can
+      -- only be driven by pipe C.
+      for i in Pipe_Index loop
+         if configs (i).Port /= Disabled then
+            return i;
+         end if;
+      end loop;
+      return Primary;
    end Default_Framebuffer_Pipe;
+
+   -- The framebuffer is shared by all active pipes, so it has to fit
+   -- the smallest of their modes.
+   procedure Setup_Framebuffer (fb : out Framebuffer_Type)
+   is
+      use type pos32;
+      use type word32;
+
+      min_h : pos32 := Config.LINEAR_FRAMEBUFFER_MAX_WIDTH;
+      min_v : pos32 := Config.LINEAR_FRAMEBUFFER_MAX_HEIGHT;
+   begin
+      for i in Pipe_Index loop
+         if configs (i).Port /= Disabled then
+            min_h := pos32'min (min_h, configs (i).Mode.H_Visible);
+            min_v := pos32'min (min_v, configs (i).Mode.V_Visible);
+         end if;
+      end loop;
+
+      fb := configs (Default_Framebuffer_Pipe).Framebuffer;
+      Screen_Rotation (fb.Rotation);
+
+      if fb.Rotation = Rotated_90 or fb.Rotation = Rotated_270 then
+         fb.Width    := Width_Type (min_v);
+         fb.Height   := Height_Type (min_h);
+         fb.Stride   := Div_Round_Up (fb.Width, 32) * 32;
+         fb.V_Stride := Div_Round_Up (fb.Height, 32) * 32;
+         fb.Tiling   := Y_Tiled;
+         fb.Offset   := word32 (GTT_Rotation_Offset) * GTT_Page_Size;
+      else
+         fb.Width    := Width_Type (min_h);
+         fb.Height   := Height_Type (min_v);
+         fb.Stride   := Div_Round_Up (fb.Width, 16) * 16;
+         fb.V_Stride := fb.Height;
+      end if;
+
+      for i in Pipe_Index loop
+         if configs (i).Port /= Disabled then
+            configs (i).Framebuffer := fb;
+         end if;
+      end loop;
+   end Setup_Framebuffer;
+
+   -- Disables pipes whose output failed to come up, e.g. a DP sink
+   -- that answered on AUX but failed link training.
+   procedure Drop_Failed_Outputs (dropped : out Boolean)
+   is
+      active : Pipe_Configs;
+   begin
+      dropped := False;
+      HW.GFX.GMA.Get_Active_Configs (active);
+      for i in Pipe_Index loop
+         if configs (i).Port /= Disabled and active (i).Port = Disabled then
+            configs (i).Port := Disabled;
+            dropped := True;
+         end if;
+      end loop;
+   end Drop_Failed_Outputs;
 
    procedure gfxinit (lightup_ok : out Interfaces.C.int)
    is
-      use type pos32;
       use type word64;
       use type word32;
       use type Interfaces.C.size_t;
@@ -61,14 +116,11 @@ is
 
       linear_fb_addr : word64;
 
-      fb : Framebuffer_Type;
-
-      min_h : pos32 := Config.LINEAR_FRAMEBUFFER_MAX_WIDTH;
-      min_v : pos32 := Config.LINEAR_FRAMEBUFFER_MAX_HEIGHT;
+      fb, resized_fb : Framebuffer_Type;
 
       fbinfo : Interfaces.C.int;
 
-      fb_pipe : Pipe_Index;
+      dropped : boolean;
 
    begin
       lightup_ok := 0;
@@ -79,46 +131,8 @@ is
          ports := Mainboard.ports;
          HW.GFX.GMA.Display_Probing.Scan_Ports (configs, ports);
 
-         fb_pipe := Default_Framebuffer_Pipe;
-         if configs (fb_pipe).Port /= Disabled then
-            if fb_pipe = Secondary then
-               min_h := pos32'min (min_h, configs (Secondary).Mode.H_Visible);
-               min_v := pos32'min (min_v, configs (Secondary).Mode.V_Visible);
-            else
-               for i in Pipe_Index loop
-                  exit when configs (i).Port = Disabled;
-
-                  min_h := pos32'min (min_h, configs (i).Mode.H_Visible);
-                  min_v := pos32'min (min_v, configs (i).Mode.V_Visible);
-               end loop;
-            end if;
-
-            fb := configs (fb_pipe).Framebuffer;
-            Screen_Rotation (fb.Rotation);
-
-            if fb.Rotation = Rotated_90 or fb.Rotation = Rotated_270 then
-               fb.Width    := Width_Type (min_v);
-               fb.Height   := Height_Type (min_h);
-               fb.Stride   := Div_Round_Up (fb.Width, 32) * 32;
-               fb.V_Stride := Div_Round_Up (fb.Height, 32) * 32;
-               fb.Tiling   := Y_Tiled;
-               fb.Offset   := word32 (GTT_Rotation_Offset) * GTT_Page_Size;
-            else
-               fb.Width    := Width_Type (min_h);
-               fb.Height   := Height_Type (min_v);
-               fb.Stride   := Div_Round_Up (fb.Width, 16) * 16;
-               fb.V_Stride := fb.Height;
-            end if;
-
-            if fb_pipe = Secondary then
-               configs (Secondary).Framebuffer := fb;
-            else
-               for i in Pipe_Index loop
-                  exit when configs (i).Port = Disabled;
-
-                  configs (i).Framebuffer := fb;
-               end loop;
-            end if;
+         if configs (Default_Framebuffer_Pipe).Port /= Disabled then
+            Setup_Framebuffer (fb);
 
             pragma Debug (HW.GFX.GMA.Dump_Configs (configs));
 
@@ -130,6 +144,31 @@ is
             if success then
                HW.GFX.GMA.Update_Outputs (configs);
 
+               -- A failed output may have constrained the framebuffer
+               -- size, resize it to fit the remaining ones only.
+               Drop_Failed_Outputs (dropped);
+               if dropped and
+                  configs (Default_Framebuffer_Pipe).Port /= Disabled
+               then
+                  Setup_Framebuffer (resized_fb);
+                  if resized_fb /= fb then
+                     fb := resized_fb;
+
+                     pragma Debug (HW.GFX.GMA.Dump_Configs (configs));
+
+                     HW.GFX.GMA.Setup_Default_FB
+                       (FB       => fb,
+                        Clear    => true,
+                        Success  => success);
+
+                     if success then
+                        HW.GFX.GMA.Update_Outputs (configs);
+                     end if;
+                  end if;
+               end if;
+            end if;
+
+            if success then
                HW.GFX.GMA.Map_Linear_FB (linear_fb_addr, fb);
                if linear_fb_addr /= 0 then
                   fbinfo := C_Fb_Add_Framebuffer_Info_Simple
