@@ -7,6 +7,10 @@ and adapt further board/codec combinations. Its scope is interface parameters
 and observable behavior; no Windows driver source or implementation header is
 included.
 
+Related documents provide the [SOF-to-NHLT conversion method](intel_sst_nhlt_conversion.md),
+[codec porting logic](intel_sst_codec_porting.md), and
+[board configuration and validation records](intel_sst_board_records.md).
+
 ## Reference baseline
 
 | Item | Recorded baseline |

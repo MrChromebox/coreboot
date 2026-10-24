@@ -24,6 +24,9 @@ CFR use within coreboot <cfr_internal.md>
 Intel DPTF <dptf.md>
 Intel MIPI camera ACPI <intel_mipi_camera.md>
 Intel SST codec interface parameters <intel_sst_codec_interface.md>
+Intel SST SOF-to-NHLT conversion <intel_sst_nhlt_conversion.md>
+Intel SST codec porting logic <intel_sst_codec_porting.md>
+Intel SST board configuration records <intel_sst_board_records.md>
 IPMI BT (Block Transfer) <ipmi_bt.md>
 IPMI KCS <ipmi_kcs.md>
 SMMSTORE <smmstore.md>
