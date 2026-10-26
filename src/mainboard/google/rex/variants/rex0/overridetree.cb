@@ -55,6 +55,18 @@ fw_config
 end
 
 chip soc/intel/meteorlake
+	register "common_soc_config.nhlt.overrides[0].match" =
+		"FW_CONFIG(AUDIO, MAX98360_ALC5682I_I2S)"
+	register "common_soc_config.nhlt.overrides[0].cbfs_name" =
+		""nhlt/mtl-max98360a-rt5682-2ch-pdm0.nhlt""
+	register "common_soc_config.nhlt.overrides[1].match" =
+		"FW_CONFIG(AUDIO, MAX98363_CS42L42_SNDW)"
+	register "common_soc_config.nhlt.overrides[1].cbfs_name" =
+		""nhlt/mtl-sdw-cs42l42-l0-max98363-l2-2ch-pdm0.nhlt""
+	register "common_soc_config.nhlt.overrides[2].match" =
+		"FW_CONFIG(AUDIO, MAX98360_ALC5682I_DISCRETE_I2S_BT)"
+	register "common_soc_config.nhlt.overrides[2].cbfs_name" =
+		""nhlt/mtl-max98360a-rt5682-2ch-pdm0.nhlt""
 
 	register "usb2_ports[0]" = "USB2_PORT_TYPE_C(OC_SKIP)"	# USB2_C1
 	register "usb2_ports[1]" = "USB2_PORT_TYPE_C(OC0)"	# USB2_C0

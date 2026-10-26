@@ -5,9 +5,27 @@
 
 #include <boot/coreboot_tables.h>
 #include <bootsplash.h>
+#include <stdbool.h>
 #include <intelblocks/gspi.h>
 #include <drivers/i2c/designware/dw_i2c.h>
 #include <intelblocks/mmc.h>
+
+struct fw_config;
+
+struct nhlt_cbfs_override {
+	const struct fw_config *match;
+	const char *cbfs_name;
+};
+
+/* Board policy for directory mode; never changes device enablement. */
+struct nhlt_cbfs_config {
+	const char *platform;
+	bool disabled;
+	/* Optional allowlist: any match permits NHLT selection. */
+	const struct fw_config *allowed[2];
+	/* Explicit table choices take precedence over SOF-derived names. */
+	struct nhlt_cbfs_override overrides[3];
+};
 
 enum {
 	CHIPSET_LOCKDOWN_COREBOOT = 0,	/* coreboot handles locking */
@@ -30,6 +48,7 @@ struct soc_intel_common_config {
 	enum fw_splash_vertical_alignment logo_valignment;
 	/* Implies spacing from an edge for rendering footer logo */
 	uint8_t logo_bottom_margin;
+	struct nhlt_cbfs_config nhlt;
 };
 
 /* This function to retrieve soc config structure required by common code */

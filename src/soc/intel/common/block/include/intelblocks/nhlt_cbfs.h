@@ -7,8 +7,7 @@
 #include <stdbool.h>
 
 bool intel_nhlt_validate(const void *data, size_t size);
-/* Directory-mode board/SKU override; single-file mode uses intel-board.nhlt. */
-const char *intel_nhlt_board_cbfs_name(void);
+const char *intel_nhlt_sof_cbfs_name(const char *platform);
 const char *intel_nhlt_cbfs_name(void);
 unsigned long intel_nhlt_write_from_cbfs(unsigned long current, acpi_rsdp_t *rsdp);
 

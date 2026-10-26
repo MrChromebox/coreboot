@@ -1,4 +1,9 @@
 chip soc/intel/tigerlake
+	# Keep native SoundWire ACPI; this table describes only the DMIC.
+	register "common_soc_config.nhlt.overrides[0].match" =
+		"FW_CONFIG(AUDIO, MAX98373_ALC5682_SNDW)"
+	register "common_soc_config.nhlt.overrides[0].cbfs_name" =
+		""nhlt/tgl-sdw-max98373-rt5682-2ch-pdm0.nhlt""
 	register "tcss_ports[0]" = "TCSS_PORT_CC1(OC3)"
 	register "typec_aux_bias_pads[0]" = "{.pad_auxp_dc = GPP_E10, .pad_auxn_dc = GPP_E13}"
 	register "DdiPort1Hpd" = "0"

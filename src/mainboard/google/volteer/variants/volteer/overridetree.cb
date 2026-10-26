@@ -1,4 +1,9 @@
 chip soc/intel/tigerlake
+	# Keep native SoundWire ACPI; this table describes only the DMIC.
+	register "common_soc_config.nhlt.overrides[0].match" =
+		"FW_CONFIG(AUDIO, MAX98373_ALC5682_SNDW)"
+	register "common_soc_config.nhlt.overrides[0].cbfs_name" =
+		""nhlt/tgl-sdw-max98373-rt5682-2ch-pdm0.nhlt""
 	register "SaGv" = "SaGv_Disabled"
 	#+-------------------+---------------------------+
 	#| Field             |  Value                    |

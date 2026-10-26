@@ -40,6 +40,16 @@ fw_config
 end
 
 chip soc/intel/alderlake
+	# The fixed SOF topology does not describe every AUDIO SKU.
+	register "common_soc_config.nhlt.allowed[0]" =
+		"FW_CONFIG(AUDIO, MAX98360_ALC5682I_I2S)"
+	register "common_soc_config.nhlt.allowed[1]" =
+		"FW_CONFIG(AUDIO, MAX98373_ALC5682_SNDW)"
+	# Keep native SoundWire ACPI; this table describes only the DMIC.
+	register "common_soc_config.nhlt.overrides[0].match" =
+		"FW_CONFIG(AUDIO, MAX98373_ALC5682_SNDW)"
+	register "common_soc_config.nhlt.overrides[0].cbfs_name" =
+		""nhlt/adl-sdw-max98373-rt5682-2ch-pdm0.nhlt""
 	register "domain_vr_config[VR_DOMAIN_IA]" = "{
 		.enable_fast_vmode = 1,
 	}"

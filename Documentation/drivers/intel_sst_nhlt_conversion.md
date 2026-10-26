@@ -261,6 +261,39 @@ choose `nhlt/<profile>.nhlt`. Inspect the final CBFS selection and the ACPI
 table actually exposed on the target. The Intel audio `_DSM` must reference
 the published table through the matching GNVS NHLT address and length.
 
+### Directory-mode selection policy
+
+Boards declare the optional selection policy in the SoC chip registers under
+`common_soc_config.nhlt`. This is separate from the existing SOF topology
+properties and device enablement:
+
+- `platform` supplies the table-name prefix (`cml`, `tgl`, `adl` or `mtl`).
+- `disabled` skips directory-mode selection for unresolved configurations.
+  Palkia and Helios Diskswap set this because the available candidates do not
+  describe their mixed-amplifier routing. Their SOF nodes remain unchanged.
+- `allowed[]` is an optional list of FW_CONFIG matches. If present, at least
+  one match is required to select a table. Taeko4es and Taniks use this instead
+  of adding probe conditions to their existing SOF devices. Unprovisioned or
+  unmatched FW_CONFIG skips only the optional NHLT table.
+  Brya0, Skolas and Skolas4es also require an explicit match: their inherited
+  SOF topology is fixed and does not identify every audio SKU. Only
+  MAX98360_ALC5682I_I2S and MAX98373_ALC5682_SNDW select the currently mapped
+  candidates. Other values, including AUDIO_UNKNOWN, need separate board/SKU
+  routing data and must not fall back to the MAX98360A/RT5682 table.
+- `overrides[]` maps FW_CONFIG matches to explicit CBFS filenames. Rex0 uses
+  these entries for its three audio choices; Volteer/Volteer2 and
+  Brya0/Skolas/Skolas4es use them for their SoundWire DMIC-only candidates.
+  Matching conflicting entries or an empty filename causes selection to fail.
+
+With no matching override, the selector requires exactly one enabled SOF
+configuration, a platform prefix, and concrete speaker/headset/microphone
+topologies. The existing `default` topology string is valid for SOF _DSD
+generation but cannot identify a board-matched NHLT. An enabled SoundWire
+controller requires an explicit table choice rather than an inferred I2S name.
+The selector does not change SOF or SoundWire node enablement or _DSD contents.
+Single-file mode continues to use `intel-board.nhlt` independently of this
+directory-mode policy.
+
 Record separate outcomes for table parsing/checksum, firmware/ACPI integration,
 Windows DSP/endpoint enumeration, companion handshake, and physical audio.
 Audible playback, microphone recording, mute, jack changes and suspend/resume

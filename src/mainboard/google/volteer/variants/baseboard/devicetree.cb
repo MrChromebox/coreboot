@@ -78,6 +78,7 @@ fw_config
 end
 
 chip soc/intel/tigerlake
+	register "common_soc_config.nhlt.platform" = ""tgl""
 
 	# GPE configuration
 	# Note that GPE events called out in ASL code rely on this

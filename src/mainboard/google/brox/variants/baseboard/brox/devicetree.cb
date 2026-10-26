@@ -1,4 +1,5 @@
 chip soc/intel/alderlake
+	register "common_soc_config.nhlt.platform" = ""adl""
 
 	# GPE configuration
 	register "pmc_gpe0_dw0" = "GPP_B"

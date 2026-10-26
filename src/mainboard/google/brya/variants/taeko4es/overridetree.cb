@@ -39,6 +39,11 @@ fw_config
 	end
 end
 chip soc/intel/alderlake
+	# Limit optional NHLT selection without changing the SOF device.
+	register "common_soc_config.nhlt.allowed[0]" =
+		"FW_CONFIG(AUDIO, AUDIO_MAX98357_ALC5682I_I2S)"
+	register "common_soc_config.nhlt.allowed[1]" =
+		"FW_CONFIG(AUDIO, AUDIO_MAX98357_ALC5682I_VS_I2S)"
 	# Acoustic settings
 	register "acoustic_noise_mitigation" = "true"
 	register "slow_slew_rate[VR_DOMAIN_IA]" = "SLEW_FAST_8"
@@ -400,10 +405,7 @@ chip soc/intel/alderlake
 				register "spkr_tplg" = "max98357a_tdm"
 				register "jack_tplg" = "rt5682"
 				register "mic_tplg" = "_2ch_pdm0"
-				device generic 0 on
-					probe AUDIO AUDIO_MAX98357_ALC5682I_I2S
-					probe AUDIO AUDIO_MAX98357_ALC5682I_VS_I2S
-				end
+				device generic 0 on end
 			end
 		end
 		device ref pcie_rp5 on

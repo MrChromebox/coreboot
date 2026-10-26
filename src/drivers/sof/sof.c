@@ -4,7 +4,6 @@
 #include <acpi/acpigen.h>
 #include <device/device.h>
 #if CONFIG(SOC_INTEL_NHLT_SOF_SELECT)
-#include <console/console.h>
 #include <intelblocks/nhlt_cbfs.h>
 #include <stdio.h>
 #include <string.h>
@@ -57,29 +56,23 @@ static const char *get_mic_tplg_str(enum _mic_tplg tplg)
 extern struct chip_operations drivers_sof_ops;
 extern struct chip_operations drivers_intel_soundwire_ops;
 
-const char *intel_nhlt_cbfs_name(void)
+const char *intel_nhlt_sof_cbfs_name(const char *platform)
 {
 	const struct drivers_sof_config *selected = NULL;
-	const char *board_name;
-	const char *platform, *speaker, *headset, *mic;
-	unsigned int soundwire_count = 0;
+	const char *speaker, *headset, *mic;
 	static char name[128];
 
-	board_name = intel_nhlt_board_cbfs_name();
-	if (board_name)
-		return board_name;
-	if (CONFIG(BOARD_GOOGLE_PALKIA) || CONFIG(BOARD_GOOGLE_HELIOS_DISKSWAP))
+	if (!platform || !platform[0])
 		return NULL;
 
-	/* FW_CONFIG has disabled unmatched nodes and their descendants before ACPI. */
+	/* Observe existing enablement; NHLT selection must not disable SOF nodes. */
 	for (const struct device *dev = all_devices; dev; dev = dev->next) {
 		if (!dev->enabled)
 			continue;
+		/* SoundWire requires an explicit table choice in the devicetree. */
 		if (CONFIG(DRIVERS_INTEL_SOUNDWIRE) &&
-		    dev->chip_ops == &drivers_intel_soundwire_ops) {
-			soundwire_count++;
-			continue;
-		}
+		    dev->chip_ops == &drivers_intel_soundwire_ops)
+			return NULL;
 		if (dev->chip_ops != &drivers_sof_ops)
 			continue;
 		if (selected || !dev->chip_info)
@@ -89,34 +82,13 @@ const char *intel_nhlt_cbfs_name(void)
 	if (!selected)
 		return NULL;
 
-	/* These SKUs retain native SoundWire ACPI and publish only their PDM0 DMIC. */
-	if (soundwire_count) {
-		if (soundwire_count != 1 || selected->mic_tplg != _2ch_pdm0)
-			return NULL;
-		if (CONFIG(BOARD_GOOGLE_VOLTEER) || CONFIG(BOARD_GOOGLE_VOLTEER2))
-			return "nhlt/tgl-sdw-max98373-rt5682-2ch-pdm0.nhlt";
-		if (CONFIG(BOARD_GOOGLE_BRYA0) || CONFIG(BOARD_GOOGLE_SKOLAS) ||
-		    CONFIG(BOARD_GOOGLE_SKOLAS4ES))
-			return "nhlt/adl-sdw-max98373-rt5682-2ch-pdm0.nhlt";
-		printk(BIOS_ERR, "NHLT: SoundWire board has no table policy\n");
-		return NULL;
-	}
-
-	if (CONFIG(BOARD_GOOGLE_BASEBOARD_HATCH))
-		platform = "cml";
-	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_VOLTEER))
-		platform = "tgl";
-	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_REX))
-		platform = "mtl";
-	else if (CONFIG(BOARD_GOOGLE_BASEBOARD_BRYA) ||
-		 CONFIG(BOARD_GOOGLE_BASEBOARD_NISSA) || CONFIG(BOARD_GOOGLE_BASEBOARD_BROX))
-		platform = "adl";
-	else
-		return NULL;
-
 	speaker = get_spkr_tplg_str(selected->spkr_tplg);
 	headset = get_jack_tplg_str(selected->jack_tplg);
 	mic = get_mic_tplg_str(selected->mic_tplg);
+	/*
+	 * "default" is valid in the existing SOF _DSD, but it is not a concrete
+	 * NHLT wiring description. Skip only this table, leaving _DSD unchanged.
+	 */
 	if (!strcmp(speaker, "default") || !strcmp(headset, "default") ||
 	    !strcmp(mic, "default"))
 		return NULL;

@@ -6,6 +6,8 @@
 #include <commonlib/bsd/helpers.h>
 #include <commonlib/endian.h>
 #include <console/console.h>
+#include <fw_config.h>
+#include <intelblocks/cfg.h>
 #include <intelblocks/nhlt_cbfs.h>
 #include <soc/nvs.h>
 #include <string.h>
@@ -56,17 +58,51 @@ bool intel_nhlt_validate(const void *data, size_t size)
 	return pos == size || (size - pos >= 4 && read_le32(blob + pos) == size - pos - 4);
 }
 
-const char *__weak intel_nhlt_board_cbfs_name(void)
+const char *__weak intel_nhlt_sof_cbfs_name(const char *platform)
 {
 	return NULL;
 }
 
-const char *__weak intel_nhlt_cbfs_name(void)
+const char *intel_nhlt_cbfs_name(void)
 {
-	if (CONFIG(SOC_INTEL_NHLT_SOF_SELECT))
-		return intel_nhlt_board_cbfs_name();
+	const struct nhlt_cbfs_config *config;
+	const char *name = NULL;
+	bool has_allowlist = false, allowed = false;
 
-	return "intel-board.nhlt";
+	if (!CONFIG(SOC_INTEL_NHLT_SOF_SELECT))
+		return "intel-board.nhlt";
+
+	config = &chip_get_common_soc_structure()->nhlt;
+	if (config->disabled)
+		return NULL;
+
+	for (size_t i = 0; i < ARRAY_SIZE(config->allowed); i++) {
+		if (!config->allowed[i])
+			continue;
+		has_allowlist = true;
+		if (CONFIG(FW_CONFIG) && fw_config_is_provisioned() &&
+		    fw_config_probe(config->allowed[i]))
+			allowed = true;
+	}
+	if (has_allowlist && !allowed)
+		return NULL;
+
+	for (size_t i = 0; i < ARRAY_SIZE(config->overrides); i++) {
+		const struct nhlt_cbfs_override *override = &config->overrides[i];
+
+		if (!override->match || !CONFIG(FW_CONFIG) ||
+		    !fw_config_is_provisioned() || !fw_config_probe(override->match))
+			continue;
+		if (name || !override->cbfs_name || !override->cbfs_name[0]) {
+			printk(BIOS_ERR, "NHLT: invalid or ambiguous table overrides\n");
+			return NULL;
+		}
+		name = override->cbfs_name;
+	}
+	if (name)
+		return name;
+
+	return intel_nhlt_sof_cbfs_name(config->platform);
 }
 
 unsigned long intel_nhlt_write_from_cbfs(unsigned long current, acpi_rsdp_t *rsdp)

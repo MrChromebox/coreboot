@@ -31,13 +31,14 @@ config SOC_INTEL_NHLT_FILE
 
 config SOC_INTEL_NHLT_SOF_SELECT
 	bool "Select NHLT using the active board SOF audio configuration"
-	depends on SOC_INTEL_NHLT_FROM_CBFS && (DRIVERS_AUDIO_SOF || BOARD_GOOGLE_REX0)
+	depends on SOC_INTEL_NHLT_FROM_CBFS
 	default n
 	help
-	  Select a table after board FW_CONFIG probing, using the enabled SOF
-	  speaker, headset and microphone declarations. Missing or ambiguous
-	  configurations are not replaced with another board's table.
-	  Supported SoundWire SKUs use DMIC-only tables and native SoundWire ACPI.
+	  Select a table using devicetree NHLT policy and existing enabled SOF
+	  speaker, headset and microphone declarations. Boards set the platform,
+	  optional FW_CONFIG allowlist and explicit table overrides in chip
+	  registers. Missing or ambiguous configurations do not select a table
+	  and do not change existing SOF or SoundWire device enablement.
 	  Unresolved mixed-amplifier boards need separate data.
 
 config SOC_INTEL_NHLT_DIRECTORY

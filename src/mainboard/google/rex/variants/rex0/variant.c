@@ -3,26 +3,8 @@
 #include <acpi/acpigen.h>
 #include <baseboard/variants.h>
 #include <fw_config.h>
-#include <intelblocks/nhlt_cbfs.h>
 #include <sar.h>
 #include <variant/gpio.h>
-
-const char *intel_nhlt_board_cbfs_name(void)
-{
-	if (!fw_config_is_provisioned())
-		return NULL;
-
-	if (fw_config_probe(FW_CONFIG(AUDIO, MAX98360_ALC5682I_I2S)))
-		return "nhlt/mtl-max98360a-rt5682-2ch-pdm0.nhlt";
-
-	if (fw_config_probe(FW_CONFIG(AUDIO, MAX98363_CS42L42_SNDW)))
-		return "nhlt/mtl-sdw-cs42l42-l0-max98363-l2-2ch-pdm0.nhlt";
-
-	if (fw_config_probe(FW_CONFIG(AUDIO, MAX98360_ALC5682I_DISCRETE_I2S_BT)))
-		return "nhlt/mtl-max98360a-rt5682-2ch-pdm0.nhlt";
-
-	return NULL;
-}
 
 const char *get_wifi_sar_cbfs_filename(void)
 {
