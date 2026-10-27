@@ -323,7 +323,9 @@ chip soc/intel/meteorlake
 			end
 		end	# PCIE4_P9 SSD card
 		device ref pcie_rp10 on
-			# Enable SD Card PCIE4 rp10 using clk 6
+			# Enable SD Card PCIE4 rp10 using clk 6.
+			# Keep SRCCLK on in D3 (srcclk_pin = -1): gating it with RTD3
+			# contributed to long s2idle resumes (rtsx_pci wait / EC timeout).
 			register "pcie_rp[PCH_RP(10)]" = "{
 				.clk_src = 6,
 				.clk_req = 6,
@@ -334,7 +336,7 @@ chip soc/intel/meteorlake
 				register "enable_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_HIGH(GPP_D03)"
 				register "reset_gpio" = "ACPI_GPIO_OUTPUT_ACTIVE_LOW(GPP_D02)"
 				register "enable_delay_ms" = "1"
-				register "srcclk_pin" = "6"
+				register "srcclk_pin" = "-1"
 				device generic 0 on
 					probe DB_SD SD_GL9750
 					probe DB_SD SD_RTS5227S
