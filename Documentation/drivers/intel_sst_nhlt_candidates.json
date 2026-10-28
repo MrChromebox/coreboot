@@ -1,0 +1,5357 @@
+{
+  "schema_version": 1,
+  "record_date": "2026-10-24",
+  "scope": "Provenance and configuration parameters for the existing 28 candidate NHLT files; no driver implementation or binaries.",
+  "method": "intel_sst_nhlt_conversion.md",
+  "board_records": "intel_sst_board_records.md",
+  "encoder_baseline": {
+    "alsatplg": "1.2.14",
+    "libasound": "1.2.14",
+    "libatopology": "1.2.14",
+    "sof_topology2_revision": "fe4bfb8853f8a2151e2c89cda171ab54b1f4c5cc"
+  },
+  "source_clock_reference_revision": "57864296b07c5ffd673214dd5b1e3d07ee274a22",
+  "validation_boundary": "Outputs matched the PR file hashes; no new firmware builds, Windows driver installation or hardware tests.",
+  "tables": [
+    {
+      "file": "nhlt/adl-max98357a-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "c4a3fbfe1137d67b511a0d530f22f9a42b23436cf2cbbc86b3fa727eb85c6b67",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98357a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98357a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98357a-rt5682.tplg",
+        "sha256": "380510a03d71f01c4db0229e2303ec44f77cd797436ff01427f1e419b296c3e3"
+      },
+      "clocks": [
+        {
+          "link": "SSP2-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98357a-tdm-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "ba62adc6507c333127f83f9a5d5d9a7dd6dba4a0610e06495c6079ed5f6485dd",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98357a_tdm",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-rt5682-2way.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-rt5682-2way.tplg",
+        "sha256": "bbab86d5429e779d53ada965040141fe2deef8ded6ce55665c786904b913027a"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 2,
+          "m": 16,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "mapping_status": "unverified-alias-of-max98360a-2way",
+      "tdm_source": "sof-adl-max98360a-rt5682-2way",
+      "tdm_policy": "SSP1 DSP_A, 8x32-bit slots, source tx/rx mask 0x0f",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [
+        "unverified-alias-of-max98360a-2way"
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 4,
+              "rate": 48000,
+              "average_bytes_per_second": 768000,
+              "block_align": 16,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0xf",
+              "settings_size": 112,
+              "settings_sha256": "d37eed66ab7329cd67d594960f642d6ab164e1ea67dd436fb4e8c8fadc30fda8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-cs42l42-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "fa8262fa011004351948077b1bd90a2a09b4bbac933604f9cc69e9be39d4ff6a",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "cs42l42",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-rt5682.tplg",
+        "sha256": "52fab042fb589cecb009be56c3deda85d6ec2291d49e4b2bd95854b54b88be80"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [
+        "RT5682-derived SSP settings do not establish CS42L42 codec or board compatibility."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-da7219-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "71a97a9d2bbcc8d5b70604b7db77563315f8afb88e713955b3d433a404d30796",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "da7219",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-da7219.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.7/sof-adl-max98360a-da7219.tplg",
+        "sha256": "ddc644e9a5c4564a3936d60124894a428b92049555a0a78c25fa19d86ff1e73f"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6d288e812c24fce6a8587e12d4e9f6f337ec89483e137aeeb3cc5fc83c4fce0a",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6d288e812c24fce6a8587e12d4e9f6f337ec89483e137aeeb3cc5fc83c4fce0a",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-nau8825-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "da48db829c4d446091af78a220d6978e6b981d01d5e4d0b17545f2874c475511",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "nau8825",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-nau8825.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-nau8825.tplg",
+        "sha256": "21fb412e651b7f50aa90244b3a9b2dd5134eb400c8673e0640d780a832ee9779"
+      },
+      "clocks": [
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-nau8825-4ch.nhlt",
+      "size": 2502,
+      "sha256": "3d502652e1c545e65b2f1ee3d0535abd065567ea1539130b7d7bcba7ded65711",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "nau8825",
+        "microphones": "_4ch"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-nau8825.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-nau8825.tplg",
+        "sha256": "21fb412e651b7f50aa90244b3a9b2dd5134eb400c8673e0640d780a832ee9779"
+      },
+      "clocks": [
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 4,
+              "rate": 48000,
+              "average_bytes_per_second": 768000,
+              "block_align": 16,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x33",
+              "settings_size": 1848,
+              "settings_sha256": "27d9a46e6e0098386c1bcd781bde77dfdb3399d6a8eabf37d6ce3faf0fb45afe",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "fa8262fa011004351948077b1bd90a2a09b4bbac933604f9cc69e9be39d4ff6a",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-rt5682.tplg",
+        "sha256": "52fab042fb589cecb009be56c3deda85d6ec2291d49e4b2bd95854b54b88be80"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98360a-rt5682-2ch-pdm1.nhlt",
+      "size": 2502,
+      "sha256": "1883c8ba4e6bcb6b79511ffb3577fa0516a48b8139ee2aa56ddb8673be4ef86e",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98360a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm1"
+      },
+      "source": {
+        "name": "sof-adl-max98360a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98360a-rt5682.tplg",
+        "sha256": "52fab042fb589cecb009be56c3deda85d6ec2291d49e4b2bd95854b54b88be80"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "4419ec0da299d060ce4716cab4c9b0c77b78a4b399998be38f8c73b18f05d46c",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-max98373-nau8825-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "f6d40cf41e8e34cd1641096078c42b3aff1e0264f3e5b754e8f7f49784e4cf1c",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "max98373",
+        "headset": "nau8825",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-max98373-nau8825.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-max98373-nau8825.tplg",
+        "sha256": "4beb29400d9beed0c80bcc11b3f4e82aad70a54d6e851638c81eb087a10d4de5"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 2,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 4,
+              "rate": 48000,
+              "average_bytes_per_second": 768000,
+              "block_align": 16,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x33",
+              "settings_size": 112,
+              "settings_sha256": "1ea301d95c64130f1c569e082d2d488cf0ff3fd9dea5d88544bf6a8bb353b9c3",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-rt1019-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "fa8262fa011004351948077b1bd90a2a09b4bbac933604f9cc69e9be39d4ff6a",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "rt1019",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-rt1019-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/WeirdTreeThing/chromebook-linux-audio/cd3c5f5c73cae02738b3b37e887a4b67579ef74c/blobs/adl/sof-adl-rt1019-rt5682.tplg",
+        "sha256": "cdaf9b8274aa0be0f6406db1cf9ad405e0bde2626c8e106793d3238db27db1e5"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-rt1019-rt5682-2ch-pdm1.nhlt",
+      "size": 2502,
+      "sha256": "1883c8ba4e6bcb6b79511ffb3577fa0516a48b8139ee2aa56ddb8673be4ef86e",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "rt1019",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm1"
+      },
+      "source": {
+        "name": "sof-adl-rt1019-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/WeirdTreeThing/chromebook-linux-audio/cd3c5f5c73cae02738b3b37e887a4b67579ef74c/blobs/adl/sof-adl-rt1019-rt5682.tplg",
+        "sha256": "cdaf9b8274aa0be0f6406db1cf9ad405e0bde2626c8e106793d3238db27db1e5"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 12,
+          "m": 24,
+          "n": 25
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "4419ec0da299d060ce4716cab4c9b0c77b78a4b399998be38f8c73b18f05d46c",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "fdb02725e6a032d417a65c7c0f0881389065007a8e4ee828929af7f6a121e37f",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-rt5650-rt5650-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "3596bd839431cfc2b8fba63f04329dbf00160c8e2b107abbc927cda7338c23aa",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "adl",
+        "speaker": "rt5650_sp",
+        "headset": "rt5650_hp",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-adl-rt5650.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.7/sof-adl-rt5650.tplg",
+        "sha256": "261303f16883fdc0f9badece420708325e2f3ec20989783a22871fadc7bb30d0"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6d288e812c24fce6a8587e12d4e9f6f337ec89483e137aeeb3cc5fc83c4fce0a",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6d288e812c24fce6a8587e12d4e9f6f337ec89483e137aeeb3cc5fc83c4fce0a",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6d288e812c24fce6a8587e12d4e9f6f337ec89483e137aeeb3cc5fc83c4fce0a",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/adl-sdw-max98373-rt5682-2ch-pdm0.nhlt",
+      "size": 1956,
+      "sha256": "2855ad8a65b75de6811d8f0c52f41caa262108ba6f88bc2c375cd5742b3c7e8e",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "source": {
+        "name": "sof-adl-sdw-max98373-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-adl-sdw-max98373-rt5682.tplg",
+        "sha256": "36c947d28bef0cae5b42482fdaa105450736a196c8d3e933dda8e44d7b926eb1"
+      },
+      "transport": "soundwire",
+      "nhlt_scope": "PDM0 DMIC only; native coreboot SoundWire ACPI retained; no BT offload",
+      "dmic_policy": "board SOF declaration selects 2ch PDM0; generic topology enables 4ch",
+      "dmic_source_candidate": {
+        "file": "nhlt/adl-max98360a-rt5682-2ch-pdm0.nhlt",
+        "sha256": "fa8262fa011004351948077b1bd90a2a09b4bbac933604f9cc69e9be39d4ff6a"
+      },
+      "transforms": [
+        "Keep only board-declared two-channel PDM0 DMIC endpoints from the recorded DMIC source candidate.",
+        "Retain native SoundWire ACPI; do not fabricate SSP codec endpoints; no Bluetooth offload."
+      ],
+      "caveats": [
+        "This table does not implement a Windows SoundWire codec driver."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/cml-max98357a-da7219-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "ed0269e9433117cc233064d0fd98bd8b15e17993cf988fa700342987ce4c591e",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "cml",
+        "speaker": "max98357a",
+        "headset": "da7219",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-cml-da7219-max98357a.tplg",
+        "sha256": "509e5a61a5370d3e7f6c7dbe296f8d74507fa6d7497648e2dc50b5944aef5bc7",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/main/v2.2.x/sof-tplg-v2.2.1/sof-cml-da7219-max98357a.tplg",
+        "revision_note": "Historical URL used main; immutable input revision was not retained. Verify the content hash.",
+        "intermediate_table_sha256": "ed0269e9433117cc233064d0fd98bd8b15e17993cf988fa700342987ce4c591e"
+      },
+      "source_links": [
+        {
+          "link": {
+            "id": 0,
+            "name": "SSP1-Codec",
+            "default_hw_config_id": 0,
+            "hw_configs": [
+              {
+                "id": 0,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2304000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 24,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 24
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 1
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 24,
+            "n": 25,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2304000
+          },
+          "settings_size": 112,
+          "settings_sha256": "1c8feb547c202484a574fd38a93204954d6f1bb67cb33162a7b5aeac0e7adbc2"
+        },
+        {
+          "link": {
+            "id": 1,
+            "name": "SSP0-Codec",
+            "default_hw_config_id": 1,
+            "hw_configs": [
+              {
+                "id": 1,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2400000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 25,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 16
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 0
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 1,
+            "n": 1,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2400000
+          },
+          "settings_size": 112,
+          "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b"
+        }
+      ],
+      "transforms": [
+        "Generate SSP settings from selected link parameters with CML 24 MHz source reconciliation.",
+        "Use legacy SSP layout with M/N and clock-source TLVs.",
+        "Generate 48 kHz, 16-bit, two-channel PDM0 DMIC data; assemble endpoint formats and ACPI checksum."
+      ],
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "68fc22927a4a95222781b9df045fcc04bc98c4040e6a44b4254951a3917aca76",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1c8feb547c202484a574fd38a93204954d6f1bb67cb33162a7b5aeac0e7adbc2",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/cml-max98357a-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "8d2b7237d0f11b85149e316de7b3d046452ea76048e2d3f01aff0587b62a91b7",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "cml",
+        "speaker": "max98357a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-cml-rt5682-max98357a.tplg",
+        "sha256": "94684dcd0a6f2d851d982710e9c1d011d8cf2ac4ae51dd18d2724a91cd1b130f",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/main/v2.2.x/sof-tplg-v2.2.1/sof-cml-rt5682-max98357a.tplg",
+        "revision_note": "Historical URL used main; immutable input revision was not retained. Verify the content hash.",
+        "intermediate_table_sha256": "8d2b7237d0f11b85149e316de7b3d046452ea76048e2d3f01aff0587b62a91b7"
+      },
+      "source_links": [
+        {
+          "link": {
+            "id": 0,
+            "name": "SSP0-Codec",
+            "default_hw_config_id": 0,
+            "hw_configs": [
+              {
+                "id": 0,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2400000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 25,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 24
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 0
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 1,
+            "n": 1,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2400000
+          },
+          "settings_size": 112,
+          "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df"
+        },
+        {
+          "link": {
+            "id": 6,
+            "name": "SSP1-Codec",
+            "default_hw_config_id": 6,
+            "hw_configs": [
+              {
+                "id": 6,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2304000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 24,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 24
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 1
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 24,
+            "n": 25,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2304000
+          },
+          "settings_size": 112,
+          "settings_sha256": "1c8feb547c202484a574fd38a93204954d6f1bb67cb33162a7b5aeac0e7adbc2"
+        }
+      ],
+      "transforms": [
+        "Generate SSP settings from selected link parameters with CML 24 MHz source reconciliation.",
+        "Use legacy SSP layout with M/N and clock-source TLVs.",
+        "Generate 48 kHz, 16-bit, two-channel PDM0 DMIC data; assemble endpoint formats and ACPI checksum."
+      ],
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "68fc22927a4a95222781b9df045fcc04bc98c4040e6a44b4254951a3917aca76",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1c8feb547c202484a574fd38a93204954d6f1bb67cb33162a7b5aeac0e7adbc2",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/cml-max98390-da7219-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "684512a2920cd9eac069789491376766fd7f8a5014723b2293c40d859980d5e0",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "cml",
+        "speaker": "max98390",
+        "headset": "da7219",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-cml-da7219-max98390.tplg",
+        "sha256": "098a42df78b2255bdf6dee56e2c9e98b1c5d23ceb0b69b3b9bf6961626e0b050",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/main/v2.2.x/sof-tplg-v2.2.1/sof-cml-da7219-max98390.tplg",
+        "revision_note": "Historical URL used main; immutable input revision was not retained. Verify the content hash.",
+        "intermediate_table_sha256": "684512a2920cd9eac069789491376766fd7f8a5014723b2293c40d859980d5e0"
+      },
+      "source_links": [
+        {
+          "link": {
+            "id": 0,
+            "name": "SSP1-Codec",
+            "default_hw_config_id": 0,
+            "hw_configs": [
+              {
+                "id": 0,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 3072000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 32,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 32
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 1
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 6,
+            "m": 96,
+            "n": 125,
+            "mclk_hz": 24000000,
+            "bclk_hz": 3072000
+          },
+          "settings_size": 112,
+          "settings_sha256": "009a1d795402ed324e8a87390c8091b8bfc8841f7b4679176e7cbe553dd3ed78"
+        },
+        {
+          "link": {
+            "id": 1,
+            "name": "SSP0-Codec",
+            "default_hw_config_id": 1,
+            "hw_configs": [
+              {
+                "id": 1,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2400000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 25,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 16
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 0
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 1,
+            "n": 1,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2400000
+          },
+          "settings_size": 112,
+          "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b"
+        }
+      ],
+      "transforms": [
+        "Generate SSP settings from selected link parameters with CML 24 MHz source reconciliation.",
+        "Use legacy SSP layout with M/N and clock-source TLVs.",
+        "Generate 48 kHz, 16-bit, two-channel PDM0 DMIC data; assemble endpoint formats and ACPI checksum."
+      ],
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "68fc22927a4a95222781b9df045fcc04bc98c4040e6a44b4254951a3917aca76",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "009a1d795402ed324e8a87390c8091b8bfc8841f7b4679176e7cbe553dd3ed78",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "1feea0f54f278fd78350158907ae52e39df6aaa4907b4a8df6f6d68247db6b0b",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/cml-rt1011-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "a7eb6a9e525e5746f8124f5355a7550742b06a20ac2b06b8dcca66f50616ec9f",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "cml",
+        "speaker": "rt1011",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-cml-rt1011-rt5682.tplg",
+        "sha256": "b7311ca571749929a5a1b86f2feb44d6295c1ace81900b8f8627e4357c667e9a",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/main/v2.2.x/sof-tplg-v2.2.1/sof-cml-rt1011-rt5682.tplg",
+        "revision_note": "Historical URL used main; immutable input revision was not retained. Verify the content hash.",
+        "intermediate_table_sha256": "a7eb6a9e525e5746f8124f5355a7550742b06a20ac2b06b8dcca66f50616ec9f"
+      },
+      "source_links": [
+        {
+          "link": {
+            "id": 0,
+            "name": "SSP0-Codec",
+            "default_hw_config_id": 0,
+            "hw_configs": [
+              {
+                "id": 0,
+                "format": 1,
+                "mclk_freq": 24000000,
+                "bclk_freq": 2400000,
+                "fsync_freq": 48000,
+                "tdm_slots": 2,
+                "tdm_slot_width": 25,
+                "tx_slots": 3,
+                "rx_slots": 3,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 24
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 0
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 10,
+            "m": 1,
+            "n": 1,
+            "mclk_hz": 24000000,
+            "bclk_hz": 2400000
+          },
+          "settings_size": 112,
+          "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df"
+        },
+        {
+          "link": {
+            "id": 6,
+            "name": "SSP1-Codec",
+            "default_hw_config_id": 6,
+            "hw_configs": [
+              {
+                "id": 6,
+                "format": 4,
+                "mclk_freq": 24000000,
+                "bclk_freq": 4800000,
+                "fsync_freq": 48000,
+                "tdm_slots": 4,
+                "tdm_slot_width": 25,
+                "tx_slots": 3,
+                "rx_slots": 15,
+                "bclk_provider": 1,
+                "fsync_provider": 1,
+                "mclk_direction": 1,
+                "invert_bclk": 0,
+                "invert_fsync": 0
+              }
+            ],
+            "tuples": [
+              {
+                "type": 4,
+                "token": 502,
+                "value": 24
+              },
+              {
+                "type": 4,
+                "token": 504,
+                "value": 0
+              },
+              {
+                "type": 4,
+                "token": 506,
+                "value": 10
+              },
+              {
+                "type": 4,
+                "token": 500,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 501,
+                "value": 0
+              },
+              {
+                "type": 5,
+                "token": 503,
+                "value": 0
+              },
+              {
+                "type": 2,
+                "token": 505,
+                "value": 0
+              },
+              {
+                "type": 1,
+                "token": 154,
+                "value": "SSP"
+              },
+              {
+                "type": 4,
+                "token": 155,
+                "value": 1
+              }
+            ]
+          },
+          "clocks": {
+            "source": "XTAL",
+            "source_hz": 24000000,
+            "scr_divider": 5,
+            "m": 1,
+            "n": 1,
+            "mclk_hz": 24000000,
+            "bclk_hz": 4800000
+          },
+          "settings_size": 112,
+          "settings_sha256": "718908c16af192b9b9247377ec3439d3a728d8872650832b08d1ec7a5f634549"
+        }
+      ],
+      "transforms": [
+        "Generate SSP settings from selected link parameters with CML 24 MHz source reconciliation.",
+        "Use legacy SSP layout with M/N and clock-source TLVs.",
+        "Generate 48 kHz, 16-bit, two-channel PDM0 DMIC data; assemble endpoint formats and ACPI checksum."
+      ],
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "68fc22927a4a95222781b9df045fcc04bc98c4040e6a44b4254951a3917aca76",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "718908c16af192b9b9247377ec3439d3a728d8872650832b08d1ec7a5f634549",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "6e37e7073118d3a6bc6b5858d0074dcf5aec224a8cfa20fc7a97b97537daa3df",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/mtl-max98360a-rt5682-2ch-pdm0.nhlt",
+      "size": 2490,
+      "sha256": "9dbbf2111800e8431fd72382fed3f78e8ac8dfe2d48baffff989b0b7a09a98c6",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "mtl",
+        "speaker": "max98360a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-mtl-max98360a-rt5682.nhlt",
+        "package": "ChromeOS sof-topology-rex-1.9",
+        "sha256": "c950dc248de600ca1d4b4bd84f44587a1d8f39324a70b2dbfb950b734696c262",
+        "revision_note": "Archive URL/revision was not retained in the available historical input record."
+      },
+      "ssp_format": "native-v1.5-preserved-windows-unverified",
+      "endpoint_fix": "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Preserve native v1.5 SSP settings; generate board-selected PDM0 DMIC data.",
+        "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+        "Rebuild endpoint lengths and ACPI checksum."
+      ],
+      "caveats": [
+        "Some retained native MTL SSP formats have a zero SubFormat GUID instead of the standard PCM GUID; Windows acceptance is unresolved."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "6b97c481cfeec452e087cce2c0e3db5ea7303055e0f1c86d32973808464ed2c5",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "45c9707b23d2d8c8d7a45e54b262fd5cf1178efe4796ea4dd3ab140fa7c379ab",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/mtl-rt1019-rt5682-2ch-pdm0.nhlt",
+      "size": 2490,
+      "sha256": "9dbbf2111800e8431fd72382fed3f78e8ac8dfe2d48baffff989b0b7a09a98c6",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "mtl",
+        "speaker": "rt1019",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-mtl-rt1019-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/WeirdTreeThing/chromebook-linux-audio/cd3c5f5c73cae02738b3b37e887a4b67579ef74c/blobs/mtl/sof-mtl-rt1019-rt5682.tplg",
+        "sha256": "47d020b7790827f817ee13d434d71431d320039380a218d1a1c721118fa8be08"
+      },
+      "ssp_format": "native-v1.5-preserved-windows-unverified",
+      "endpoint_fix": "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Preserve native v1.5 SSP settings; generate board-selected PDM0 DMIC data.",
+        "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+        "Rebuild endpoint lengths and ACPI checksum."
+      ],
+      "caveats": [
+        "This native-v1.5/PDM0 candidate differs from Screebo's historical legacy-96-byte/PDM1 runtime NHLT.",
+        "Some retained native MTL SSP formats have a zero SubFormat GUID instead of the standard PCM GUID; Windows acceptance is unresolved."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "6b97c481cfeec452e087cce2c0e3db5ea7303055e0f1c86d32973808464ed2c5",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "45c9707b23d2d8c8d7a45e54b262fd5cf1178efe4796ea4dd3ab140fa7c379ab",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/mtl-rt5650-rt5650-2ch-pdm0.nhlt",
+      "size": 2490,
+      "sha256": "9dbbf2111800e8431fd72382fed3f78e8ac8dfe2d48baffff989b0b7a09a98c6",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "mtl",
+        "speaker": "rt5650_sp",
+        "headset": "rt5650_hp",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-mtl-rt5650.tplg",
+        "url": "https://raw.githubusercontent.com/WeirdTreeThing/chromebook-linux-audio/cd3c5f5c73cae02738b3b37e887a4b67579ef74c/blobs/mtl/sof-mtl-rt5650.tplg",
+        "sha256": "790e87f7b7e7b85198f3c7497b2ccf8255fa4f718a41eacddd4ec6a33ad964b4"
+      },
+      "ssp_format": "native-v1.5-preserved-windows-unverified",
+      "endpoint_fix": "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Preserve native v1.5 SSP settings; generate board-selected PDM0 DMIC data.",
+        "SSP DeviceType corrected from ALSA zero to I2S=4; settings unchanged",
+        "Rebuild endpoint lengths and ACPI checksum."
+      ],
+      "caveats": [
+        "Some retained native MTL SSP formats have a zero SubFormat GUID instead of the standard PCM GUID; Windows acceptance is unresolved."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "6b97c481cfeec452e087cce2c0e3db5ea7303055e0f1c86d32973808464ed2c5",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "a69917d489de2ec9fb1322b5135be97b9757855c870e5739cbf56ef826c3a5ca",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 178,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "45c9707b23d2d8c8d7a45e54b262fd5cf1178efe4796ea4dd3ab140fa7c379ab",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/mtl-sdw-cs42l42-l0-max98363-l2-2ch-pdm0.nhlt",
+      "size": 2920,
+      "sha256": "e11a280c8e6d117737ff210e7bf5de49591d4535e5425b3bddff6a66af4172c1",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "mtl",
+        "speaker": "sdw-max98363",
+        "headset": "cs42l42",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-mtl-sdw-cs42l42-l0-max98363-l2.nhlt",
+        "package": "ChromeOS sof-topology-rex-1.9",
+        "sha256": "13c2203fe13bf3f63da987251725a18a0edf27faead096c082e22dbe8e09e88a",
+        "revision_note": "Archive URL/revision was not retained in the available historical input record."
+      },
+      "ssp_format": "native-v1.5-preserved-windows-unverified",
+      "endpoint_fix": "SSP1-BT DeviceType=0; source tplg-targets-ace1.cmake ADD_BT=true",
+      "transport": "soundwire",
+      "nhlt_scope": "DMIC plus source SSP/BT endpoints; SoundWire codec endpoints are ACPI/SoundWire-managed",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "native-source-candidate-windows-unverified",
+      "transforms": [
+        "Preserve native v1.5 SSP settings; generate board-selected PDM0 DMIC data.",
+        "SSP1-BT DeviceType=0; source tplg-targets-ace1.cmake ADD_BT=true",
+        "Rebuild endpoint lengths and ACPI checksum."
+      ],
+      "caveats": [
+        "This table does not implement a Windows SoundWire codec driver.",
+        "Some retained native MTL SSP formats have a zero SubFormat GUID instead of the standard PCM GUID; Windows acceptance is unresolved."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "6b97c481cfeec452e087cce2c0e3db5ea7303055e0f1c86d32973808464ed2c5",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 482,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 0,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 3,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 1,
+              "rate": 16000,
+              "average_bytes_per_second": 32000,
+              "block_align": 2,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "c8157d957dbca0217a2639e6cf6f06ef43ee96195ebdcb8a703cc555b55aabdd",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            },
+            {
+              "index": 1,
+              "tag": "0xfffe",
+              "channels": 1,
+              "rate": 8000,
+              "average_bytes_per_second": 16000,
+              "block_align": 2,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "fca546eeffb44164c74cc2f4f77b3a42e3fb32d1526ddb5239ffa64806d0b9d0",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            },
+            {
+              "index": 2,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "10c68b762acc656fc54468961eeea4e8cf2617457106b25ccec43d8fb10b2041",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 482,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 0,
+          "subsystem": "0x0",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 3,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 1,
+              "rate": 16000,
+              "average_bytes_per_second": 32000,
+              "block_align": 2,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "c8157d957dbca0217a2639e6cf6f06ef43ee96195ebdcb8a703cc555b55aabdd",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            },
+            {
+              "index": 1,
+              "tag": "0xfffe",
+              "channels": 1,
+              "rate": 8000,
+              "average_bytes_per_second": 16000,
+              "block_align": 2,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "fca546eeffb44164c74cc2f4f77b3a42e3fb32d1526ddb5239ffa64806d0b9d0",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            },
+            {
+              "index": 2,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x0",
+              "settings_size": 108,
+              "settings_sha256": "10c68b762acc656fc54468961eeea4e8cf2617457106b25ccec43d8fb10b2041",
+              "subformat_guid": "00000000-0000-0000-0000-000000000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-max98357a-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "0fb48fb8f194ce01fcf43eea693f61b2b44244d9586c67c964ec7b5477de66d8",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "max98357a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-tgl-max98357a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-max98357a-rt5682.tplg",
+        "sha256": "2922e55809b25110fdbdac415e39f20f40c31b6c6aa5238f1d9933f881f1d9fe"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-max98357a-rt5682-2ch-pdm1.nhlt",
+      "size": 2502,
+      "sha256": "c912317766e7c5aeae700cc13d1cfc0bc2264fe92c086430dbf0ad6f803bc796",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "max98357a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm1"
+      },
+      "source": {
+        "name": "sof-tgl-max98357a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-max98357a-rt5682.tplg",
+        "sha256": "2922e55809b25110fdbdac415e39f20f40c31b6c6aa5238f1d9933f881f1d9fe"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "4419ec0da299d060ce4716cab4c9b0c77b78a4b399998be38f8c73b18f05d46c",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-max98360a-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "0fb48fb8f194ce01fcf43eea693f61b2b44244d9586c67c964ec7b5477de66d8",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "max98360a",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-tgl-max98357a-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-max98357a-rt5682.tplg",
+        "sha256": "2922e55809b25110fdbdac415e39f20f40c31b6c6aa5238f1d9933f881f1d9fe"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 25,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "mapping_status": "unverified-alias-of-max98357a",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [
+        "unverified-alias-of-max98357a"
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 192000,
+              "block_align": 4,
+              "bits": 16,
+              "extra_size": 22,
+              "valid_bits": 16,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "acf0af4d10d36f06472008e3abea276a95ddce4ee1cf9386ec0dedf93bb3eb10",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-max98373-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "f6d40cf41e8e34cd1641096078c42b3aff1e0264f3e5b754e8f7f49784e4cf1c",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "max98373",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-tgl-max98373-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-max98373-rt5682.tplg",
+        "sha256": "21fd41bb1700ed3a71ec5de6c6bb8c9cc9afe99dd361030d6ca68c993b9e27c8"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 2,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 4,
+              "rate": 48000,
+              "average_bytes_per_second": 768000,
+              "block_align": 16,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x33",
+              "settings_size": 112,
+              "settings_sha256": "1ea301d95c64130f1c569e082d2d488cf0ff3fd9dea5d88544bf6a8bb353b9c3",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-max98373-ssp2-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "cf308cab938ab4abfa277f18faaac92ef4bf84ac3cca66c518520df83b97d118",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "max98373_ssp2",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-tgl-rt5682-ssp0-max98373-ssp2.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-rt5682-ssp0-max98373-ssp2.tplg",
+        "sha256": "6580801b5f76cb6d3c082bc900c2daa112831754a441126e8ecab066decc82e5"
+      },
+      "clocks": [
+        {
+          "link": "SSP2-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 2,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 24576000,
+          "source_encoding": 1,
+          "mclk_divider": 1,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 2,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 4,
+              "rate": 48000,
+              "average_bytes_per_second": 768000,
+              "block_align": 16,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x33",
+              "settings_size": 112,
+              "settings_sha256": "1ea301d95c64130f1c569e082d2d488cf0ff3fd9dea5d88544bf6a8bb353b9c3",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "4879f1024976ea63d24add45b66a109471690e4737ab53390bb9b02a64f1dd83",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-rt1011-rt5682-2ch-pdm0.nhlt",
+      "size": 2502,
+      "sha256": "852fed1983e7a4a79f551f367b956933fd984499a721c2af4b9087d3f909afeb",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "selection_parameters": {
+        "platform": "tgl",
+        "speaker": "rt1011",
+        "headset": "rt5682",
+        "microphones": "_2ch_pdm0"
+      },
+      "source": {
+        "name": "sof-tgl-rt1011-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-rt1011-rt5682.tplg",
+        "sha256": "d3bfc158efa3a1baa1280918ba85ca0caacf95b241addedff6b8d67622e95f7a"
+      },
+      "clocks": [
+        {
+          "link": "SSP1-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 8,
+          "m": 1,
+          "n": 1
+        },
+        {
+          "link": "SSP0-Codec",
+          "source_hz": 38400000,
+          "source_encoding": 0,
+          "mclk_divider": 2,
+          "scr": 16,
+          "m": 1,
+          "n": 1
+        }
+      ],
+      "ssp_format": "legacy-cavs2-source-clock-candidate",
+      "pcm_channel_policy": "active-slot-count-requires-Windows-ABI-validation",
+      "amplifier_feedback": "not-implemented",
+      "bluetooth_offload": "not-included",
+      "transforms": [
+        "Decode source SSP links and selected hardware configuration.",
+        "Generate legacy SSP settings and reconcile cAVS2 source clocks, divisors, M/N and reserved ACS bit.",
+        "Apply the recorded candidate PCM channel policy; generate platform DMIC data and rebuild endpoint lengths/checksum."
+      ],
+      "caveats": [],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 1,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "b61f35193c3e5bc06e25a70e29530d2c1878e282ba96f6acc0cef0a01d0ba7a8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 0,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "length": 182,
+          "link": 3,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae34",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 4,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 2,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 24,
+              "channel_mask": "0x3",
+              "settings_size": 112,
+              "settings_sha256": "219c195d29ef606c082d7d4400a42478fa33751b3f7b4dbe51f8da1c8a7adbc8",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhlt/tgl-sdw-max98373-rt5682-2ch-pdm0.nhlt",
+      "size": 1956,
+      "sha256": "2855ad8a65b75de6811d8f0c52f41caa262108ba6f88bc2c375cd5742b3c7e8e",
+      "status": "source-data-candidate",
+      "exact_output_hardware_verified": false,
+      "verification_note": "Board-level owner reports are separate; see intel_sst_board_records.md.",
+      "source": {
+        "name": "sof-tgl-sdw-max98373-rt5682.tplg",
+        "url": "https://raw.githubusercontent.com/thesofproject/sof-bin/a0f9088c3df42e4d913806301aaefe8442a688db/v2.2.x/sof-tplg-v2.2.1/sof-tgl-sdw-max98373-rt5682.tplg",
+        "sha256": "1d4c74fba1e11236e702aaf57d45bac938829f3869449e2291d2a7665009bc47"
+      },
+      "transport": "soundwire",
+      "nhlt_scope": "PDM0 DMIC only; native coreboot SoundWire ACPI retained; no BT offload",
+      "dmic_policy": "board SOF declaration selects 2ch PDM0; generic topology enables 4ch",
+      "dmic_source_candidate": {
+        "file": "nhlt/tgl-max98360a-rt5682-2ch-pdm0.nhlt",
+        "sha256": "0fb48fb8f194ce01fcf43eea693f61b2b44244d9586c67c964ec7b5477de66d8"
+      },
+      "transforms": [
+        "Keep only board-declared two-channel PDM0 DMIC endpoints from the recorded DMIC source candidate.",
+        "Retain native SoundWire ACPI; do not fabricate SSP codec endpoints; no Bluetooth offload."
+      ],
+      "caveats": [
+        "This table does not implement a Windows SoundWire codec driver."
+      ],
+      "endpoints": [
+        {
+          "index": 0,
+          "length": 1919,
+          "link": 2,
+          "instance": 0,
+          "vid": "0x8086",
+          "did": "0xae20",
+          "revision": 1,
+          "subsystem": "0x1",
+          "device_type": 0,
+          "direction": 1,
+          "bus": 0,
+          "capability_size": 3,
+          "format_count": 1,
+          "formats": [
+            {
+              "index": 0,
+              "tag": "0xfffe",
+              "channels": 2,
+              "rate": 48000,
+              "average_bytes_per_second": 384000,
+              "block_align": 8,
+              "bits": 32,
+              "extra_size": 22,
+              "valid_bits": 32,
+              "channel_mask": "0x3",
+              "settings_size": 1848,
+              "settings_sha256": "854690c7f45d8bf5d37b2c15026c7ee37be32b180047d7d0576dfd551edf7a66",
+              "subformat_guid": "00000001-0000-0010-8000-00aa00389b71"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

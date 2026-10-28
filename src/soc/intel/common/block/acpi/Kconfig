@@ -13,6 +13,39 @@ config SOC_INTEL_COMMON_BLOCK_ACPI
 config SOC_INTEL_COMMON_BLOCK_ACPI_GPIO
 	bool
 
+config SOC_INTEL_NHLT_FROM_CBFS
+	bool "Publish a board-specific NHLT from CBFS"
+	depends on SOC_INTEL_COMMON_BLOCK_ACPI && HAVE_ACPI_TABLES
+	depends on BOARD_GOOGLE_BASEBOARD_HATCH || BOARD_GOOGLE_BASEBOARD_VOLTEER || BOARD_GOOGLE_BASEBOARD_BRYA || BOARD_GOOGLE_BASEBOARD_NISSA || BOARD_GOOGLE_BASEBOARD_BROX || BOARD_GOOGLE_BASEBOARD_REX
+	default n
+	help
+	  Publish the supplied board/SKU-specific NHLT and set the GNVS address
+	  used by the Intel audio _DSM. This does not generate codec settings or
+	  establish compatibility with a Windows DSP firmware. Do not enable
+	  without a table matched to the board's audio wiring and target ABI.
+
+config SOC_INTEL_NHLT_FILE
+	string "Board NHLT input file"
+	depends on SOC_INTEL_NHLT_FROM_CBFS && !SOC_INTEL_NHLT_SOF_SELECT
+	default ""
+
+config SOC_INTEL_NHLT_SOF_SELECT
+	bool "Select NHLT using the active board SOF audio configuration"
+	depends on SOC_INTEL_NHLT_FROM_CBFS
+	default n
+	help
+	  Select a table using devicetree NHLT policy and existing enabled SOF
+	  speaker, headset and microphone declarations. Boards set the platform,
+	  optional FW_CONFIG allowlist and explicit table overrides in chip
+	  registers. Missing or ambiguous configurations do not select a table
+	  and do not change existing SOF or SoundWire device enablement.
+	  Unresolved mixed-amplifier boards need separate data.
+
+config SOC_INTEL_NHLT_DIRECTORY
+	string "Directory containing matching SOF NHLT tables"
+	depends on SOC_INTEL_NHLT_SOF_SELECT
+	default ""
+
 config SOC_INTEL_COMMON_BLOCK_ACPI_LPIT
 	bool
 	depends on HAVE_ACPI_TABLES

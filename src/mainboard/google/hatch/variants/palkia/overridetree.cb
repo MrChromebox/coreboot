@@ -1,4 +1,6 @@
 chip soc/intel/cannonlake
+	# Mixed RT1011/MAX98357A routing has no matching candidate table.
+	register "common_soc_config.nhlt.disabled" = "true"
 	register "power_limits_config" = "{
 		.tdp_pl1_override = 15,
 		.tdp_pl2_override = 64,
