@@ -50,7 +50,7 @@ config PCIEXP_HOTPLUG_IO
 # edk2 payload options
 
 config EDK2_TAG_OR_REV
-	default "f7cbaab0d5a224d15a144c049fc83f8d730b45fb" if EDK2_REPO_MRCHROMEBOX
+	default "6c14abf865e093452edc775651df61775bf99c9f" if EDK2_REPO_MRCHROMEBOX
 
 config EDK2_BOOT_MANAGER_ESCAPE
 	default y
