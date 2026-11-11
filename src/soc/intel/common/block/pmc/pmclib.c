@@ -637,16 +637,15 @@ static void pmc_control_poweroff(void)
 
 void poweroff(void)
 {
-	if (CONFIG(HAVE_EARLY_POWEROFF_SUPPORT)) {
-		platform_do_early_poweroff();
+	if (CONFIG(HAVE_EARLY_POWEROFF_SUPPORT))
+		platform_do_early_poweroff();	/* returns only on failure */
+
+	if (!ENV_ROMSTAGE_OR_BEFORE) {
+		pmc_control_poweroff();
 	} else {
-		if (!ENV_ROMSTAGE_OR_BEFORE) {
-			pmc_control_poweroff();
-		} else {
-			printk(BIOS_EMERG, "This platform cannot be powered off until the silicon"
-				 " initialization is complete, hanging!\n");
-			halt();
-		}
+		printk(BIOS_EMERG, "This platform cannot be powered off until the silicon"
+			 " initialization is complete, hanging!\n");
+		halt();
 	}
 }
 

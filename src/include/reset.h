@@ -53,6 +53,10 @@ void do_board_reset(void);
  * Note: Issuing power off early before memory initialization is not supported use case on
  *       Intel chipset, therefore, it might need a special platform specific handing
  *       to power-off the platform early.
+ *
+ * This function may return if the power off request fails (e.g. the EC rejects
+ * it). Callers must not assume it never returns and must fall back to another
+ * power off method (or halt) when it does.
  */
 void platform_do_early_poweroff(void);
 

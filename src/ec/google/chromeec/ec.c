@@ -909,7 +909,11 @@ void google_chromeec_ap_poweroff(void)
 		 * aggressive hardware-level trigger to ensure the system doesn't
 		 * remain powered on in an undefined state.
 		 */
-		google_chromeec_reboot(EC_REBOOT_COLD_AP_OFF, 0);
+		if (google_chromeec_reboot(EC_REBOOT_COLD_AP_OFF, 0) && CONFIG(ARCH_X86)) {
+			/* Old ECs (e.g. hatch) reject both commands; use the chipset S5 path. */
+			printk(BIOS_ERR, "EC rejected AP off, falling back to poweroff()\n");
+			poweroff();
+		}
 	}
 	halt();
 }
@@ -2097,12 +2101,14 @@ int google_chromeec_after_g3_state_set(enum ec_after_g3_state state)
  * Performs early power off.
  *
  * This function handles the necessary steps to initiate an early power off
- * sequence.
+ * sequence. Returns only if the EC rejected the request.
  */
 void platform_do_early_poweroff(void)
 {
-	google_chromeec_reboot(EC_REBOOT_COLD_AP_OFF, 0);
-	halt();
+	if (google_chromeec_reboot(EC_REBOOT_COLD_AP_OFF, 0) == 0)
+		halt();
+	/* Old ECs (e.g. hatch) reject cmd 8; let the caller fall back. */
+	printk(BIOS_ERR, "EC rejected COLD_AP_OFF, falling back\n");
 }
 
 /*
